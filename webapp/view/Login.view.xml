@@ -7,116 +7,108 @@
     
     <Page id="page" title="Quality Management Login" showHeader="false" class="loginPage">
         <content>
-            <!-- Animated Background Elements -->
+            <!-- Animated Background -->
             <html:div class="loginBackground">
                 <html:div class="floatingShape shape1"></html:div>
                 <html:div class="floatingShape shape2"></html:div>
                 <html:div class="floatingShape shape3"></html:div>
                 <html:div class="floatingShape shape4"></html:div>
                 <html:div class="floatingShape shape5"></html:div>
-                <html:div class="floatingShape shape6"></html:div>
-                <html:div class="floatingShape shape7"></html:div>
                 <html:div class="kaarWatermark">KAAR</html:div>
             </html:div>
             
-            <!-- Main Login Container -->
-            <FlexBox alignItems="Center" justifyContent="End" height="100%" direction="Column" class="loginContainer">
-                <VBox class="loginCard" alignItems="End">
+            <!-- Right Side Login Container -->
+            <html:div class="rightLoginContainer">
+                <html:div class="loginCard">
                     
-                    <!-- Company Logo Section -->
-                    <VBox class="logoSection" alignItems="End">
-                        <VBox class="loginLogo" alignItems="Center" justifyContent="Center">
-                            <core:Icon src="sap-icon://quality-issue" size="3rem" color="white" class="logoIcon" />
-                        </VBox>
-                        <VBox class="companyBranding" alignItems="End">
-                            <Title text="KAAR" level="H1" class="companyName" />
-                            <Title text="TECHNOLOGIES" level="H2" class="companySubName" />
-                        </VBox>
-                    </VBox>
-                    
-                    <!-- System Title -->
-                    <VBox class="systemTitle" alignItems="End">
-                        <Text text="Quality Management System" class="systemSubtitle" />
-                        <html:div class="titleUnderline"></html:div>
-                    </VBox>
+                    <!-- Logo and Branding -->
+                    <html:div class="brandingSection">
+                        <html:div class="loginLogo">
+                            <html:i class="sap-icon sap-icon--quality-issue logoIcon"></html:i>
+                        </html:div>
+                        <html:div class="companyBranding">
+                            <html:h1 class="companyName">KAAR</html:h1>
+                            <html:h2 class="companySubName">TECHNOLOGIES</html:h2>
+                        </html:div>
+                        <html:div class="systemTitle">
+                            <html:p class="systemSubtitle">Quality Management System</html:p>
+                            <html:div class="titleUnderline"></html:div>
+                        </html:div>
+                    </html:div>
                     
                     <!-- Login Form -->
-                    <VBox width="100%" class="loginForm">
-                        <!-- User ID Input -->
-                        <VBox class="loginInputGroup">
-                            <Label text="User ID" labelFor="userInput" design="Bold" class="inputLabel"/>
-                            <VBox class="inputWrapper">
-                                <core:Icon src="sap-icon://person-placeholder" class="inputIcon" />
+                    <html:div class="loginFormContainer">
+                        <!-- User ID -->
+                        <html:div class="inputGroup">
+                            <html:label class="inputLabel">USER ID</html:label>
+                            <html:div class="inputWrapper">
+                                <html:i class="sap-icon sap-icon--person-placeholder inputIcon"></html:i>
                                 <Input id="userInput" 
                                        placeholder="Enter your user ID" 
                                        value="{login>/userId}" 
-                                       class="loginInputField"
+                                       class="customInput"
                                        liveChange="onInputChange"
                                        submit="onLoginPress" />
-                            </VBox>
-                        </VBox>
+                            </html:div>
+                        </html:div>
                         
-                        <!-- Password Input -->
-                        <VBox class="loginInputGroup">
-                            <Label text="Password" labelFor="passwordInput" design="Bold" class="inputLabel"/>
-                            <VBox class="inputWrapper">
-                                <core:Icon src="sap-icon://locked" class="inputIcon" />
+                        <!-- Password -->
+                        <html:div class="inputGroup">
+                            <html:label class="inputLabel">PASSWORD</html:label>
+                            <html:div class="inputWrapper">
+                                <html:i class="sap-icon sap-icon--locked inputIcon"></html:i>
                                 <Input id="passwordInput" 
                                        type="Password" 
                                        placeholder="Enter your password" 
                                        value="{login>/password}" 
-                                       class="loginInputField"
+                                       class="customInput"
                                        liveChange="onInputChange"
                                        submit="onLoginPress" />
-                            </VBox>
-                        </VBox>
+                            </html:div>
+                        </html:div>
                         
                         <!-- Login Button -->
-                        <VBox class="buttonSection">
+                        <html:div class="buttonGroup">
                             <Button text="SIGN IN TO PORTAL" 
                                     type="Emphasized" 
                                     press="onLoginPress" 
                                     class="loginButton"
                                     icon="sap-icon://log"
                                     enabled="{parts: [{path: 'login>/userId'}, {path: 'login>/password'}], formatter: '.formatLoginEnabled'}" />
-                        </VBox>
+                        </html:div>
                         
-                        <!-- Additional Options -->
-                        <HBox justifyContent="SpaceBetween" alignItems="Center" class="loginExtras">
+                        <!-- Login Options -->
+                        <html:div class="loginOptions">
                             <CheckBox text="Remember me" class="rememberMe" />
                             <Link text="Forgot password?" class="forgotPassword" press="onForgotPassword" />
-                        </HBox>
-                    </VBox>
+                        </html:div>
+                    </html:div>
                     
-                    <!-- Demo Credentials Helper -->
-                    <VBox alignItems="End" class="demoSection">
-                        <Button text="🔑 Demo Credentials" 
+                    <!-- Demo Section -->
+                    <html:div class="demoSection">
+                        <Button text="🔑 Demo Login" 
                                 type="Transparent" 
-                                press="onShowDemoCredentials" 
-                                class="demoButton"
-                                tooltip="Click to see demo login credentials" />
+                                press="onUseDemoCredentials" 
+                                class="demoButton" />
                         <Button text="🚀 Quick Dashboard" 
                                 type="Transparent" 
                                 press="onQuickNavToDashboard" 
-                                class="demoButton"
-                                tooltip="Quick navigation to dashboard for testing" />
-                    </VBox>
+                                class="demoButton" />
+                    </html:div>
                     
                     <!-- Security Badge -->
-                    <VBox alignItems="End" class="securityBadge">
-                        <HBox alignItems="Center" class="securityInfo">
-                            <core:Icon src="sap-icon://shield" class="securityIcon" />
-                            <Text text="Secure Enterprise Portal" class="securityText" />
-                        </HBox>
-                    </VBox>
+                    <html:div class="securityBadge">
+                        <html:i class="sap-icon sap-icon--shield securityIcon"></html:i>
+                        <html:span class="securityText">Secure Enterprise Portal</html:span>
+                    </html:div>
                     
                     <!-- Footer -->
-                    <VBox alignItems="End" class="loginFooter">
-                        <Text text="Powered by SAP UI5 Technology" class="footerText" />
-                        <Text text="© 2024 Kaar Technologies Pvt Ltd. All Rights Reserved." class="copyrightText" />
-                    </VBox>
-                </VBox>
-            </FlexBox>
+                    <html:div class="loginFooter">
+                        <html:p class="footerText">Powered by SAP UI5 Technology</html:p>
+                        <html:p class="copyrightText">© 2024 Kaar Technologies Pvt Ltd. All Rights Reserved.</html:p>
+                    </html:div>
+                </html:div>
+            </html:div>
         </content>
     </Page>
 </mvc:View>

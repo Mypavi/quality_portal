@@ -289,7 +289,7 @@ body,
     }
 }
 
-/* ===== LOGIN PAGE STYLES ===== */
+/* ===== COMPLETELY NEW LOGIN PAGE STYLES ===== */
 .loginPage {
     background: var(--gradient-background) !important;
     min-height: 100vh !important;
@@ -303,488 +303,303 @@ body,
 
 /* Animated Background Elements */
 .loginBackground {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    z-index: 1 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
 }
 
 .floatingShape {
-    position: absolute !important;
-    border-radius: 50% !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px) !important;
-    animation: float 20s infinite linear !important;
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: float 20s infinite linear;
 }
 
 .shape1 {
-    width: 80px !important;
-    height: 80px !important;
-    top: 20% !important;
-    left: 10% !important;
-    animation-delay: 0s !important;
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
 }
 
 .shape2 {
-    width: 120px !important;
-    height: 120px !important;
-    top: 60% !important;
-    right: 15% !important;
-    animation-delay: -5s !important;
+    width: 120px;
+    height: 120px;
+    top: 60%;
+    right: 15%;
+    animation-delay: -5s;
 }
 
 .shape3 {
-    width: 60px !important;
-    height: 60px !important;
-    top: 80% !important;
-    left: 20% !important;
-    animation-delay: -10s !important;
+    width: 60px;
+    height: 60px;
+    top: 80%;
+    left: 20%;
+    animation-delay: -10s;
 }
 
 .shape4 {
-    width: 100px !important;
-    height: 100px !important;
-    top: 10% !important;
-    right: 25% !important;
-    animation-delay: -15s !important;
+    width: 100px;
+    height: 100px;
+    top: 10%;
+    right: 25%;
+    animation-delay: -15s;
 }
 
 .shape5 {
-    width: 140px !important;
-    height: 140px !important;
-    top: 40% !important;
-    left: 5% !important;
-    animation-delay: -8s !important;
+    width: 140px;
+    height: 140px;
+    top: 40%;
+    left: 5%;
+    animation-delay: -8s;
 }
 
-.shape6 {
-    width: 90px !important;
-    height: 90px !important;
-    top: 70% !important;
-    right: 40% !important;
-    animation-delay: -12s !important;
-}
-
-.shape7 {
-    width: 110px !important;
-    height: 110px !important;
-    top: 30% !important;
-    left: 40% !important;
-    animation-delay: -18s !important;
-}
-
-/* Kaar Technologies Watermark */
 .kaarWatermark {
-    position: absolute !important;
-    bottom: 5% !important;
-    left: 5% !important;
-    font-size: 8rem !important;
-    font-weight: 900 !important;
-    color: rgba(255, 255, 255, 0.03) !important;
-    letter-spacing: 0.2em !important;
-    z-index: 2 !important;
-    pointer-events: none !important;
-    animation: float 25s infinite linear !important;
-    transform-origin: center !important;
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    font-size: 8rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    letter-spacing: 0.2em;
+    z-index: 2;
+    pointer-events: none;
+    animation: float 25s infinite linear;
 }
 
-/* Login Container - Force Right Alignment */
-.loginContainer {
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 50% !important;
-    max-width: 600px !important;
-    min-width: 480px !important;
-    height: 100vh !important;
-    padding: var(--space-xl) 5% var(--space-xl) var(--space-xl) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 10 !important;
-}
-
-/* Override SAP UI5 FlexBox alignment */
-.loginPage .loginContainer,
-.loginPage .loginContainer .sapMFlexBox {
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 50% !important;
-    max-width: 600px !important;
-    min-width: 480px !important;
-    height: 100vh !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-direction: column !important;
-}
-
-/* Desktop: Force all child elements to align right */
-@media (min-width: 769px) {
-    .loginCard,
-    .loginCard .sapMVBox,
-    .logoSection,
-    .logoSection .sapMVBox,
-    .companyBranding,
-    .companyBranding .sapMVBox,
-    .systemTitle,
-    .systemTitle .sapMVBox,
-    .demoSection,
-    .demoSection .sapMVBox,
-    .securityBadge,
-    .securityBadge .sapMVBox,
-    .loginFooter,
-    .loginFooter .sapMVBox {
-        align-items: flex-end !important;
-        text-align: right !important;
-    }
-    
-    /* Ensure the login form inputs remain left-aligned for usability */
-    .loginForm,
-    .loginInputGroup,
-    .loginInputField,
-    .buttonSection {
-        text-align: left !important;
-    }
-    
-    .loginInputGroup .sapMVBox {
-        align-items: flex-start !important;
-    }
+/* Right Side Login Container */
+.rightLoginContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%;
+    max-width: 600px;
+    min-width: 480px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    z-index: 100;
 }
 
 /* Login Card */
 .loginCard {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(40px) !important;
-    border-radius: var(--radius-2xl) !important;
-    box-shadow: var(--shadow-2xl), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
-    padding: var(--space-3xl) var(--space-2xl) !important;
-    text-align: right !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
-    animation: slideUp var(--transition-bounce) !important;
-    position: relative !important;
-    overflow: hidden !important;
-    width: 100% !important;
-    max-width: 450px !important;
-    transform-origin: right center !important;
-    align-items: flex-end !important;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(40px);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 450px;
+    text-align: right;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .loginCard::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: -100% !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
-    animation: shimmer 3s infinite !important;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 3s infinite;
 }
 
-/* Logo Section */
-.logoSection {
-    margin-bottom: var(--space-xl) !important;
-    animation: fadeIn 1s ease-out 0.3s both !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
+/* Branding Section */
+.brandingSection {
+    margin-bottom: 2rem;
+    text-align: right;
 }
 
 .loginLogo {
-    width: 140px !important;
-    height: 140px !important;
-    margin: 0 0 var(--space-xl) auto !important;
-    background: var(--gradient-primary) !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: white !important;
-    font-size: 3.5rem !important;
-    box-shadow: var(--shadow-xl), var(--shadow-glow) !important;
-    position: relative !important;
-    animation: glow 4s ease-in-out infinite, spin 30s linear infinite !important;
+    width: 120px;
+    height: 120px;
+    margin: 0 0 1.5rem auto;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    position: relative;
+    animation: glow 4s ease-in-out infinite;
 }
 
 .loginLogo::before {
-    content: '' !important;
-    position: absolute !important;
-    top: -8px !important;
-    left: -8px !important;
-    right: -8px !important;
-    bottom: -8px !important;
-    background: var(--gradient-secondary) !important;
-    border-radius: 50% !important;
-    z-index: -1 !important;
-    animation: spin 5s linear infinite reverse !important;
-    opacity: 0.8 !important;
-}
-
-.loginLogo::after {
-    content: '' !important;
-    position: absolute !important;
-    top: -15px !important;
-    left: -15px !important;
-    right: -15px !important;
-    bottom: -15px !important;
-    background: conic-gradient(from 0deg, var(--primary-500), var(--secondary-500), var(--primary-600), var(--secondary-600), var(--primary-500)) !important;
-    border-radius: 50% !important;
-    z-index: -2 !important;
-    animation: spin 8s linear infinite !important;
-    opacity: 0.4 !important;
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background: var(--gradient-secondary);
+    border-radius: 50%;
+    z-index: -1;
+    animation: spin 5s linear infinite reverse;
+    opacity: 0.8;
 }
 
 .logoIcon {
-    animation: pulse 3s ease-in-out infinite !important;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
+    font-size: 3rem;
+    animation: pulse 3s ease-in-out infinite;
 }
 
-/* Company Branding */
 .companyBranding {
-    margin-bottom: var(--space-lg) !important;
-    text-align: right !important;
-    position: relative !important;
+    margin-bottom: 1rem;
 }
 
 .companyName {
-    color: var(--neutral-900) !important;
-    margin-bottom: 0.3rem !important;
-    font-weight: 900 !important;
-    font-size: 3rem !important;
-    background: var(--gradient-primary) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    letter-spacing: 0.15em !important;
-    animation: slideInRight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both !important;
-    text-shadow: 0 4px 8px rgba(59, 130, 246, 0.2) !important;
-    position: relative !important;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin: 0 0 0.2rem 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.15em;
+    position: relative;
+    animation: slideInRight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
 }
 
 .companyName::after {
-    content: '' !important;
-    position: absolute !important;
-    bottom: -8px !important;
-    right: 0 !important;
-    width: 0 !important;
-    height: 4px !important;
-    background: var(--gradient-primary) !important;
-    border-radius: var(--radius-sm) !important;
-    animation: expandLine 1.5s ease-out 1.8s both !important;
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 0;
+    width: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    animation: expandLine 1.5s ease-out 1.5s both;
 }
 
 .companySubName {
-    color: var(--neutral-600) !important;
-    font-weight: 400 !important;
-    font-size: 1.1rem !important;
-    letter-spacing: 0.4em !important;
-    margin-bottom: 0 !important;
-    animation: slideInRight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.9s both !important;
-    text-transform: uppercase !important;
-    position: relative !important;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--neutral-600);
+    letter-spacing: 0.4em;
+    margin: 0;
+    text-transform: uppercase;
+    animation: slideInRight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both;
 }
 
-/* System Title */
 .systemTitle {
-    margin-bottom: var(--space-xl) !important;
-    animation: fadeIn 1s ease-out 1s both !important;
-    text-align: right !important;
+    margin-bottom: 2rem;
+    text-align: right;
 }
 
 .systemSubtitle {
-    color: var(--neutral-600) !important;
-    font-size: 1.2rem !important;
-    font-weight: 600 !important;
-    margin-bottom: var(--space-md) !important;
-    letter-spacing: 0.05em !important;
-    animation: textGlow 3s ease-in-out infinite !important;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--neutral-600);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: 0.05em;
 }
 
 .titleUnderline {
-    width: 80px !important;
-    height: 4px !important;
-    background: var(--gradient-primary) !important;
-    border-radius: var(--radius-sm) !important;
-    margin: 0 0 0 auto !important;
-    animation: expandLine 1.5s ease-out 1.2s both !important;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    margin-left: auto;
+    animation: expandLine 1.5s ease-out 0.9s both;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
-/* Login Form */
-.loginForm {
-    width: 100% !important;
-    margin-top: var(--space-lg) !important;
-    /* animation: slideUp 1s ease-out 1.4s both !important; */
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 100 !important;
-    display: block !important;
+/* Login Form Container */
+.loginFormContainer {
+    margin: 2rem 0;
+    text-align: left;
 }
 
-/* Ensure form inputs align properly in right-aligned layout */
-.loginInputGroup {
-    margin-bottom: var(--space-xl) !important;
-    text-align: left !important;
-    position: relative !important;
-    width: 100% !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 50 !important;
-}
-
-.loginInputGroup {
-    margin-bottom: var(--space-xl) !important;
-    text-align: left !important;
-    position: relative !important;
+.inputGroup {
+    margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .inputLabel {
-    color: var(--neutral-600) !important;
-    font-weight: 700 !important;
-    margin-bottom: var(--space-sm) !important;
-    font-size: 0.9rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
+    display: block;
+    color: var(--neutral-600);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
 }
 
 .inputWrapper {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 20 !important;
-    width: 100% !important;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .inputIcon {
-    position: absolute !important;
-    left: var(--space-md) !important;
-    z-index: 25 !important;
-    color: var(--neutral-400) !important;
-    font-size: 1.2rem !important;
-    transition: all var(--transition-normal) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: none !important;
+    position: absolute;
+    left: 1rem;
+    z-index: 10;
+    color: var(--neutral-400);
+    font-size: 1.2rem;
+    pointer-events: none;
+    transition: all 0.3s ease;
 }
 
-.loginInputField .sapMInputBase {
-    border-radius: var(--radius-xl) !important;
+.customInput {
+    width: 100%;
+}
+
+.customInput .sapMInputBase {
+    border-radius: 16px !important;
     border: 2px solid var(--neutral-200) !important;
     background: rgba(255, 255, 255, 0.9) !important;
-    transition: all var(--transition-normal) !important;
     height: 56px !important;
     box-shadow: var(--shadow-sm) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: flex !important;
-    z-index: 10 !important;
+    transition: all 0.3s ease !important;
 }
 
-.loginInputField .sapMInputBaseInner {
+.customInput .sapMInputBaseInner {
     font-size: 1rem !important;
     padding-left: 3.5rem !important;
     color: var(--neutral-700) !important;
     font-weight: 500 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
 }
 
-/* Ensure SAP UI5 Input components are visible */
-.loginInputField,
-.loginInputField .sapMInput,
-.loginInputField .sapMInputBase,
-.loginInputField .sapMInputBaseContentWrapper {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: flex !important;
-    width: 100% !important;
-}
-
-/* Force visibility of all login form elements */
-.loginForm *,
-.loginInputGroup *,
-.inputWrapper *,
-.loginInputField * {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Debug: Temporary background to see form boundaries */
-.loginForm {
-    background: rgba(255, 0, 0, 0.1) !important;
-    border: 2px solid red !important;
-    min-height: 200px !important;
-}
-
-.loginInputGroup {
-    background: rgba(0, 255, 0, 0.1) !important;
-    border: 1px solid green !important;
-    min-height: 80px !important;
-}
-
-/* Specific fixes for SAP UI5 input elements */
-.sapMInput {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: inline-block !important;
-    width: 100% !important;
-}
-
-.sapMInputBase {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: flex !important;
-    width: 100% !important;
-}
-
-.sapMInputBaseContentWrapper {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: flex !important;
-    width: 100% !important;
-}
-
-.sapMInputBaseInner {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-    width: 100% !important;
-}
-
-.loginInputField .sapMInputBase:focus-within {
+.customInput .sapMInputBase:focus-within {
     border-color: var(--primary-500) !important;
     box-shadow: var(--shadow-md), 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
     background: white !important;
     transform: translateY(-2px) !important;
 }
 
-.loginInputField .sapMInputBase:focus-within + .inputIcon,
-.loginInputField:focus-within .inputIcon {
+.customInput .sapMInputBase:focus-within + .inputIcon,
+.inputWrapper:focus-within .inputIcon {
     color: var(--primary-500) !important;
     transform: scale(1.1) !important;
 }
 
-/* Login Button */
-.buttonSection {
-    margin: var(--space-xl) 0 !important;
-    animation: scaleIn 1s ease-out 1.8s both !important;
+/* Button Group */
+.buttonGroup {
+    margin: 2rem 0 1.5rem 0;
 }
 
 .loginButton {
-    width: 100% !important;
+    width: 100%;
 }
 
 .loginButton .sapMBtn {
-    border-radius: var(--radius-xl) !important;
+    border-radius: 16px !important;
     background: var(--gradient-primary) !important;
     border: none !important;
     padding: 18px 32px !important;
@@ -792,7 +607,7 @@ body,
     font-size: 1.1rem !important;
     height: 60px !important;
     width: 100% !important;
-    transition: all var(--transition-normal) !important;
+    transition: all 0.3s ease !important;
     box-shadow: var(--shadow-lg), var(--shadow-glow) !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
@@ -801,14 +616,14 @@ body,
 }
 
 .loginButton .sapMBtn::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: -100% !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
-    transition: left 0.6s !important;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
 }
 
 .loginButton .sapMBtn:hover:not(.sapMBtnDisabled) {
@@ -817,7 +632,7 @@ body,
 }
 
 .loginButton .sapMBtn:hover:not(.sapMBtnDisabled)::before {
-    left: 100% !important;
+    left: 100%;
 }
 
 .loginButton .sapMBtn.sapMBtnDisabled {
@@ -826,70 +641,67 @@ body,
     box-shadow: var(--shadow-sm) !important;
 }
 
-/* Login Extras */
-.loginExtras {
-    margin-top: var(--space-lg) !important;
-    width: 100% !important;
-    animation: slideInLeft 1s ease-out 2s both !important;
-    justify-content: space-between !important;
-}
-
-.loginExtras .sapMHBox {
-    justify-content: space-between !important;
-    width: 100% !important;
+/* Login Options */
+.loginOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
 }
 
 .rememberMe .sapMCb {
-    font-size: 0.875rem !important;
-    color: var(--neutral-500) !important;
-    font-weight: 500 !important;
+    font-size: 0.875rem;
+    color: var(--neutral-500);
+    font-weight: 500;
 }
 
 .forgotPassword {
-    font-size: 0.875rem !important;
-    color: var(--primary-600) !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    transition: all var(--transition-normal) !important;
-    position: relative !important;
+    font-size: 0.875rem;
+    color: var(--primary-600);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .forgotPassword::after {
-    content: '' !important;
-    position: absolute !important;
-    bottom: -2px !important;
-    left: 0 !important;
-    width: 0 !important;
-    height: 2px !important;
-    background: var(--gradient-primary) !important;
-    transition: width var(--transition-normal) !important;
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    transition: width 0.3s ease;
 }
 
 .forgotPassword:hover {
-    color: var(--secondary-600) !important;
-    transform: translateY(-1px) !important;
+    color: var(--secondary-600);
+    transform: translateY(-1px);
 }
 
 .forgotPassword:hover::after {
-    width: 100% !important;
+    width: 100%;
 }
 
 /* Demo Section */
 .demoSection {
-    margin: var(--space-lg) 0 var(--space-md) 0 !important;
-    animation: fadeIn 1s ease-out 2.2s both !important;
-    text-align: right !important;
+    margin: 1.5rem 0;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .demoButton .sapMBtn {
     background: rgba(59, 130, 246, 0.1) !important;
     border: 1px solid rgba(59, 130, 246, 0.3) !important;
-    border-radius: var(--radius-full) !important;
+    border-radius: 20px !important;
     color: var(--primary-600) !important;
     font-weight: 600 !important;
     font-size: 0.875rem !important;
-    padding: var(--space-sm) var(--space-lg) !important;
-    transition: all var(--transition-normal) !important;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.3s ease !important;
 }
 
 .demoButton .sapMBtn:hover {
@@ -901,52 +713,90 @@ body,
 
 /* Security Badge */
 .securityBadge {
-    margin: var(--space-xl) 0 var(--space-lg) 0 !important;
-    animation: scaleIn 1s ease-out 2.4s both !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-}
-
-.securityInfo {
-    background: rgba(34, 197, 94, 0.1) !important;
-    border: 1px solid rgba(34, 197, 94, 0.2) !important;
-    border-radius: var(--radius-full) !important;
-    padding: var(--space-sm) var(--space-lg) !important;
-    gap: var(--space-sm) !important;
+    margin: 1.5rem 0;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .securityIcon {
-    color: var(--success-600) !important;
-    font-size: 1rem !important;
+    color: var(--success-600);
+    font-size: 1rem;
+    margin-right: 0.5rem;
 }
 
 .securityText {
-    color: var(--success-700) !important;
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
+    color: var(--success-700);
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
 }
 
 /* Login Footer */
 .loginFooter {
-    margin-top: var(--space-lg) !important;
-    padding-top: var(--space-lg) !important;
-    border-top: 1px solid var(--neutral-200) !important;
-    width: 100% !important;
-    animation: slideUp 1s ease-out 2.6s both !important;
-    text-align: right !important;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--neutral-200);
+    text-align: right;
 }
 
 .footerText {
-    color: var(--neutral-500) !important;
-    font-size: 0.8rem !important;
-    margin-bottom: var(--space-sm) !important;
-    font-weight: 500 !important;
+    color: var(--neutral-500);
+    font-size: 0.8rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
 }
 
 .copyrightText {
-    color: var(--neutral-400) !important;
-    font-size: 0.75rem !important;
-    font-weight: 400 !important;
+    color: var(--neutral-400);
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .rightLoginContainer {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        min-width: auto;
+        padding: 1rem;
+    }
+    
+    .loginCard {
+        text-align: center;
+        max-width: 400px;
+        padding: 2rem 1.5rem;
+    }
+    
+    .brandingSection,
+    .systemTitle,
+    .demoSection,
+    .securityBadge,
+    .loginFooter {
+        text-align: center;
+    }
+    
+    .companyName::after,
+    .titleUnderline {
+        margin: 0 auto;
+    }
+    
+    .loginOptions {
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .kaarWatermark {
+        font-size: 4rem;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 /* ===== DASHBOARD STYLES ===== */

@@ -272,13 +272,14 @@ sap.ui.define([
             oLoginModel.setProperty("/userId", "demo");
             oLoginModel.setProperty("/password", "demo");
             
-            MessageToast.show("✅ Demo credentials loaded! You can now sign in.", {
+            MessageToast.show("✅ Demo credentials loaded! Signing in...", {
                 duration: 2000
             });
             
-            if (this._demoDialog) {
-                this._demoDialog.close();
-            }
+            // Auto-login with demo credentials
+            setTimeout(function() {
+                this.onLoginPress();
+            }.bind(this), 1000);
         },
 
         // Quick navigation method for testing
