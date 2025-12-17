@@ -31,7 +31,11 @@
                     </GenericTile>
                 </HBox>
 
-                <Title text="Inspection Lots" level="H2" class="sapUiSmallMarginBottom" />
+                <Toolbar class="sapUiSmallMarginBottom">
+                    <Title text="Inspection Lots" level="H2" />
+                    <ToolbarSpacer />
+                    <SearchField search="onSearch" width="auto" placeholder="Search Inspection Lot" />
+                </Toolbar>
                 
                 <Table id="inspectionTable" items="{inspection>/ZQM_INSPECT_PR}" growing="true" growingThreshold="10">
                     <columns>

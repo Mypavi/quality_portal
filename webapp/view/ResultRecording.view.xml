@@ -8,6 +8,8 @@
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Inspection Results" level="H2"/>
+                        <ToolbarSpacer />
+                        <SearchField search="onSearch" width="auto" placeholder="Search Inspection Lot" />
                     </Toolbar>
                 </headerToolbar>
                 <columns>

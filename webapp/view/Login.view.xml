@@ -2,24 +2,28 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.f"
-    xmlns:form="sap.ui.layout.form">
-    <Page id="page" title="{i18n>title}" showHeader="false">
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <Page id="page" title="{i18n>title}" showHeader="false" class="loginPage">
         <content>
-            <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column" class="sapUiMediumMargin">
-                <items>
-                    <Title text="Quality Portal Login" level="H1" class="sapUiMediumMarginBottom"/>
-                    <Panel width="400px" class="sapUiResponsiveMargin">
-                        <content>
-                            <VBox class="sapUiSmallMargin">
-                                <Label text="User ID" labelFor="userInput"/>
-                                <Input id="userInput" placeholder="Enter User ID" value="{login>/userId}"/>
-                                <Label text="Password" labelFor="passwordInput" class="sapUiSmallMarginTop"/>
-                                <Input id="passwordInput" type="Password" placeholder="Enter Password" value="{login>/password}"/>
-                                <Button text="Login" type="Emphasized" press="onLoginPress" class="sapUiMediumMarginTop" width="100%"/>
-                            </VBox>
-                        </content>
-                    </Panel>
-                </items>
+            <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column">
+                <VBox class="loginCard sapUiResponsiveMargin" width="400px" alignItems="Center">
+                    <!-- Placeholder using a generic business icon styled as logo, since download failed -->
+                    <!-- In a real scenario, use src="img/logo.png" -->
+                    <core:Icon src="sap-icon://building" size="3rem" class="sapUiSmallMarginBottom" color="#2c5364" />
+                    <Title text="Kaar Technologies" level="H2" class="sapUiTinyMarginBottom" />
+                    <Title text="Quality Portal" level="H3" class="sapUiMediumMarginBottom"/>
+                    
+                    <VBox width="100%">
+                        <Label text="User ID" labelFor="userInput" design="Bold"/>
+                        <Input id="userInput" placeholder="Enter User ID" value="{login>/userId}" icon="sap-icon://employee"/>
+                        
+                        <Label text="Password" labelFor="passwordInput" class="sapUiSmallMarginTop" design="Bold"/>
+                        <Input id="passwordInput" type="Password" placeholder="Enter Password" value="{login>/password}" icon="sap-icon://locked"/>
+                        
+                        <Button text="Login" type="Emphasized" press="onLoginPress" class="sapUiMediumMarginTop" width="100%"/>
+                    </VBox>
+                </VBox>
             </FlexBox>
         </content>
     </Page>

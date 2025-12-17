@@ -8,6 +8,8 @@
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Usage Decisions" level="H2"/>
+                        <ToolbarSpacer />
+                        <SearchField search="onSearch" width="auto" placeholder="Search Inspection Lot" />
                     </Toolbar>
                 </headerToolbar>
                 <columns>
@@ -27,7 +29,7 @@
                         <Text text="UD Code" />
                     </Column>
                     <Column>
-                        <Text text="Status" />
+                        <Text text="Validation" />
                     </Column>
                     <Column minScreenWidth="Desktop" demandPopin="true">
                         <Text text="Message" />
@@ -41,7 +43,15 @@
                             <ObjectNumber number="{usage>LotQuantity}" />
                             <ObjectNumber number="{usage>InspectedQuantity}" />
                             <Text text="{usage>UsageDecisionCode}" />
-                            <ObjectStatus text="{usage>DecisionStatus}" state="{= ${usage>DecisionStatus} === 'Allowed' ? 'Success' : 'Error' }" />
+                            <ObjectStatus 
+                                text="{parts: [
+                                    {path: 'usage>LotQuantity'},
+                                    {path: 'usage>InspectedQuantity'}
+                                ], formatter: '.formatValidationText'}" 
+                                state="{parts: [
+                                    {path: 'usage>LotQuantity'},
+                                    {path: 'usage>InspectedQuantity'}
+                                ], formatter: '.formatValidationStatus'}" />
                             <Text text="{usage>DecisionMessage}" />
                         </cells>
                     </ColumnListItem>

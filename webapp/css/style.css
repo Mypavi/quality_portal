@@ -1,1 +1,44 @@
-/* Enter your custom styles here */
+/* Kaar Tech Branding */
+.loginPage {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+
+.loginCard {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+}
+
+.kaarLogo {
+    display: block;
+    margin: 0 auto 1rem auto;
+    max-width: 150px;
+    height: auto;
+}
+
+/* Dashboard Tiles Gradient */
+.sapMGT {
+    border-radius: 12px !important;
+    color: #fff !important;
+}
+
+.sapMGT:nth-child(1) .sapMGTContent {
+    background: linear-gradient(135deg, #FF9966, #FF5E62) !important;
+}
+
+.sapMGT:nth-child(2) .sapMGTContent {
+    background: linear-gradient(135deg, #56CCF2, #2F80ED) !important;
+}
+
+.sapMGT:nth-child(3) .sapMGTContent {
+    background: linear-gradient(135deg, #11998e, #38ef7d) !important;
+}
+
+.sapMNCValue, .sapMNCIcon {
+    color: #fff !important;
+}
+
+.sapMGTHdrTxt {
+    color: #eee !important;
+}

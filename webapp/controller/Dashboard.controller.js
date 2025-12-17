@@ -68,6 +68,18 @@ sap.ui.define([
             oRouter.navTo("RouteLogin");
         },
 
+        onSearch: function (oEvent) {
+            var aFilters = [];
+            var sQuery = oEvent.getSource().getValue();
+            if (sQuery && sQuery.length > 0) {
+                var filter = new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.Contains, sQuery);
+                aFilters.push(filter);
+            }
+            var oTable = this.byId("inspectionTable");
+            var oBinding = oTable.getBinding("items");
+            oBinding.filter(aFilters, "Application");
+        },
+
         onTilePress: function () {
             // This tile represents the current view (Inspection Lots)
             // Can be used to refresh the table or counts if needed

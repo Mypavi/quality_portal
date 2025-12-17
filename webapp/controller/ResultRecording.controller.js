@@ -12,6 +12,18 @@ sap.ui.define([
         onNavBack: function () {
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteDashboard");
+        },
+
+        onSearch: function (oEvent) {
+            var aFilters = [];
+            var sQuery = oEvent.getSource().getValue();
+            if (sQuery && sQuery.length > 0) {
+                var filter = new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.Contains, sQuery);
+                aFilters.push(filter);
+            }
+            var oTable = this.byId("resultTable");
+            var oBinding = oTable.getBinding("items");
+            oBinding.filter(aFilters, "Application");
         }
     });
 });
