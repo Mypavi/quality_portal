@@ -3,79 +3,248 @@ sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/m/MessageToast"
-], function (Controller, UIComponent, Filter, FilterOperator, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox"
+], function (Controller, UIComponent, Filter, FilterOperator, MessageToast, MessageBox) {
     "use strict";
 
     return Controller.extend("quality.controller.Dashboard", {
         onInit: function () {
-            console.log("Dashboard controller initialized");
+            console.log("🚀 Dashboard controller initialized - Kaar Technologies Quality Management");
             
-            // Initialize counts with demo data
-            var oInspectionModel = new sap.ui.model.json.JSONModel({ count: 15 });
-            var oResultModel = new sap.ui.model.json.JSONModel({ count: 8 });
-            var oUsageModel = new sap.ui.model.json.JSONModel({ count: 5 });
+            // Initialize loading state
+            this._initializeLoadingState();
+            
+            // Load real data from SAP services
+            this._loadRealData();
+        },
+
+        _initializeLoadingState: function() {
+            // Set initial loading counts
+            var oInspectionModel = new sap.ui.model.json.JSONModel({ count: 0, loading: true });
+            var oResultModel = new sap.ui.model.json.JSONModel({ count: 0, loading: true });
+            var oUsageModel = new sap.ui.model.json.JSONModel({ count: 0, loading: true });
 
             this.getView().setModel(oInspectionModel, "inspectionCount");
             this.getView().setModel(oResultModel, "resultCount");
             this.getView().setModel(oUsageModel, "usageCount");
 
-            // Initialize demo inspection data
-            this._initializeDemoData();
-            
-            // Try to fetch real data, but don't fail if unavailable
-            this._fetchCounts();
+            // Initialize empty inspection data model
+            var oInspectionDataModel = new sap.ui.model.json.JSONModel({
+                ZQM_INSPECT_PR: [],
+                loading: true
+            });
+            this.getView().setModel(oInspectionDataModel, "inspection");
         },
 
-        _initializeDemoData: function() {
+        _loadRealData: function() {
+            console.log("📊 Loading real data from SAP OData services...");
+            
+            // Show loading message
+            MessageToast.show("🔄 Loading quality data from SAP system...", {
+                duration: 2000,
+                width: "20em"
+            });
+
+            // Load inspection lots data
+            this._loadInspectionLots();
+            
+            // Load counts for all services
+            this._loadServiceCounts();
+        },
+
+        _loadInspectionLots: function() {
+            var oInspectionModel = this.getOwnerComponent().getModel("inspection");
+            
+            if (!oInspectionModel) {
+                console.error("❌ Inspection model not available");
+                this._showFallbackData();
+                return;
+            }
+
+            console.log("📋 Fetching inspection lots from ZQM_INSPECT_PR...");
+            
+            oInspectionModel.read("/ZQM_INSPECT_PR", {
+                success: function(oData) {
+                    console.log("✅ Successfully loaded inspection lots:", oData.results.length, "records");
+                    
+                    // Process and enhance the data
+                    var aProcessedData = this._processInspectionData(oData.results);
+                    
+                    // Update the model
+                    var oDataModel = new sap.ui.model.json.JSONModel({
+                        ZQM_INSPECT_PR: aProcessedData,
+                        loading: false
+                    });
+                    this.getView().setModel(oDataModel, "inspection");
+                    
+                    // Update inspection count
+                    this.getView().getModel("inspectionCount").setData({
+                        count: aProcessedData.length,
+                        loading: false
+                    });
+                    
+                    // Show success message
+                    MessageToast.show("✅ Loaded " + aProcessedData.length + " inspection lots", {
+                        duration: 2000
+                    });
+                    
+                }.bind(this),
+                error: function(oError) {
+                    console.error("❌ Failed to load inspection lots:", oError);
+                    this._showFallbackData();
+                    MessageBox.error("Failed to load inspection data. Using demo data for now.");
+                }.bind(this)
+            });
+        },
+
+        _processInspectionData: function(aData) {
+            return aData.map(function(oItem) {
+                // Enhance each inspection lot with additional computed fields
+                return {
+                    ...oItem,
+                    // Add computed fields for better display
+                    InspectionProgress: this._calculateProgress(oItem.InspectedQuantity, oItem.ActualQuantity),
+                    StatusIcon: this._getStatusIcon(oItem.UsageDecisionStatus),
+                    StatusColor: this._getStatusColor(oItem.UsageDecisionCode),
+                    MaterialDisplay: oItem.SelectedMaterial || "Material " + oItem.InspectionLotNumber.substr(-3),
+                    PlantDisplay: oItem.PlantDescription || ("Plant " + oItem.Plant)
+                };
+            }.bind(this));
+        },
+
+        _calculateProgress: function(sInspected, sActual) {
+            var fInspected = parseFloat(sInspected) || 0;
+            var fActual = parseFloat(sActual) || 1;
+            return Math.round((fInspected / fActual) * 100);
+        },
+
+        _getStatusIcon: function(sStatus) {
+            switch(sStatus) {
+                case "Decision Made": return "sap-icon://accept";
+                case "Pending": return "sap-icon://pending";
+                default: return "sap-icon://status-inactive";
+            }
+        },
+
+        _getStatusColor: function(sCode) {
+            switch(sCode) {
+                case "A": return "Success";
+                case "R": 
+                case "R2": return "Error";
+                case "": return "Warning";
+                default: return "Information";
+            }
+        },
+
+        _loadServiceCounts: function() {
+            // Load result records count
+            this._loadServiceCount("result", "ZQM_RESULT_PR", "resultCount");
+            
+            // Load usage decisions count  
+            this._loadServiceCount("usage", "ZQM_US_PR", "usageCount");
+        },
+
+        _loadServiceCount: function(sModelName, sEntitySet, sCountModelName) {
+            var oModel = this.getOwnerComponent().getModel(sModelName);
+            
+            if (!oModel) {
+                console.log("⚠️ Model " + sModelName + " not available");
+                return;
+            }
+
+            console.log("📊 Loading count for " + sEntitySet + "...");
+            
+            oModel.read("/" + sEntitySet, {
+                success: function(oData) {
+                    var iCount = oData.results ? oData.results.length : 0;
+                    console.log("✅ " + sEntitySet + " count:", iCount);
+                    
+                    this.getView().getModel(sCountModelName).setData({
+                        count: iCount,
+                        loading: false
+                    });
+                }.bind(this),
+                error: function(oError) {
+                    console.error("❌ Failed to load " + sEntitySet + " count:", oError);
+                    this.getView().getModel(sCountModelName).setData({
+                        count: 0,
+                        loading: false
+                    });
+                }.bind(this)
+            });
+        },
+
+        _showFallbackData: function() {
+            console.log("📋 Loading fallback demo data...");
+            
             var aDemoInspectionData = [
                 {
-                    InspectionLotNumber: "100000001",
-                    Plant: "1000",
-                    PlantDescription: "Main Plant",
-                    SelectedMaterial: "MAT-001",
-                    MaterialDescription: "Raw Material A",
-                    ActualQuantity: "1000.000",
-                    InspectedQuantity: "750.000",
-                    UnitOfMeasure: "KG",
-                    UsageDecisionCode: "",
-                    UsageDecisionStatus: "Pending",
-                    InspectionStatus: "In Progress"
-                },
-                {
-                    InspectionLotNumber: "100000002",
-                    Plant: "1000",
-                    PlantDescription: "Main Plant",
-                    SelectedMaterial: "MAT-002",
-                    MaterialDescription: "Component B",
-                    ActualQuantity: "500.000",
-                    InspectedQuantity: "500.000",
-                    UnitOfMeasure: "PC",
-                    UsageDecisionCode: "A",
-                    UsageDecisionStatus: "Approved",
-                    InspectionStatus: "Complete"
-                },
-                {
-                    InspectionLotNumber: "100000003",
-                    Plant: "2000",
-                    PlantDescription: "Secondary Plant",
-                    SelectedMaterial: "MAT-003",
-                    MaterialDescription: "Finished Product C",
-                    ActualQuantity: "200.000",
-                    InspectedQuantity: "150.000",
+                    InspectionLotNumber: "50000000032",
+                    Plant: "0001",
+                    PlantDescription: "werk_01",
+                    SelectedMaterial: "34",
+                    ActualQuantity: "12.000",
+                    InspectedQuantity: "10.000",
                     UnitOfMeasure: "EA",
                     UsageDecisionCode: "",
                     UsageDecisionStatus: "Pending",
-                    InspectionStatus: "In Progress"
+                    LotOrigin: "05",
+                    InspectionProgress: 83,
+                    StatusIcon: "sap-icon://pending",
+                    StatusColor: "Warning",
+                    MaterialDisplay: "Material 034",
+                    PlantDisplay: "werk_01"
+                },
+                {
+                    InspectionLotNumber: "50000000034",
+                    Plant: "0001", 
+                    PlantDescription: "werk_01",
+                    SelectedMaterial: "35",
+                    ActualQuantity: "12.000",
+                    InspectedQuantity: "10.000",
+                    UnitOfMeasure: "PC",
+                    UsageDecisionCode: "",
+                    UsageDecisionStatus: "Pending",
+                    LotOrigin: "05",
+                    InspectionProgress: 83,
+                    StatusIcon: "sap-icon://pending",
+                    StatusColor: "Warning",
+                    MaterialDisplay: "Material 035",
+                    PlantDisplay: "werk_01"
+                },
+                {
+                    InspectionLotNumber: "30000000051",
+                    Plant: "1003",
+                    PlantDescription: "MK",
+                    SelectedMaterial: "FIN_MAT_SW",
+                    ActualQuantity: "10.000",
+                    InspectedQuantity: "10.000",
+                    UnitOfMeasure: "PC",
+                    UsageDecisionCode: "",
+                    UsageDecisionStatus: "Pending",
+                    LotOrigin: "03",
+                    InspectionProgress: 100,
+                    StatusIcon: "sap-icon://pending",
+                    StatusColor: "Warning",
+                    MaterialDisplay: "FIN_MAT_SW",
+                    PlantDisplay: "MK"
                 }
             ];
 
             var oInspectionModel = new sap.ui.model.json.JSONModel({
-                ZQM_INSPECT_PR: aDemoInspectionData
+                ZQM_INSPECT_PR: aDemoInspectionData,
+                loading: false
             });
             
             this.getView().setModel(oInspectionModel, "inspection");
-            console.log("Demo inspection data initialized");
+            
+            // Update counts with demo data
+            this.getView().getModel("inspectionCount").setData({ count: 47, loading: false });
+            this.getView().getModel("resultCount").setData({ count: 42, loading: false });
+            this.getView().getModel("usageCount").setData({ count: 47, loading: false });
+            
+            console.log("✅ Demo inspection data loaded");
             
             // Show welcome message
             setTimeout(function() {
@@ -84,52 +253,6 @@ sap.ui.define([
                     width: "25em"
                 });
             }, 500);
-        },
-
-        _fetchCounts: function () {
-            console.log("Attempting to fetch real data counts...");
-            var oComponent = this.getOwnerComponent();
-
-            // Helper to fetch count using direct OData calls
-            var fnFetchCount = function (sModelName, sEntitySet, sTargetModel, sTargetProperty, sBaseUrl) {
-                var oModel = oComponent.getModel(sModelName);
-                if (!oModel) {
-                    console.log("Model " + sModelName + " not available, using demo data");
-                    return;
-                }
-                
-                // Try to get count using $inlinecount first, fallback to loading data
-                var sUrl = sBaseUrl + sEntitySet + "?$top=0&$inlinecount=allpages&$format=json";
-                
-                jQuery.ajax({
-                    url: sUrl,
-                    type: "GET",
-                    timeout: 5000, // 5 second timeout
-                    success: function (data) {
-                        var iCount = 0;
-                        if (data && data.d && data.d.__count) {
-                            iCount = parseInt(data.d.__count, 10);
-                        } else if (data && data.d && data.d.results) {
-                            iCount = data.d.results.length;
-                        }
-                        console.log("Successfully fetched count for " + sEntitySet + ": " + iCount);
-                        this.getView().getModel(sTargetModel).setProperty(sTargetProperty, isNaN(iCount) ? 0 : iCount);
-                    }.bind(this),
-                    error: function (xhr, status, error) {
-                        console.log("Failed to fetch count for " + sEntitySet + ", using demo data. Error:", error);
-                        // Keep demo data, don't override with 0
-                    }.bind(this)
-                });
-            }.bind(this);
-
-            // Try to fetch real data, but continue with demo data if it fails
-            try {
-                fnFetchCount("inspection", "ZQM_INSPECT_PR", "inspectionCount", "/count", "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/");
-                fnFetchCount("result", "ZQM_RESULT_PR", "resultCount", "/count", "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/");
-                fnFetchCount("usage", "ZQM_US_PR", "usageCount", "/count", "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/");
-            } catch (e) {
-                console.error("Error in _fetchCounts:", e);
-            }
         },
 
         onNavBack: function () {
@@ -151,7 +274,7 @@ sap.ui.define([
             var aFilters = [];
             var sQuery = oEvent.getSource().getValue();
             if (sQuery && sQuery.length > 0) {
-                var filter = new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.Contains, sQuery);
+                var filter = new Filter("InspectionLotNumber", FilterOperator.Contains, sQuery);
                 aFilters.push(filter);
             }
             var oTable = this.byId("inspectionTable");
@@ -160,10 +283,16 @@ sap.ui.define([
         },
 
         onTilePress: function () {
-            // This tile represents the current view (Inspection Lots)
-            // Can be used to refresh the table or counts if needed
-            this._fetchCounts();
-            this.getView().byId("inspectionTable").getBinding("items").refresh();
+            // Refresh inspection lots data
+            MessageToast.show("🔄 Refreshing inspection data...");
+            this._loadInspectionLots();
+        },
+
+        onRefresh: function() {
+            // Manual refresh button
+            MessageToast.show("🔄 Refreshing all data...");
+            this._initializeLoadingState();
+            this._loadRealData();
         },
 
         onResultRecordingPress: function () {

@@ -100,18 +100,8 @@ sap.ui.define([
             var oAuthModel = this.getOwnerComponent().getModel("auth");
             
             if (!oAuthModel) {
-                MessageBox.error("Authentication service not available. Using demo mode.", {
-                    title: "Service Unavailable",
-                    styleClass: "sapUiSizeCompact",
-                    onClose: function() {
-                        // Navigate to dashboard anyway for demo
-                        setTimeout(function() {
-                            console.log("Service unavailable, using demo navigation...");
-                            this._navigateToDashboard();
-                        }.bind(this), 500);
-                    }.bind(this)
-                });
-                oLoginModel.setProperty("/isLoading", false);
+                console.log("Authentication service not available, trying direct AJAX call...");
+                this._tryDirectAuthentication(sUserId, sPassword, oLoginModel);
                 return;
             }
             
@@ -124,12 +114,18 @@ sap.ui.define([
                     sap.ui.core.BusyIndicator.hide();
                     oLoginModel.setProperty("/isLoading", false);
                     
-                    if (oData && oData.bname) {
+                    console.log("Authentication response:", oData);
+                    
+                    if (oData && (oData.bname || oData.Bname)) {
+                        var sUserName = oData.bname || oData.Bname || sUserId;
                         // Success animation and navigation
-                        MessageToast.show("🎉 Welcome to Quality Management System, " + oData.bname + "!", {
+                        MessageToast.show("🎉 Welcome to Quality Management System, " + sUserName + "!", {
                             duration: 3000,
                             width: "25em"
                         });
+                        
+                        // Store user info for session
+                        this._storeUserSession(sUserName);
                         
                         // Add success animation delay before navigation
                         setTimeout(function() {
@@ -150,37 +146,9 @@ sap.ui.define([
                     
                     console.error("Login error:", oError);
                     
-                    var sErrorMessage = "Authentication failed. Please check your credentials and try again.";
-                    var sErrorTitle = "Login Error";
-                    
-                    try {
-                        var oErrorResponse = JSON.parse(oError.responseText);
-                        if (oErrorResponse.error && oErrorResponse.error.message) {
-                            sErrorMessage = oErrorResponse.error.message.value || sErrorMessage;
-                        }
-                    } catch (e) {
-                        // Use default error message
-                        if (oError.status === 0) {
-                            sErrorMessage = "Unable to connect to Kaar Technologies servers. Please check your network connection.";
-                            sErrorTitle = "Connection Error";
-                        } else if (oError.status === 401) {
-                            sErrorMessage = "Invalid credentials. Please verify your User ID and Password.";
-                            sErrorTitle = "Authentication Failed";
-                        } else if (oError.status >= 500) {
-                            sErrorMessage = "Server error occurred. Please try again later or contact support.";
-                            sErrorTitle = "Server Error";
-                        }
-                    }
-                    
-                    MessageBox.error(sErrorMessage, {
-                        title: sErrorTitle,
-                        styleClass: "sapUiSizeCompact",
-                        actions: [MessageBox.Action.OK],
-                        onClose: function() {
-                            // Focus back to user input for retry
-                            this.byId("userInput").focus();
-                        }.bind(this)
-                    });
+                    // Try direct authentication as fallback
+                    console.log("OData model failed, trying direct authentication...");
+                    this._tryDirectAuthentication(sUserId, sPassword, oLoginModel);
                 }.bind(this)
             });
         },
@@ -274,6 +242,96 @@ sap.ui.define([
 
         onCloseDemoDialog: function () {
             this._demoDialog.close();
+        },
+
+        _tryDirectAuthentication: function (sUserId, sPassword, oLoginModel) {
+            console.log("Attempting direct authentication...");
+            
+            var sUrl = "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/ZQM_LOG_PR(bname='" + 
+                       sUserId + "',password='" + sPassword + "')?$format=json";
+            
+            jQuery.ajax({
+                url: sUrl,
+                type: "GET",
+                success: function (data) {
+                    console.log("Direct authentication successful:", data);
+                    oLoginModel.setProperty("/isLoading", false);
+                    
+                    var oResult = data.d || data;
+                    if (oResult && (oResult.bname || oResult.Bname)) {
+                        var sUserName = oResult.bname || oResult.Bname || sUserId;
+                        
+                        MessageToast.show("🎉 Welcome to Quality Management System, " + sUserName + "!", {
+                            duration: 3000,
+                            width: "25em"
+                        });
+                        
+                        // Store user info for session
+                        this._storeUserSession(sUserName);
+                        
+                        setTimeout(function() {
+                            console.log("Direct authentication successful, navigating...");
+                            this._navigateToDashboard();
+                        }.bind(this), 1500);
+                        
+                    } else {
+                        this._handleAuthenticationError("Invalid credentials returned from server");
+                    }
+                }.bind(this),
+                error: function (xhr, status, error) {
+                    console.error("Direct authentication failed:", error);
+                    oLoginModel.setProperty("/isLoading", false);
+                    
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        this._handleAuthenticationError("Invalid credentials. Please check your User ID and Password.");
+                    } else if (xhr.status === 0) {
+                        this._handleAuthenticationError("Unable to connect to Kaar Technologies servers. Please check your network connection.", "Connection Error");
+                    } else {
+                        // For any other error, allow demo mode access
+                        MessageBox.warning(
+                            "Unable to connect to SAP authentication service. You can continue with demo mode or try again later.\n\n" +
+                            "Error: " + (error || "Connection failed"),
+                            {
+                                title: "Service Unavailable",
+                                styleClass: "sapUiSizeCompact",
+                                actions: [MessageBox.Action.OK, "Demo Mode"],
+                                onClose: function(sAction) {
+                                    if (sAction === "Demo Mode") {
+                                        console.log("User chose demo mode, navigating...");
+                                        this._storeUserSession("Demo User");
+                                        this._navigateToDashboard();
+                                    }
+                                }.bind(this)
+                            }
+                        );
+                    }
+                }.bind(this)
+            });
+        },
+
+        _handleAuthenticationError: function (sMessage, sTitle) {
+            MessageBox.error(sMessage, {
+                title: sTitle || "Authentication Failed",
+                styleClass: "sapUiSizeCompact",
+                actions: [MessageBox.Action.OK],
+                onClose: function() {
+                    // Focus back to user input for retry
+                    if (this.byId("userInput")) {
+                        this.byId("userInput").focus();
+                    }
+                }.bind(this)
+            });
+        },
+
+        _storeUserSession: function (sUserName) {
+            // Store user session information
+            try {
+                sessionStorage.setItem("qms_user", sUserName);
+                sessionStorage.setItem("qms_login_time", new Date().toISOString());
+                console.log("User session stored:", sUserName);
+            } catch (e) {
+                console.warn("Could not store user session:", e);
+            }
         },
 
         onTestNavigation: function() {

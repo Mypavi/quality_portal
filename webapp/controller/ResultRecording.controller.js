@@ -297,7 +297,7 @@ sap.ui.define([
             var aFilters = [];
             var sQuery = oEvent.getSource().getValue();
             if (sQuery && sQuery.length > 0) {
-                var filter = new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.Contains, sQuery);
+                var filter = new Filter("InspectionLotNumber", FilterOperator.Contains, sQuery);
                 aFilters.push(filter);
             }
             var oTable = this.byId("resultTable");
@@ -396,7 +396,7 @@ sap.ui.define([
                 MessageToast.show("Results saved successfully!");
                 
                 // Refresh the result table to show new entries
-                this._refreshResultTable([new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sLot)]);
+                this._forceTableRefresh([new Filter("InspectionLotNumber", FilterOperator.EQ, sLot)]);
                 
                 // Check if all quantity is recorded and navigate to usage decision
                 var oCtx = this.getView().getBindingContext("inspection");
@@ -620,9 +620,9 @@ sap.ui.define([
                     console.log("Direct AJAX call successful:", data);
                     MessageToast.show("Direct call successful: " + (data.d?.results?.length || 0) + " records");
                 },
-                error: function (xhr, status, error) {
-                    console.error("Direct AJAX call failed:", error);
-                    MessageToast.show("Direct call failed: " + error);
+                error: function (oError) {
+                    console.error("Direct AJAX call failed:", oError);
+                    MessageToast.show("Direct call failed: " + oError.statusText);
                 }
             });
 

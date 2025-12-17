@@ -310,9 +310,9 @@ sap.ui.define([
                     console.log("Direct AJAX call successful:", data);
                     MessageToast.show("Direct call successful: " + (data.d?.results?.length || 0) + " records");
                 },
-                error: function (xhr, status, error) {
-                    console.error("Direct AJAX call failed:", error);
-                    MessageToast.show("Direct call failed: " + error);
+                error: function (oError) {
+                    console.error("Direct AJAX call failed:", oError);
+                    MessageToast.show("Direct call failed: " + oError.statusText);
                 }
             });
 
