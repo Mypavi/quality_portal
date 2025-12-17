@@ -103,12 +103,15 @@ sap.ui.define([
         onInspectionLotPress: function (oEvent) {
             var oItem = oEvent.getSource();
             var oContext = oItem.getBindingContext("inspection");
-            // The property name in the OData entity is InspectionLotNumber
-            var sInspectionLot = oContext.getProperty("InspectionLotNumber");
+
+            // Get the full path e.g. /ZQM_INSPECT_PR('50000000010')
+            var sPath = oContext.getPath();
+            // Extract the key predicate: '50000000010' or (InspectLot='...')
+            var sKeyPredicate = sPath.substring(sPath.indexOf("(") + 1, sPath.lastIndexOf(")"));
 
             var oRouter = UIComponent.getRouterFor(this);
             oRouter.navTo("RouteResultRecording", {
-                inspectionLot: sInspectionLot
+                inspectionLot: sKeyPredicate
             });
         },
 

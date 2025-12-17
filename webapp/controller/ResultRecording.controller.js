@@ -14,41 +14,35 @@ sap.ui.define([
 
         _onRouteMatched: function (oEvent) {
             var oArgs = oEvent.getParameter("arguments");
-            var sInspectionLot = oArgs ? oArgs.inspectionLot : null;
+            var sKeyPredicate = oArgs ? oArgs.inspectionLot : null;
 
             var aFilters = [];
 
-            if (sInspectionLot) {
+            if (sKeyPredicate) {
                 // Detail Mode: Specific Lot selected
+                // sKeyPredicate might be '5000000010' (with quotes, from Dashboard)
+                // Extract raw ID for filtering the table (which relies on property value)
+                var sRawID = sKeyPredicate.replace(/'/g, "");
 
                 // 1. Filter the History Table
-                aFilters.push(new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sInspectionLot));
+                // Note: The main table shows results (ZQM_RESULT_PR).
+                // Ensure the InspectionLotNumber column matches this ID exactly.
+                aFilters.push(new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sRawID));
 
                 // 2. Bind the Whole Page/Header to the Inspection Lot Context
-                // Assuming standard OData V2 Key syntax: Entity('Key')
-                var sPath = "/ZQM_INSPECT_PR('" + sInspectionLot + "')";
+                // Use the predicate exactly as passed from Dashboard (matches cache key e.g. '123')
+                var sPath = "/ZQM_INSPECT_PR(" + sKeyPredicate + ")";
+
                 this.getView().bindElement({
                     path: sPath,
-                    model: "inspection",
-                    events: {
-                        change: function () {
-                            // Optional: Check if binding failed
-                        },
-                        dataReceived: function () {
-                            // Data Loaded
-                        }
-                    }
+                    model: "inspection"
                 });
 
-                this.byId("resultPage").setTitle("Result Recording - Lot " + sInspectionLot);
+                this.byId("resultPage").setTitle("Result Recording - Lot " + sRawID);
 
             } else {
                 // List Mode: No Specific Lot (Tile Click)
-                // Show all results? or just empty? Let's show all for now.
-
-                // Unbind the specific lot context so Header and Panel don't show stale or wrong data
                 this.getView().unbindElement("inspection");
-
                 this.byId("resultPage").setTitle("Result Recording - All");
             }
 
