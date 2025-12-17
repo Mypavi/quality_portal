@@ -134,6 +134,13 @@
           ]
         },
         {
+          "name": "RouteResultRecordingList",
+          "pattern": "result",
+          "target": [
+            "TargetResultRecording"
+          ]
+        },
+        {
           "name": "RouteResultRecording",
           "pattern": "result/{inspectionLot}",
           "target": [

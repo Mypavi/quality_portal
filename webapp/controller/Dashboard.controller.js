@@ -88,9 +88,10 @@ sap.ui.define([
         },
 
         onResultRecordingPress: function () {
-            // Navigate to Result Recording List or View
+            // Navigate to Result Recording List (Generic)
             var oRouter = UIComponent.getRouterFor(this);
-            oRouter.navTo("RouteResultRecording");
+            // Use the List route which causes no parameter error
+            oRouter.navTo("RouteResultRecordingList");
         },
 
         onUsageDecisionPress: function () {
