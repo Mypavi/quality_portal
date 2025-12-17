@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/UIComponent"
-], function (Controller, UIComponent) {
+    "sap/ui/core/UIComponent",
+    "sap/m/MessageToast"
+], function (Controller, UIComponent, MessageToast) {
     "use strict";
 
     return Controller.extend("quality.controller.ResultRecording", {
@@ -15,6 +16,11 @@ sap.ui.define([
         _onRouteMatched: function (oEvent) {
             var oArgs = oEvent.getParameter("arguments");
             var sKeyPredicate = oArgs ? oArgs.inspectionLot : null;
+
+            // Clear inputs when entering a new lot or reloading
+            if (this.byId("inputUnrestricted")) this.byId("inputUnrestricted").setValue("");
+            if (this.byId("inputBlocked")) this.byId("inputBlocked").setValue("");
+            if (this.byId("inputProduction")) this.byId("inputProduction").setValue("");
 
             var aFilters = [];
 
@@ -70,9 +76,74 @@ sap.ui.define([
             oBinding.filter(aFilters, "Application");
         },
 
+        onSaveResult: function () {
+            var oView = this.getView();
+            var oCtx = oView.getBindingContext("inspection");
+            if (!oCtx) {
+                MessageToast.show("No Inspection Lot selected.");
+                return;
+            }
+
+            // Get Inputs
+            var nUnrestricted = parseFloat(this.byId("inputUnrestricted").getValue()) || 0;
+            var nBlocked = parseFloat(this.byId("inputBlocked").getValue()) || 0;
+            var nProduction = parseFloat(this.byId("inputProduction").getValue()) || 0;
+            var nTotal = nUnrestricted + nBlocked + nProduction;
+
+            if (nTotal <= 0) {
+                MessageToast.show("Please enter a valid quantity.");
+                return;
+            }
+
+            var nActual = parseFloat(oCtx.getProperty("ActualQuantity")) || 0;
+            var nInspected = parseFloat(oCtx.getProperty("InspectedQuantity")) || 0;
+
+            if (nInspected + nTotal > nActual) {
+                MessageToast.show("Error: Total recorded quantity cannot exceed Lot quantity. Remaining: " + (nActual - nInspected).toFixed(3));
+                return;
+            }
+
+            // Update Inspected Quantity in Inspection Model
+            var oInspModel = oCtx.getModel();
+            oInspModel.setProperty(oCtx.getPath() + "/InspectedQuantity", (nInspected + nTotal).toFixed(3));
+
+            // Create Entries in Result Model (History)
+            var sLot = oCtx.getProperty("InspectionLotNumber");
+            var oResultModel = oView.getModel("result");
+            var sPlant = oCtx.getProperty("Plant");
+
+            // Helper to create entry
+            var createRecord = function (sCategory, nQty) {
+                var oData = {
+                    InspectionLotNumber: sLot,
+                    ResultCategory: sCategory,
+                    StockCode: nQty.toString(), // Using StockCode to store Quantity as String due to metadata assumption
+                    PlantCode: sPlant,
+                    InspectorName: "Engineer",
+                    RecordedDate: new Date(),
+                    UsageDecisionCode: ""
+                };
+                oResultModel.create("/ZQM_RESULT_PR", oData, {
+                    success: function () { },
+                    error: function () { }
+                });
+            };
+
+            if (nUnrestricted > 0) createRecord("Unrestricted Stock", nUnrestricted);
+            if (nBlocked > 0) createRecord("Block Stock", nBlocked);
+            if (nProduction > 0) createRecord("Production Stock", nProduction);
+
+            MessageToast.show("Results Saved. Progress Updated.");
+
+            // Clear Inputs
+            this.byId("inputUnrestricted").setValue("");
+            this.byId("inputBlocked").setValue("");
+            this.byId("inputProduction").setValue("");
+        },
+
         onAcceptPress: function () {
             // Simulate Acceptance
-            sap.m.MessageToast.show("Inspection Lot Accepted");
+            MessageToast.show("Inspection Lot Accepted");
 
             // In a real app, we would call the OData service to update the status.
             // For now, we update the model locally to reflect the change visually.
@@ -86,7 +157,7 @@ sap.ui.define([
 
         onRejectPress: function () {
             // Simulate Rejection
-            sap.m.MessageToast.show("Inspection Lot Rejected");
+            MessageToast.show("Inspection Lot Rejected");
 
             var oCtx = this.getView().getBindingContext("inspection");
             if (oCtx) {
