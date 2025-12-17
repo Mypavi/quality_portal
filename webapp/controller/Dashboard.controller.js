@@ -114,18 +114,23 @@ sap.ui.define([
 
         formatUDState: function (sCode) {
             if (sCode === 'A') {
-                return "Success";
-            } else if (sCode === 'R') {
-                return "Error";
+                return "Success"; // Green
+            } else if (sCode === 'R' || sCode === 'R2') {
+                return "Error"; // Red
+            } else if (sCode) {
+                // Any other code implies a decision was made but maybe not strictly A/R
+                return "Warning";
             }
-            return "None";
+            return "None"; // Pending
         },
 
         formatUDText: function (sCode) {
             if (sCode === 'A') {
                 return "Approved";
-            } else if (sCode === 'R') {
+            } else if (sCode === 'R' || sCode === 'R2') {
                 return "Rejected";
+            } else if (sCode) {
+                return "Decision Made (" + sCode + ")";
             }
             return "Pending";
         }

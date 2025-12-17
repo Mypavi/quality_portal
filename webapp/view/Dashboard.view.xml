@@ -52,10 +52,10 @@
                             <Text text="Quantity" />
                         </Column>
                         <Column>
-                            <Text text="Status" />
+                            <Text text="Usage Decision" />
                         </Column>
                          <Column>
-                            <Text text="UD Code" />
+                            <Text text="Code" />
                         </Column>
                     </columns>
                     <items>
