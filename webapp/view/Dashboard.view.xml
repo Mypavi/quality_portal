@@ -65,7 +65,7 @@
                                 <Text text="{inspection>PlantDescription} ({inspection>Plant})" />
                                 <Text text="{inspection>SelectedMaterial}" />
                                 <ObjectNumber number="{inspection>ActualQuantity}" unit="{inspection>UnitOfMeasure}" />
-                                <ObjectStatus text="{inspection>UsageDecisionStatus}" state="{= ${inspection>UsageDecisionStatus} === 'Decision Made' ? 'Success' : 'Warning' }" />
+                                <ObjectStatus text="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDText'}" state="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDState'}" />
                                 <Text text="{inspection>UsageDecisionCode}" />
                             </cells>
                         </ColumnListItem>

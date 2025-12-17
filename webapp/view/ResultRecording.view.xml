@@ -4,12 +4,54 @@
     xmlns:f="sap.f">
     <Page id="resultPage" title="Result Recording" showNavButton="true" navButtonPress="onNavBack">
         <content>
-            <Table id="resultTable" items="{result>/ZQM_RESULT_PR}" growing="true" growingThreshold="10">
+            <!-- Header: Lot Details -->
+            <ObjectHeader
+                title="Lot {inspection>InspectionLotNumber}"
+                number="{inspection>ActualQuantity}"
+                numberUnit="{inspection>UnitOfMeasure}"
+                intro="{inspection>PlantDescription} ({inspection>Plant})"
+                backgroundDesign="Translucent">
+                <attributes>
+                    <ObjectAttribute title="Material" text="{inspection>SelectedMaterial}" />
+                    <ObjectAttribute title="Origin" text="{inspection>LotOrigin}" />
+                </attributes>
+                <statuses>
+                    <ObjectStatus title="Status" text="{inspection>UsageDecisionStatus}" state="{= ${inspection>UsageDecisionStatus} === 'Decision Made' ? 'Success' : 'Warning' }" />
+                </statuses>
+            </ObjectHeader>
+
+            <!-- Section: New Result Entry (Incremental) -->
+            <Panel headerText="Record New Result (Daily Entry)" visible="{= !${inspection>UsageDecisionCode} &amp;&amp; ${inspection>UsageDecisionStatus} !== 'Decision Made' }" expandable="true" expanded="true" class="sapUiResponsiveMargin" width="auto">
+                <content>
+                    <VBox>
+                        <Label text="Enter quantities processed today:" />
+                        <HBox alignItems="Center" wrap="Wrap">
+                            <VBox class="sapUiSmallMarginEnd">
+                                <Label text="Unrestricted (Good)" />
+                                <Input placeholder="0" type="Number" width="120px" />
+                            </VBox>
+                            <VBox class="sapUiSmallMarginEnd">
+                                <Label text="Blocked (Defect)" />
+                                <Input placeholder="0" type="Number" width="120px"/>
+                            </VBox>
+                            <VBox class="sapUiSmallMarginEnd">
+                                <Label text="Production (Rework)" />
+                                <Input placeholder="0" type="Number" width="120px"/>
+                            </VBox>
+                            <Button text="Save Record" type="Emphasized" icon="sap-icon://save" class="sapUiSmallMarginTop" />
+                        </HBox>
+                        <Text text="* Records are cumulative. Enter only the quantity for the current session." class="sapUiTinyMarginTop" type="Secondary" />
+                    </VBox>
+                </content>
+            </Panel>
+
+            <!-- Section: History Table -->
+            <Table id="resultTable" items="{result>/ZQM_RESULT_PR}" growing="true" growingThreshold="10" class="sapUiSmallMarginTop">
                 <headerToolbar>
                     <Toolbar>
-                        <Title text="Inspection Results" level="H2"/>
+                        <Title text="Recording History" level="H2"/>
                         <ToolbarSpacer />
-                        <SearchField search="onSearch" width="auto" placeholder="Search Inspection Lot" />
+                        <SearchField search="onSearch" width="auto" placeholder="Search Results" />
                     </Toolbar>
                 </headerToolbar>
                 <columns>

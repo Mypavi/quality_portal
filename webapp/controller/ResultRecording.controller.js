@@ -17,12 +17,14 @@ sap.ui.define([
             var aFilters = [];
             if (sInspectionLot) {
                 // If it's a direct navigation with an ID, filter by it
-                // Note: The main table shows results. 
-                // We assume ZQM_RESULT_PR has InspectionLotNumber.
                 aFilters.push(new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sInspectionLot));
 
-                // Also set the title or header to show which lot we are viewing
-                this.byId("resultPage").setTitle("Result Recording - Lot " + sInspectionLot);
+                // Bind the view to the specific Inspection Lot to access header properties (Qty, Material, etc.)
+                var sPath = "/ZQM_INSPECT_PR('" + sInspectionLot + "')";
+                this.getView().bindElement({
+                    path: sPath,
+                    model: "inspection"
+                });
             } else {
                 this.byId("resultPage").setTitle("Result Recording");
             }

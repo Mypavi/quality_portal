@@ -109,6 +109,24 @@ sap.ui.define([
             oRouter.navTo("RouteResultRecording", {
                 inspectionLot: sInspectionLot
             });
+        },
+
+        formatUDState: function (sCode) {
+            if (sCode === 'A') {
+                return "Success";
+            } else if (sCode === 'R') {
+                return "Error";
+            }
+            return "None";
+        },
+
+        formatUDText: function (sCode) {
+            if (sCode === 'A') {
+                return "Approved";
+            } else if (sCode === 'R') {
+                return "Rejected";
+            }
+            return "Pending";
         }
     });
 });
