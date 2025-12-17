@@ -1,275 +1,205 @@
-<mvc:View controllerName="quality.controller.ResultRecording"
-    xmlns:mvc="sap.ui.core.mvc" 
+<mvc:View
+    controllerName="quality.controller.ResultRecording"
+    xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.f"
-    xmlns:core="sap.ui.core"
-    xmlns:layout="sap.ui.layout">
+    xmlns:core="sap.ui.core">
     
-    <Page id="resultPage" title="Result Recording" showNavButton="true" navButtonPress="onNavBack" 
-          class="resultRecordingPage" busy="{viewModel>/busy}">
+    <Page title="Result Recording" showNavButton="true" navButtonPress="onNavBack" class="resultPage">
         
-        <!-- Custom Header -->
         <customHeader>
-            <Bar class="customHeaderBar">
+            <Bar class="resultHeader">
                 <contentLeft>
-                    <Button icon="sap-icon://nav-back" press="onNavBack" type="Transparent" />
+                    <Button icon="sap-icon://nav-back" press="onNavBack"/>
+                    <Title text="Result Recording" level="H2"/>
                 </contentLeft>
-                <contentMiddle>
-                    <Title text="Quality Result Recording" class="headerTitle" />
-                </contentMiddle>
                 <contentRight>
-                    <Button icon="sap-icon://refresh" press="onRefreshData" type="Transparent" tooltip="Refresh Data" />
+                    <Button icon="sap-icon://test" press="onTestFetch" tooltip="Test Fetch"/>
+                    <Button icon="sap-icon://refresh" press="onRefresh" tooltip="Refresh"/>
                 </contentRight>
             </Bar>
         </customHeader>
-
+        
         <content>
-            <!-- Hero Section with Lot Information -->
-            <Panel class="heroPanel" visible="{inspection>InspectionLotNumber}">
-                <content>
-                    <f:Card class="lotInfoCard">
-                        <f:header>
-                            <f:Header title="Inspection Lot {inspection>InspectionLotNumber}" 
-                                     subtitle="{inspection>PlantDescription} ({inspection>Plant})" />
-                        </f:header>
-                        <f:content>
-                            <VBox class="cardContent">
-                                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
-                                    <VBox>
-                                        <Label text="Material" class="cardLabel" />
-                                        <Text text="{inspection>SelectedMaterial}" class="cardValue" />
-                                    </VBox>
-                                    <VBox>
-                                        <Label text="Lot Quantity" class="cardLabel" />
-                                        <Text text="{inspection>ActualQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
-                                    </VBox>
-                                    <VBox>
-                                        <Label text="Inspected" class="cardLabel" />
-                                        <Text text="{inspection>InspectedQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
-                                    </VBox>
-                                </HBox>
-                                
-                                <!-- Progress Bar -->
-                                <VBox class="sapUiSmallMarginTop">
-                                    <Label text="Inspection Progress" class="cardLabel" />
-                                    <ProgressIndicator 
-                                        percentValue="{parts: ['inspection>InspectedQuantity', 'inspection>ActualQuantity'], formatter: '.formatProgress'}"
-                                        displayValue="{parts: ['inspection>InspectedQuantity', 'inspection>ActualQuantity'], formatter: '.formatProgressText'}"
-                                        state="Information"
-                                        class="progressBar" />
+            <VBox class="resultContent">
+                
+                <!-- Selected Lot Information -->
+                <f:Card class="lotInfoCard" visible="{= ${result>/selectedLot} !== null }">
+                    <f:header>
+                        <f:Header title="Inspection Lot Information"/>
+                    </f:header>
+                    <f:content>
+                        <VBox class="lotInfoContent">
+                            <HBox class="lotInfoGrid">
+                                <VBox class="lotInfoItem">
+                                    <Text text="Lot Number:" class="lotInfoLabel"/>
+                                    <Text text="{result>/selectedLot/InspectionLotNumber}" class="lotInfoValue"/>
                                 </VBox>
-
-                                <!-- Status Badge -->
-                                <HBox justifyContent="End" class="sapUiSmallMarginTop">
-                                    <ObjectStatus 
-                                        text="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDText'}"
-                                        state="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDState'}"
-                                        class="statusBadge" />
-                                </HBox>
-                            </VBox>
-                        </f:content>
-                    </f:Card>
-                </content>
-            </Panel>
-
-            <!-- Quick Actions Panel -->
-            <Panel class="actionsPanel" visible="{inspection>InspectionLotNumber}">
-                <headerToolbar>
-                    <Toolbar class="actionToolbar">
-                        <Title text="Quick Actions" level="H3" class="actionTitle" />
-                    </Toolbar>
-                </headerToolbar>
-                <content>
-                    <HBox justifyContent="Center" alignItems="Center" wrap="Wrap" class="actionButtons">
-                        <!-- Accept Button -->
-                        <Button text="Accept Lot" 
-                                type="Accept" 
-                                press="onAcceptPress" 
-                                icon="sap-icon://accept"
-                                class="actionButton acceptButton"
-                                visible="{path: 'inspection>UsageDecisionCode', formatter: '.formatNotDecided'}" />
-                        
-                        <!-- Reject Button -->
-                        <Button text="Reject Lot" 
-                                type="Reject" 
-                                press="onRejectPress" 
-                                icon="sap-icon://decline"
-                                class="actionButton rejectButton"
-                                visible="{path: 'inspection>UsageDecisionCode', formatter: '.formatNotDecided'}" />
-                        
-                        <!-- Usage Decision Button -->
-                        <Button text="Usage Decision" 
-                                type="Emphasized" 
-                                press="onProceedToUsageDecision" 
-                                icon="sap-icon://decision"
-                                class="actionButton usageButton" />
-                        
-                        <!-- Refresh Data Button -->
-                        <Button text="Refresh Data" 
-                                type="Transparent" 
-                                press="onRefreshData" 
-                                icon="sap-icon://refresh"
-                                class="actionButton refreshButton" />
-                        
-                        <!-- Test Data Fetch Button -->
-                        <Button text="Test Fetch" 
-                                type="Ghost" 
-                                press="onTestDataFetch" 
-                                icon="sap-icon://test-automation"
-                                class="actionButton testButton" />
-                    </HBox>
-                </content>
-            </Panel>
-
-            <!-- Result Entry Form -->
-            <Panel class="entryPanel" 
-                   visible="{parts: ['inspection>InspectionLotNumber', 'inspection>UsageDecisionCode'], formatter: '.formatEntryVisible'}"
-                   expandable="true" 
-                   expanded="true">
-                <headerToolbar>
-                    <Toolbar class="entryToolbar">
-                        <Title text="Record Quality Results" level="H3" class="entryTitle" />
-                        <ToolbarSpacer />
-                        <Label text="Daily Entry" class="entrySubtitle" />
-                    </Toolbar>
-                </headerToolbar>
-                <content>
-                    <VBox class="entryForm">
-                        <!-- Input Fields -->
-                        <HBox wrap="Wrap" class="inputContainer">
-                            <!-- Unrestricted Stock -->
-                            <VBox class="inputGroup unrestrictedGroup">
-                                <Label text="Unrestricted Stock" class="inputLabel" />
-                                <Text text="(Good Quality)" class="inputDescription" />
-                                <Input id="inputUnrestricted" 
-                                       placeholder="Enter quantity" 
-                                       type="Number" 
-                                       class="inputField unrestrictedInput"
-                                       liveChange="onInputChange" />
-                            </VBox>
+                                <VBox class="lotInfoItem">
+                                    <Text text="Plant:" class="lotInfoLabel"/>
+                                    <Text text="{result>/selectedLot/Plant} - {result>/selectedLot/PlantDescription}" class="lotInfoValue"/>
+                                </VBox>
+                                <VBox class="lotInfoItem">
+                                    <Text text="Material:" class="lotInfoLabel"/>
+                                    <Text text="{result>/selectedLot/SelectedMaterial}" class="lotInfoValue"/>
+                                </VBox>
+                                <VBox class="lotInfoItem">
+                                    <Text text="Actual Quantity:" class="lotInfoLabel"/>
+                                    <Text text="{result>/selectedLot/ActualQuantity} {result>/selectedLot/UnitOfMeasure}" class="lotInfoValue"/>
+                                </VBox>
+                                <VBox class="lotInfoItem">
+                                    <Text text="Inspected Quantity:" class="lotInfoLabel"/>
+                                    <Text text="{result>/selectedLot/InspectedQuantity} {result>/selectedLot/UnitOfMeasure}" class="lotInfoValue"/>
+                                </VBox>
+                                <VBox class="lotInfoItem">
+                                    <Text text="Status:" class="lotInfoLabel"/>
+                                    <ObjectStatus text="{result>/selectedLot/UsageDecisionStatus}" state="{result>/selectedLot/StatusState}"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </f:content>
+                </f:Card>
+                
+                <!-- Result Recording Form -->
+                <f:Card class="resultFormCard">
+                    <f:header>
+                        <f:Header title="Record New Result"/>
+                    </f:header>
+                    <f:content>
+                        <VBox class="resultFormContent">
                             
-                            <!-- Blocked Stock -->
-                            <VBox class="inputGroup blockedGroup">
-                                <Label text="Blocked Stock" class="inputLabel" />
-                                <Text text="(Defective)" class="inputDescription" />
-                                <Input id="inputBlocked" 
-                                       placeholder="Enter quantity" 
-                                       type="Number" 
-                                       class="inputField blockedInput"
-                                       liveChange="onInputChange" />
-                            </VBox>
+                            <HBox class="resultFormGrid">
+                                <VBox>
+                                    <Label text="Inspection Lot Number:" required="true"/>
+                                    <Input value="{result>/newResult/InspectionLotNumber}" placeholder="Enter lot number"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Plant Code:" required="true"/>
+                                    <Input value="{result>/newResult/PlantCode}" placeholder="Enter plant code"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Inspector Name:"/>
+                                    <Input value="{result>/newResult/InspectorName}" placeholder="Enter inspector name"/>
+                                </VBox>
+                            </HBox>
                             
-                            <!-- Production Stock -->
-                            <VBox class="inputGroup productionGroup">
-                                <Label text="Production Stock" class="inputLabel" />
-                                <Text text="(Rework Required)" class="inputDescription" />
-                                <Input id="inputProduction" 
-                                       placeholder="Enter quantity" 
-                                       type="Number" 
-                                       class="inputField productionInput"
-                                       liveChange="onInputChange" />
-                            </VBox>
-                        </HBox>
-                        
-                        <!-- Save Button -->
-                        <HBox justifyContent="Center" class="sapUiMediumMarginTop">
-                            <Button text="Save Results" 
-                                    type="Emphasized" 
-                                    icon="sap-icon://save" 
-                                    press="onSaveResult" 
-                                    class="saveButton" />
-                        </HBox>
-                        
-                        <!-- Help Text -->
-                        <MessageStrip text="Enter only the quantities processed in the current session. All entries are cumulative." 
-                                     type="Information" 
-                                     class="helpMessage sapUiSmallMarginTop" />
-                    </VBox>
-                </content>
-            </Panel>
-
-            <!-- Results History -->
-            <Panel class="historyPanel" expandable="true" expanded="true">
-                <headerToolbar>
-                    <Toolbar class="historyToolbar">
-                        <Title text="Recording History" level="H3" class="historyTitle" />
-                        <ToolbarSpacer />
-                        <Text text="{viewModel>/resultCount} Records" class="recordCount" />
-                        <SearchField search="onSearch" 
-                                   width="250px" 
-                                   placeholder="Search by lot number..." 
-                                   class="searchField" />
-                    </Toolbar>
-                </headerToolbar>
-                <content>
-                    <!-- No Data Message -->
-                    <MessagePage title="No Results Found" 
-                                description="No quality results have been recorded yet. Start by recording results for an inspection lot."
-                                icon="sap-icon://document"
-                                visible="{parts: ['viewModel>/hasData', 'viewModel>/busy'], formatter: '.formatNoDataVisible'}"
-                                class="noDataMessage">
-                        <customDescription>
-                            <Button text="Refresh Data" 
-                                    type="Emphasized" 
-                                    press="onRefreshData" 
-                                    icon="sap-icon://refresh" />
-                        </customDescription>
-                    </MessagePage>
-
-                    <!-- Results Table -->
-                    <Table id="resultTable" 
-                           items="{result>/ZQM_RESULT_PR}" 
-                           growing="true" 
-                           growingThreshold="20"
-                           visible="{viewModel>/hasData}"
-                           class="resultsTable">
-                        <columns>
-                            <Column width="12rem">
-                                <Text text="Inspection Lot" class="columnHeader" />
-                            </Column>
-                            <Column width="8rem" minScreenWidth="Tablet" demandPopin="true">
-                                <Text text="Plant" class="columnHeader" />
-                            </Column>
-                            <Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
-                                <Text text="Inspector" class="columnHeader" />
-                            </Column>
-                            <Column width="10rem">
-                                <Text text="Date" class="columnHeader" />
-                            </Column>
-                            <Column width="12rem">
-                                <Text text="Category" class="columnHeader" />
-                            </Column>
-                            <Column width="8rem" hAlign="End">
-                                <Text text="Quantity" class="columnHeader" />
-                            </Column>
-                            <Column width="10rem">
-                                <Text text="Status" class="columnHeader" />
-                            </Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem class="resultRow" press="onResultPress">
-                                <cells>
-                                    <ObjectIdentifier title="{result>InspectionLotNumber}" 
-                                                    class="lotIdentifier" />
-                                    <Text text="{result>PlantCode}" class="cellText" />
-                                    <Text text="{result>InspectorName}" class="cellText" />
-                                    <Text text="{path: 'result>RecordedDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium' }}" 
-                                          class="cellText" />
-                                    <ObjectStatus text="{result>ResultCategory}" 
-                                                state="{path: 'result>ResultCategory', formatter: '.formatCategoryState'}"
-                                                class="categoryStatus" />
-                                    <ObjectNumber number="{result>StockCode}" 
-                                                class="quantityNumber" />
-                                    <ObjectStatus text="{path: 'result>UsageDecisionCode', formatter: '.formatUDText'}"
-                                                state="{path: 'result>UsageDecisionCode', formatter: '.formatUDState'}"
-                                                class="statusIndicator" />
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
-                </content>
-            </Panel>
+                            <HBox class="resultFormGrid">
+                                <VBox>
+                                    <Label text="Recorded Date:"/>
+                                    <DatePicker value="{result>/newResult/RecordedDate}"/>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Usage Decision Code:"/>
+                                    <Select selectedKey="{result>/newResult/UsageDecisionCode}">
+                                        <core:Item key="" text="Select Decision"/>
+                                        <core:Item key="A" text="Approved (A)"/>
+                                        <core:Item key="R" text="Rejected (R)"/>
+                                        <core:Item key="R2" text="Rework Required (R2)"/>
+                                    </Select>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Stock Code:"/>
+                                    <Select selectedKey="{result>/newResult/StockCode}">
+                                        <core:Item key="" text="Select Stock Code"/>
+                                        <core:Item key="100" text="100 - Unrestricted"/>
+                                        <core:Item key="1" text="1 - Blocked"/>
+                                        <core:Item key="20" text="20 - Production"/>
+                                    </Select>
+                                </VBox>
+                            </HBox>
+                            
+                            <HBox class="resultFormGrid">
+                                <VBox>
+                                    <Label text="Result Category:"/>
+                                    <Select selectedKey="{result>/newResult/ResultCategory}">
+                                        <core:Item key="" text="Select Category"/>
+                                        <core:Item key="Unrestricted Stock" text="Unrestricted Stock"/>
+                                        <core:Item key="Block Stock" text="Block Stock"/>
+                                        <core:Item key="Production Stock" text="Production Stock"/>
+                                    </Select>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Recording Status:"/>
+                                    <Select selectedKey="{result>/newResult/RecordingStatus}">
+                                        <core:Item key="Active" text="Active"/>
+                                        <core:Item key="View Only" text="View Only"/>
+                                    </Select>
+                                </VBox>
+                            </HBox>
+                            
+                            <HBox class="resultFormButtons">
+                                <Button text="Clear Form" press="onClearForm" type="Transparent"/>
+                                <Button text="Save Result" press="onSaveResult" type="Emphasized"/>
+                            </HBox>
+                            
+                        </VBox>
+                    </f:content>
+                </f:Card>
+                
+                <!-- Existing Results Table -->
+                <f:Card class="resultsTableCard">
+                    <f:header>
+                        <f:Header title="Existing Results"/>
+                    </f:header>
+                    <f:content>
+                        <Table 
+                            items="{result>/results}"
+                            growing="true"
+                            growingThreshold="20"
+                            busy="{result>/isLoading}">
+                            
+                            <columns>
+                                <Column>
+                                    <Text text="Lot Number"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Plant"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Inspector"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Recorded Date"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Decision Code"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Stock Code"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Category"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Status"/>
+                                </Column>
+                            </columns>
+                            
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{result>InspectionLotNumber}" class="lotNumber"/>
+                                        <Text text="{result>PlantCode}"/>
+                                        <Text text="{result>InspectorName}"/>
+                                        <Text text="{result>RecordedDateFormatted}"/>
+                                        <Text text="{result>UsageDecisionCode}"/>
+                                        <Text text="{result>StockCode}"/>
+                                        <Text text="{result>ResultCategory}"/>
+                                        <ObjectStatus 
+                                            text="{result>RecordingStatus}"
+                                            state="{result>StatusState}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                            
+                        </Table>
+                    </f:content>
+                </f:Card>
+                
+            </VBox>
         </content>
+        
     </Page>
+    
 </mvc:View>

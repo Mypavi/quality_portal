@@ -1,80 +1,190 @@
-<mvc:View controllerName="quality.controller.Dashboard"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+<mvc:View
+    controllerName="quality.controller.Dashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.f"
-    xmlns:card="sap.f.cards"
     xmlns:core="sap.ui.core">
-    <Page id="dashboardPage" title="Quality Engineer Dashboard" showNavButton="true" navButtonPress="onNavBack">
+    
+    <Page title="Quality Management Dashboard" showNavButton="false" class="dashboardPage">
+        
+        <customHeader>
+            <Bar class="dashboardHeader">
+                <contentLeft>
+                    <Title text="QMS Dashboard" level="H2"/>
+                </contentLeft>
+                <contentRight>
+                    <Button icon="sap-icon://refresh" press="onRefresh" tooltip="Refresh Data"/>
+                    <Button icon="sap-icon://test" press="onTestServices" tooltip="Test Services"/>
+                    <Button icon="sap-icon://log" press="onLogout" tooltip="Logout"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        
         <content>
-            <VBox class="sapUiSmallMargin">
-
-                <HBox alignItems="Center" justifyContent="Center" class="dashboard-tile-container sapUiMediumMarginBottom">
-                    <GenericTile header="Inspection Lots" frameType="OneByOne" press="onTilePress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
-                        <tileContent>
-                            <TileContent>
-                                <NumericContent value="{inspectionCount>/count}" icon="sap-icon://inspection" withMargin="false" />
-                            </TileContent>
-                        </tileContent>
-                    </GenericTile>
-                    <GenericTile header="Result Recording" frameType="OneByOne" press="onResultRecordingPress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
-                        <tileContent>
-                            <TileContent>
-                                <NumericContent value="{resultCount>/count}" icon="sap-icon://form" withMargin="false" />
-                            </TileContent>
-                        </tileContent>
-                    </GenericTile>
-                    <GenericTile header="Usage Decision" frameType="OneByOne" press="onUsageDecisionPress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
-                        <tileContent>
-                            <TileContent>
-                                <NumericContent value="{usageCount>/count}" icon="sap-icon://approvals" withMargin="false" />
-                            </TileContent>
-                        </tileContent>
-                    </GenericTile>
-                </HBox>
-
-                <Toolbar class="sapUiSmallMarginBottom">
-                    <Title text="Inspection Lots" level="H2" />
-                    <ToolbarSpacer />
-                    <Button text="Test Services" icon="sap-icon://test-automation" press="onTestServices" type="Emphasized" class="sapUiTinyMarginEnd" />
-                    <Button text="Refresh" icon="sap-icon://refresh" press="onRefresh" type="Default" class="sapUiTinyMarginEnd" />
-                    <SearchField search="onSearch" width="auto" placeholder="Search Inspection Lot" />
-                </Toolbar>
+            <VBox class="dashboardContent">
                 
-                <Table id="inspectionTable" items="{inspection>/ZQM_INSPECT_PR}" growing="true" growingThreshold="10">
-                    <columns>
-                        <Column>
-                            <Text text="Inspection Lot" />
-                        </Column>
-                        <Column minScreenWidth="Tablet" demandPopin="true">
-                            <Text text="Plant" />
-                        </Column>
-                         <Column minScreenWidth="Tablet" demandPopin="true">
-                            <Text text="Material" />
-                        </Column>
-                        <Column hAlign="End">
-                            <Text text="Quantity" />
-                        </Column>
-                        <Column>
-                            <Text text="Usage Decision" />
-                        </Column>
-                         <Column>
-                            <Text text="Code" />
-                        </Column>
-                    </columns>
-                    <items>
-                        <ColumnListItem type="Navigation" press="onInspectionLotPress">
-                            <cells>
-                                <ObjectIdentifier title="{inspection>InspectionLotNumber}" text="{inspection>LotOrigin}" />
-                                <Text text="{inspection>PlantDescription} ({inspection>Plant})" />
-                                <Text text="{inspection>SelectedMaterial}" />
-                                <ObjectNumber number="{inspection>ActualQuantity}" unit="{inspection>UnitOfMeasure}" />
-                                <ObjectStatus text="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDText'}" state="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDState'}" />
-                                <Text text="{inspection>UsageDecisionCode}" />
-                            </cells>
-                        </ColumnListItem>
-                    </items>
-                </Table>
+                <!-- Statistics Cards -->
+                <HBox class="statsContainer" justifyContent="SpaceAround">
+                    
+                    <f:Card class="statsCard inspectionCard">
+                        <f:header>
+                            <f:Header title="Total Inspections"/>
+                        </f:header>
+                        <f:content>
+                            <VBox alignItems="Center" class="cardContent">
+                                <Text text="{dashboard>/counts/totalInspections}" class="statsNumber"/>
+                                <Text text="Inspection Lots" class="statsLabel"/>
+                                <Button text="View All" type="Transparent" press="onNavigateToResults"/>
+                            </VBox>
+                        </f:content>
+                    </f:Card>
+                    
+                    <f:Card class="statsCard pendingCard">
+                        <f:header>
+                            <f:Header title="Pending Inspections"/>
+                        </f:header>
+                        <f:content>
+                            <VBox alignItems="Center" class="cardContent">
+                                <Text text="{dashboard>/counts/pendingInspections}" class="statsNumber"/>
+                                <Text text="Awaiting Decision" class="statsLabel"/>
+                                <Button text="Process" type="Emphasized" press="onNavigateToResults"/>
+                            </VBox>
+                        </f:content>
+                    </f:Card>
+                    
+                    <f:Card class="statsCard completedCard">
+                        <f:header>
+                            <f:Header title="Completed"/>
+                        </f:header>
+                        <f:content>
+                            <VBox alignItems="Center" class="cardContent">
+                                <Text text="{dashboard>/counts/completedInspections}" class="statsNumber"/>
+                                <Text text="Decisions Made" class="statsLabel"/>
+                                <Button text="Review" type="Transparent" press="onNavigateToUsage"/>
+                            </VBox>
+                        </f:content>
+                    </f:Card>
+                    
+                    <f:Card class="statsCard resultsCard">
+                        <f:header>
+                            <f:Header title="Results Recorded"/>
+                        </f:header>
+                        <f:content>
+                            <VBox alignItems="Center" class="cardContent">
+                                <Text text="{dashboard>/counts/totalResults}" class="statsNumber"/>
+                                <Text text="Result Records" class="statsLabel"/>
+                                <Button text="View" type="Transparent" press="onNavigateToResults"/>
+                            </VBox>
+                        </f:content>
+                    </f:Card>
+                    
+                </HBox>
+                
+                <!-- Quick Actions -->
+                <Panel headerText="Quick Actions" class="actionsPanel">
+                    <content>
+                        <HBox class="actionButtons" justifyContent="SpaceAround">
+                            <Button 
+                                text="Record Results" 
+                                icon="sap-icon://add-document"
+                                type="Emphasized"
+                                press="onNavigateToResults"
+                                class="actionButton"/>
+                            <Button 
+                                text="Usage Decisions" 
+                                icon="sap-icon://decision"
+                                type="Default"
+                                press="onNavigateToUsage"
+                                class="actionButton"/>
+                            <Button 
+                                text="Test Services" 
+                                icon="sap-icon://test"
+                                type="Transparent"
+                                press="onTestServices"
+                                class="actionButton"/>
+                        </HBox>
+                    </content>
+                </Panel>
+                
+                <!-- Inspection Lots Table -->
+                <Panel headerText="Recent Inspection Lots" class="lotsPanel">
+                    <content>
+                        <Table 
+                            items="{dashboard>/inspectionLots}"
+                            growing="true"
+                            growingThreshold="20"
+                            class="inspectionTable">
+                            
+                            <columns>
+                                <Column>
+                                    <Text text="Lot Number"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Plant"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Material"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Quantities"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Progress"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Status"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Actions"/>
+                                </Column>
+                            </columns>
+                            
+                            <items>
+                                <ColumnListItem press="onInspectionLotPress" type="Active">
+                                    <cells>
+                                        <Text text="{dashboard>InspectionLotNumber}" class="lotNumber"/>
+                                        <VBox>
+                                            <Text text="{dashboard>Plant}"/>
+                                            <Text text="{dashboard>PlantDescription}" class="plantDesc"/>
+                                        </VBox>
+                                        <Text text="{dashboard>SelectedMaterial}"/>
+                                        <VBox>
+                                            <Text text="Actual: {dashboard>ActualQuantity} {dashboard>UnitOfMeasure}"/>
+                                            <Text text="Inspected: {dashboard>InspectedQuantity} {dashboard>UnitOfMeasure}"/>
+                                        </VBox>
+                                        <ProgressIndicator 
+                                            percentValue="{dashboard>ProgressPercent}"
+                                            displayValue="{dashboard>ProgressPercent}%"
+                                            class="progressBar"/>
+                                        <ObjectStatus 
+                                            text="{dashboard>StatusText}"
+                                            state="{dashboard>StatusState}"/>
+                                        <Button 
+                                            text="Process" 
+                                            type="Emphasized"
+                                            press="onInspectionLotPress"
+                                            visible="{= ${dashboard>UsageDecisionStatus} === 'Pending' }"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                            
+                        </Table>
+                    </content>
+                </Panel>
+                
+                <!-- Loading Indicator -->
+                <BusyIndicator visible="{dashboard>/isLoading}" class="loadingIndicator"/>
+                
+                <!-- Last Updated -->
+                <Text 
+                    text="Last Updated: {dashboard>/lastUpdated}" 
+                    class="lastUpdated"
+                    visible="{= ${dashboard>/lastUpdated} !== null }"/>
+                
             </VBox>
         </content>
+        
     </Page>
+    
 </mvc:View>

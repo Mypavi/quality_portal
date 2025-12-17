@@ -1,118 +1,69 @@
-<mvc:View controllerName="quality.controller.Login"
-    xmlns:mvc="sap.ui.core.mvc" 
+<mvc:View
+    controllerName="quality.controller.Login"
+    xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
-    xmlns="sap.m"
-    xmlns:core="sap.ui.core"
-    xmlns:html="http://www.w3.org/1999/xhtml">
+    xmlns="sap.m">
     
-    <Page id="page" title="Quality Management Login" showHeader="false" class="loginPage">
+    <Page showHeader="false" class="loginPage">
         <content>
-            <!-- Animated Background -->
-            <html:div class="loginBackground">
-                <html:div class="floatingShape shape1"></html:div>
-                <html:div class="floatingShape shape2"></html:div>
-                <html:div class="floatingShape shape3"></html:div>
-                <html:div class="floatingShape shape4"></html:div>
-                <html:div class="floatingShape shape5"></html:div>
-                <html:div class="kaarWatermark">KAAR</html:div>
-            </html:div>
-            
-            <!-- Right Side Login Container -->
-            <html:div class="rightLoginContainer">
-                <html:div class="loginCard">
-                    
-                    <!-- Logo and Branding -->
-                    <html:div class="brandingSection">
-                        <html:div class="loginLogo">
-                            <html:i class="sap-icon sap-icon--quality-issue logoIcon"></html:i>
-                        </html:div>
-                        <html:div class="companyBranding">
-                            <html:h1 class="companyName">KAAR</html:h1>
-                            <html:h2 class="companySubName">TECHNOLOGIES</html:h2>
-                        </html:div>
-                        <html:div class="systemTitle">
-                            <html:p class="systemSubtitle">Quality Management System</html:p>
-                            <html:div class="titleUnderline"></html:div>
-                        </html:div>
-                    </html:div>
-                    
-                    <!-- Login Form -->
-                    <html:div class="loginFormContainer">
-                        <!-- User ID -->
-                        <html:div class="inputGroup">
-                            <html:label class="inputLabel">USER ID</html:label>
-                            <html:div class="inputWrapper">
-                                <html:i class="sap-icon sap-icon--person-placeholder inputIcon"></html:i>
-                                <Input id="userInput" 
-                                       placeholder="Enter your user ID" 
-                                       value="{login>/userId}" 
-                                       class="customInput"
-                                       liveChange="onInputChange"
-                                       submit="onLoginPress" />
-                            </html:div>
-                        </html:div>
-                        
-                        <!-- Password -->
-                        <html:div class="inputGroup">
-                            <html:label class="inputLabel">PASSWORD</html:label>
-                            <html:div class="inputWrapper">
-                                <html:i class="sap-icon sap-icon--locked inputIcon"></html:i>
-                                <Input id="passwordInput" 
-                                       type="Password" 
-                                       placeholder="Enter your password" 
-                                       value="{login>/password}" 
-                                       class="customInput"
-                                       liveChange="onInputChange"
-                                       submit="onLoginPress" />
-                            </html:div>
-                        </html:div>
-                        
-                        <!-- Login Button -->
-                        <html:div class="buttonGroup">
-                            <Button text="SIGN IN TO PORTAL" 
-                                    type="Emphasized" 
-                                    press="onLoginPress" 
-                                    class="loginButton"
-                                    icon="sap-icon://log"
-                                    enabled="{parts: [{path: 'login>/userId'}, {path: 'login>/password'}], formatter: '.formatLoginEnabled'}" />
-                        </html:div>
-                        
-                        <!-- Login Options -->
-                        <html:div class="loginOptions">
-                            <CheckBox text="Remember me" class="rememberMe" />
-                            <Link text="Forgot password?" class="forgotPassword" press="onForgotPassword" />
-                        </html:div>
-                    </html:div>
-                    
-                    <!-- Demo Section -->
-                    <html:div class="demoSection">
-                        <Button text="🔑 Demo Login" 
-                                type="Transparent" 
-                                press="onUseDemoCredentials" 
-                                class="demoButton" />
-                        <Button text="🚀 Quick Dashboard" 
-                                type="Transparent" 
-                                press="onQuickNavToDashboard" 
-                                class="demoButton" />
-                        <Button text="🔧 Test Navigation" 
-                                type="Transparent" 
-                                press="onTestNavigation" 
-                                class="demoButton" />
-                    </html:div>
-                    
-                    <!-- Security Badge -->
-                    <html:div class="securityBadge">
-                        <html:i class="sap-icon sap-icon--shield securityIcon"></html:i>
-                        <html:span class="securityText">Secure Enterprise Portal</html:span>
-                    </html:div>
-                    
-                    <!-- Footer -->
-                    <html:div class="loginFooter">
-                        <html:p class="footerText">Powered by SAP UI5 Technology</html:p>
-                        <html:p class="copyrightText">© 2024 Kaar Technologies Pvt Ltd. All Rights Reserved.</html:p>
-                    </html:div>
-                </html:div>
-            </html:div>
+            <VBox class="loginContainer" alignItems="Center" justifyContent="Center">
+                
+                <!-- Header Section -->
+                <VBox class="loginHeader" alignItems="Center">
+                    <Icon src="sap-icon://quality-issue" size="4rem" color="#0070f2"/>
+                    <Title text="Quality Management System" level="H1" class="loginTitle"/>
+                    <Text text="SAP Integrated Quality Control Portal" class="loginSubtitle"/>
+                </VBox>
+                
+                <!-- Login Form -->
+                <VBox class="loginForm">
+                    <Panel headerText="Sign In" class="loginPanel">
+                        <content>
+                            <VBox class="loginInputs">
+                                <Label text="Username:" class="loginLabel"/>
+                                <Input 
+                                    value="{auth>/username}" 
+                                    placeholder="Enter your username (e.g., K901900)"
+                                    class="loginInput"
+                                    submit="onEnterPressed"/>
+                                
+                                <Label text="Password:" class="loginLabel"/>
+                                <Input 
+                                    type="Password"
+                                    value="{auth>/password}" 
+                                    placeholder="Enter your password"
+                                    class="loginInput"
+                                    submit="onEnterPressed"/>
+                                
+                                <HBox class="loginButtons" justifyContent="SpaceBetween">
+                                    <Button 
+                                        text="Login" 
+                                        type="Emphasized" 
+                                        press="onLogin"
+                                        class="loginButton"/>
+                                    <Button 
+                                        text="Demo Login" 
+                                        type="Transparent" 
+                                        press="onDemoLogin"
+                                        class="demoButton"/>
+                                </HBox>
+                            </VBox>
+                        </content>
+                    </Panel>
+                </VBox>
+                
+                <!-- Info Section -->
+                <VBox class="loginInfo" alignItems="Center">
+                    <Text text="Supported Credentials:" class="infoTitle"/>
+                    <VBox class="credentialsList">
+                        <Text text="• SAP User: K901900 / 12345" class="credentialItem"/>
+                        <Text text="• Demo Mode: demo / demo" class="credentialItem"/>
+                        <Text text="• Admin: admin / admin" class="credentialItem"/>
+                    </VBox>
+                </VBox>
+                
+            </VBox>
         </content>
     </Page>
+    
 </mvc:View>

@@ -1,5 +1,5 @@
 {
-  "_version": "1.76.0",
+  "_version": "1.59.0",
   "sap.app": {
     "id": "quality",
     "type": "application",
@@ -12,41 +12,44 @@
     "resources": "resources.json",
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
-      "version": "1.20.0",
-      "toolsId": "0d7f2416-8e9e-4ae2-855e-59c4786d8017"
+      "version": "1.14.4",
+      "toolsId": "ca793c1b-2f5a-4c6e-8f4b-7b8c9d0e1f2a"
     },
     "dataSources": {
       "loginService": {
-        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/",
+        "uri": "/sap/opu/odata/sap/ZQM_LOG_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0",
-          "useBatch": false
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
         }
       },
       "inspectionService": {
-        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/",
+        "uri": "/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0",
-          "useBatch": false
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
         }
       },
       "resultService": {
-        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
+        "uri": "/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0",
-          "useBatch": false,
-          "defaultBindingMode": "TwoWay"
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
         }
       },
       "usageService": {
-        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/",
+        "uri": "/sap/opu/odata/sap/ZQM_US_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0",
-          "useBatch": false
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
         }
       }
     }
@@ -70,131 +73,138 @@
   "sap.ui5": {
     "flexEnabled": true,
     "dependencies": {
-      "minUI5Version": "1.143.2",
+      "minUI5Version": "1.120.17",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {},
-        "sap.f": {}
+        "sap.f": {},
+        "sap.suite.ui.commons": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
       }
-    },
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
     },
     "models": {
       "i18n": {
+        "dataSource": "i18n",
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "quality.i18n.i18n"
         }
       },
-      "auth": {
+      "login": {
         "dataSource": "loginService",
-        "preload": true
+        "preload": true,
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "Request"
+        }
       },
       "inspection": {
         "dataSource": "inspectionService",
-        "preload": true
+        "preload": true,
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "Request"
+        }
       },
       "result": {
         "dataSource": "resultService",
         "preload": true,
+        "type": "sap.ui.model.odata.v2.ODataModel",
         "settings": {
+          "defaultOperationMode": "Server",
           "defaultBindingMode": "TwoWay",
-          "defaultCountMode": "Inline"
+          "defaultCountMode": "Request"
         }
       },
       "usage": {
         "dataSource": "usageService",
-        "preload": true
-      }
-    },
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
+        "preload": true,
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "Request"
         }
-      ]
+      }
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "quality"
+  },
+  "sap.platform.cf": {
+    "ui5ComponentLoader": {
+      "url": "https://ui5.sap.com/resources/sap-ui-cachebuster/sap-ui-core.js"
+    }
+  },
+  "routing": {
+    "config": {
+      "routerClass": "sap.m.routing.Router",
+      "viewType": "XML",
+      "async": true,
+      "viewPath": "quality.view",
+      "controllerPath": "quality.controller",
+      "controlId": "App",
+      "clearControlAggregation": false
     },
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "transition": "slide",
-        "type": "View",
-        "viewType": "XML",
-        "path": "quality.view",
-        "async": true
+    "routes": [
+      {
+        "name": "login",
+        "pattern": "",
+        "target": ["login"]
       },
-      "routes": [
-        {
-          "name": "RouteLogin",
-          "pattern": "",
-          "target": [
-            "TargetLogin"
-          ]
-        },
-        {
-          "name": "RouteDashboard",
-          "pattern": "dashboard",
-          "target": [
-            "TargetDashboard"
-          ]
-        },
-        {
-          "name": "RouteResultRecordingList",
-          "pattern": "result",
-          "target": [
-            "TargetResultRecording"
-          ]
-        },
-        {
-          "name": "RouteResultRecording",
-          "pattern": "result/{inspectionLot}",
-          "target": [
-            "TargetResultRecording"
-          ]
-        },
-        {
-          "name": "RouteUsageDecisionList",
-          "pattern": "usage",
-          "target": [
-            "TargetUsageDecision"
-          ]
-        },
-        {
-          "name": "RouteUsageDecision",
-          "pattern": "usage/{inspectionLot}",
-          "target": [
-            "TargetUsageDecision"
-          ]
-        }
-      ],
-      "targets": {
-        "TargetLogin": {
-          "viewName": "Login",
-          "viewId": "login"
-        },
-        "TargetDashboard": {
-          "viewName": "Dashboard",
-          "viewId": "dashboard"
-        },
-        "TargetResultRecording": {
-          "viewName": "ResultRecording",
-          "viewId": "resultRecording"
-        },
-        "TargetUsageDecision": {
-          "viewName": "UsageDecision",
-          "viewId": "usageDecision"
-        }
+      {
+        "name": "dashboard",
+        "pattern": "dashboard",
+        "target": ["dashboard"]
+      },
+      {
+        "name": "results",
+        "pattern": "results",
+        "target": ["results"]
+      },
+      {
+        "name": "usage",
+        "pattern": "usage",
+        "target": ["usage"]
       }
-    },
-    "rootView": {
-      "viewName": "quality.view.App",
-      "type": "XML",
-      "id": "App",
-      "async": true
+    ],
+    "targets": {
+      "login": {
+        "viewType": "XML",
+        "transition": "slide",
+        "clearControlAggregation": false,
+        "viewId": "login",
+        "viewName": "Login"
+      },
+      "dashboard": {
+        "viewType": "XML",
+        "transition": "slide",
+        "clearControlAggregation": false,
+        "viewId": "dashboard",
+        "viewName": "Dashboard"
+      },
+      "results": {
+        "viewType": "XML",
+        "transition": "slide",
+        "clearControlAggregation": false,
+        "viewId": "results",
+        "viewName": "ResultRecording"
+      },
+      "usage": {
+        "viewType": "XML",
+        "transition": "slide",
+        "clearControlAggregation": false,
+        "viewId": "usage",
+        "viewName": "UsageDecision"
+      }
     }
   }
 }

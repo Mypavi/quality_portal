@@ -1,10 +1,14 @@
 sap.ui.define([
-  "sap/ui/core/mvc/Controller"
-], (BaseController) => {
-  "use strict";
+    "sap/ui/core/mvc/Controller"
+], function (Controller) {
+    "use strict";
 
-  return BaseController.extend("quality.controller.App", {
-      onInit() {
-      }
-  });
+    return Controller.extend("quality.controller.App", {
+
+        onInit: function () {
+            // App controller initialization
+            console.log("Quality Management System initialized");
+        }
+
+    });
 });

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices m:DataServiceVersion="1.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <Schema Namespace="ZQM_SERVICES" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      
+      <!-- Login Entity -->
+      <EntityType Name="ZQM_LOG_PRType">
+        <Key>
+          <PropertyRef Name="bname"/>
+        </Key>
+        <Property Name="bname" Type="Edm.String" Nullable="false" MaxLength="12"/>
+        <Property Name="password" Type="Edm.String" Nullable="false" MaxLength="40"/>
+      </EntityType>
+      
+      <!-- Inspection Entity -->
+      <EntityType Name="ZQM_INSPECT_PRType">
+        <Key>
+          <PropertyRef Name="InspectionLotNumber"/>
+        </Key>
+        <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12"/>
+        <Property Name="Plant" Type="Edm.String" Nullable="true" MaxLength="4"/>
+        <Property Name="PlantDescription" Type="Edm.String" Nullable="true" MaxLength="30"/>
+        <Property Name="LotOrigin" Type="Edm.String" Nullable="true" MaxLength="2"/>
+        <Property Name="ActualQuantity" Type="Edm.String" Nullable="true" MaxLength="13"/>
+        <Property Name="InspectedQuantity" Type="Edm.String" Nullable="true" MaxLength="13"/>
+        <Property Name="UsageDecisionCode" Type="Edm.String" Nullable="true" MaxLength="1"/>
+        <Property Name="SelectedMaterial" Type="Edm.String" Nullable="true" MaxLength="40"/>
+        <Property Name="UnitOfMeasure" Type="Edm.String" Nullable="true" MaxLength="3"/>
+        <Property Name="UsageDecisionStatus" Type="Edm.String" Nullable="true" MaxLength="20"/>
+      </EntityType>
+      
+      <!-- Result Entity -->
+      <EntityType Name="ZQM_RESULT_PRType">
+        <Key>
+          <PropertyRef Name="InspectionLotNumber"/>
+        </Key>
+        <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12"/>
+        <Property Name="PlantCode" Type="Edm.String" Nullable="true" MaxLength="4"/>
+        <Property Name="InspectorName" Type="Edm.String" Nullable="true" MaxLength="12"/>
+        <Property Name="RecordedDate" Type="Edm.DateTime" Nullable="true"/>
+        <Property Name="UsageDecisionCode" Type="Edm.String" Nullable="true" MaxLength="1"/>
+        <Property Name="StockCode" Type="Edm.String" Nullable="true" MaxLength="3"/>
+        <Property Name="ResultCategory" Type="Edm.String" Nullable="true" MaxLength="20"/>
+        <Property Name="RecordingStatus" Type="Edm.String" Nullable="true" MaxLength="10"/>
+      </EntityType>
+      
+      <!-- Usage Decision Entity -->
+      <EntityType Name="ZQM_US_PRType">
+        <Key>
+          <PropertyRef Name="InspectionLotNumber"/>
+        </Key>
+        <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12"/>
+        <Property Name="Plant" Type="Edm.String" Nullable="true" MaxLength="4"/>
+        <Property Name="LotQuantity" Type="Edm.String" Nullable="true" MaxLength="13"/>
+        <Property Name="InspectedQuantity" Type="Edm.String" Nullable="true" MaxLength="13"/>
+        <Property Name="UsageDecisionCode" Type="Edm.String" Nullable="true" MaxLength="1"/>
+        <Property Name="DecisionStatus" Type="Edm.String" Nullable="true" MaxLength="10"/>
+        <Property Name="DecisionMessage" Type="Edm.String" Nullable="true" MaxLength="50"/>
+      </EntityType>
+      
+      <!-- Entity Container -->
+      <EntityContainer Name="ZQM_SERVICES_Container" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="ZQM_LOG_PR" EntityType="ZQM_SERVICES.ZQM_LOG_PRType"/>
+        <EntitySet Name="ZQM_INSPECT_PR" EntityType="ZQM_SERVICES.ZQM_INSPECT_PRType"/>
+        <EntitySet Name="ZQM_RESULT_PR" EntityType="ZQM_SERVICES.ZQM_RESULT_PRType"/>
+        <EntitySet Name="ZQM_US_PR" EntityType="ZQM_SERVICES.ZQM_US_PRType"/>
+      </EntityContainer>
+      
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

@@ -1,175 +1,166 @@
-<mvc:View controllerName="quality.controller.UsageDecision"
-    xmlns:mvc="sap.ui.core.mvc" 
+<mvc:View
+    controllerName="quality.controller.UsageDecision"
+    xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.f"
-    xmlns:core="sap.ui.core"
-    xmlns:layout="sap.ui.layout">
+    xmlns:core="sap.ui.core">
     
-    <Page id="usagePage" title="Usage Decision" showNavButton="true" navButtonPress="onNavBack" 
-          class="usageDecisionPage" busy="{viewModel>/busy}">
+    <Page title="Usage Decisions" showNavButton="true" navButtonPress="onNavBack" class="usagePage">
         
-        <!-- Custom Header -->
         <customHeader>
-            <Bar class="customHeaderBar">
+            <Bar class="usageHeader">
                 <contentLeft>
-                    <Button icon="sap-icon://nav-back" press="onNavBack" type="Transparent" />
+                    <Button icon="sap-icon://nav-back" press="onNavBack"/>
+                    <Title text="Usage Decisions" level="H2"/>
                 </contentLeft>
-                <contentMiddle>
-                    <Title text="Quality Usage Decision" class="headerTitle" />
-                </contentMiddle>
                 <contentRight>
-                    <Button icon="sap-icon://refresh" press="onRefreshData" type="Transparent" tooltip="Refresh Data" />
+                    <Button icon="sap-icon://download" press="onExport" tooltip="Export"/>
+                    <Button icon="sap-icon://refresh" press="onRefresh" tooltip="Refresh"/>
                 </contentRight>
             </Bar>
         </customHeader>
-
+        
         <content>
-            <!-- Hero Section with Lot Information -->
-            <Panel class="heroPanel" visible="{inspection>InspectionLotNumber}">
-                <content>
-                    <f:Card class="lotInfoCard">
-                        <f:header>
-                            <f:Header title="Inspection Lot {inspection>InspectionLotNumber}" 
-                                     subtitle="{inspection>PlantDescription} ({inspection>Plant})" />
-                        </f:header>
-                        <f:content>
-                            <VBox class="cardContent">
-                                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
-                                    <VBox>
-                                        <Label text="Material" class="cardLabel" />
-                                        <Text text="{inspection>SelectedMaterial}" class="cardValue" />
-                                    </VBox>
-                                    <VBox>
-                                        <Label text="Lot Quantity" class="cardLabel" />
-                                        <Text text="{inspection>ActualQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
-                                    </VBox>
-                                    <VBox>
-                                        <Label text="Inspected" class="cardLabel" />
-                                        <Text text="{inspection>InspectedQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
-                                    </VBox>
-                                </HBox>
-
-                                <!-- Status Badge -->
-                                <HBox justifyContent="End" class="sapUiSmallMarginTop">
-                                    <ObjectStatus 
-                                        text="{path: 'inspection>UsageDecisionCode', formatter: '.formatDecisionText'}"
-                                        state="{path: 'inspection>UsageDecisionCode', formatter: '.formatDecisionState'}"
-                                        class="statusBadge" />
-                                </HBox>
+            <VBox class="usageContent">
+                
+                <!-- Filters Panel -->
+                <Panel headerText="Filters" class="usageFilters">
+                    <content>
+                        <VBox>
+                            <HBox class="filterGrid">
+                                <VBox>
+                                    <Label text="Plant:"/>
+                                    <Select selectedKey="{usage>/filters/plant}">
+                                        <core:Item key="" text="All Plants"/>
+                                        <core:Item key="0001" text="0001 - werk_01"/>
+                                        <core:Item key="1003" text="1003 - MK"/>
+                                        <core:Item key="1008" text="1008 - SW"/>
+                                    </Select>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Decision Status:"/>
+                                    <Select selectedKey="{usage>/filters/status}">
+                                        <core:Item key="" text="All Statuses"/>
+                                        <core:Item key="Allowed" text="Allowed"/>
+                                        <core:Item key="Blocked" text="Blocked"/>
+                                        <core:Item key="Checked" text="Checked"/>
+                                    </Select>
+                                </VBox>
+                                <VBox>
+                                    <Label text="Lot Number:"/>
+                                    <Input 
+                                        value="{usage>/filters/lotNumber}" 
+                                        placeholder="Search by lot number"/>
+                                </VBox>
+                            </HBox>
+                            
+                            <HBox class="filterButtons">
+                                <Button text="Clear Filters" press="onClearFilters" type="Transparent"/>
+                                <Button text="Apply Filters" press="onApplyFilters" type="Emphasized"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Panel>
+                
+                <!-- Usage Decisions Table -->
+                <f:Card class="usageTableCard">
+                    <f:header>
+                        <f:Header title="Usage Decisions"/>
+                    </f:header>
+                    <f:content>
+                        <Table 
+                            id="usageDecisionTable"
+                            items="{usage>/usageDecisions}"
+                            growing="true"
+                            growingThreshold="20"
+                            busy="{usage>/isLoading}">
+                            
+                            <columns>
+                                <Column>
+                                    <Text text="Lot Number"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Plant"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Quantities"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Progress"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Decision Code"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Status"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Message"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Actions"/>
+                                </Column>
+                            </columns>
+                            
+                            <items>
+                                <ColumnListItem press="onUsageDecisionPress" type="Active">
+                                    <cells>
+                                        <Text text="{usage>InspectionLotNumber}" class="lotNumber"/>
+                                        <Text text="{usage>Plant}"/>
+                                        <VBox>
+                                            <Text text="Total: {usage>LotQuantity}"/>
+                                            <Text text="Inspected: {usage>InspectedQuantity}"/>
+                                        </VBox>
+                                        <ProgressIndicator 
+                                            percentValue="{usage>QuantityProgress}"
+                                            displayValue="{usage>QuantityProgress}%"
+                                            class="progressBar"/>
+                                        <Text text="{usage>DecisionCodeText}" class="decisionCode"/>
+                                        <ObjectStatus 
+                                            text="{usage>DecisionStatus}"
+                                            state="{usage>StatusState}"
+                                            class="decisionStatus"/>
+                                        <Text text="{usage>DecisionMessage}" class="decisionMessage"/>
+                                        <Button 
+                                            text="Details" 
+                                            type="Transparent"
+                                            press="onUsageDecisionPress"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                            
+                        </Table>
+                    </f:content>
+                </f:Card>
+                
+                <!-- Summary Statistics -->
+                <Panel headerText="Summary Statistics" class="summaryPanel">
+                    <content>
+                        <HBox class="summaryStats" justifyContent="SpaceAround">
+                            <VBox alignItems="Center">
+                                <Text text="{= ${usage>/usageDecisions}.filter(function(d) { return d.DecisionStatus === 'Allowed'; }).length }" class="summaryNumber"/>
+                                <Text text="Allowed" class="summaryLabel"/>
                             </VBox>
-                        </f:content>
-                    </f:Card>
-                </content>
-            </Panel>
-
-            <!-- Quick Actions Panel -->
-            <Panel class="actionsPanel">
-                <headerToolbar>
-                    <Toolbar class="actionToolbar">
-                        <Title text="Quick Actions" level="H3" class="actionTitle" />
-                    </Toolbar>
-                </headerToolbar>
-                <content>
-                    <HBox justifyContent="Center" alignItems="Center" wrap="Wrap" class="actionButtons">
-                        <!-- Refresh Data Button -->
-                        <Button text="Refresh Data" 
-                                type="Transparent" 
-                                press="onRefreshData" 
-                                icon="sap-icon://refresh"
-                                class="actionButton refreshButton" />
-                        
-                        <!-- Test Data Fetch Button -->
-                        <Button text="Test Fetch" 
-                                type="Ghost" 
-                                press="onTestDataFetch" 
-                                icon="sap-icon://test-automation"
-                                class="actionButton testButton" />
-                    </HBox>
-                </content>
-            </Panel>
-
-            <!-- Usage Decisions History -->
-            <Panel class="historyPanel" expandable="true" expanded="true">
-                <headerToolbar>
-                    <Toolbar class="historyToolbar">
-                        <Title text="Usage Decisions" level="H3" class="historyTitle" />
-                        <ToolbarSpacer />
-                        <Text text="{viewModel>/usageCount} Records" class="recordCount" />
-                        <SearchField search="onSearch" 
-                                   width="250px" 
-                                   placeholder="Search by lot number..." 
-                                   class="searchField" />
-                    </Toolbar>
-                </headerToolbar>
-                <content>
-                    <!-- No Data Message -->
-                    <MessagePage title="No Usage Decisions Found" 
-                                description="No usage decisions have been made yet. Complete result recording first."
-                                icon="sap-icon://decision"
-                                visible="{parts: ['viewModel>/hasData', 'viewModel>/busy'], formatter: '.formatNoDataVisible'}"
-                                class="noDataMessage">
-                        <customDescription>
-                            <Button text="Refresh Data" 
-                                    type="Emphasized" 
-                                    press="onRefreshData" 
-                                    icon="sap-icon://refresh" />
-                        </customDescription>
-                    </MessagePage>
-
-                    <!-- Usage Decisions Table -->
-                    <Table id="usageTable" 
-                           items="{usage>/ZQM_US_PR}" 
-                           growing="true" 
-                           growingThreshold="20"
-                           visible="{viewModel>/hasData}"
-                           class="usageTable">
-                        <columns>
-                            <Column width="12rem">
-                                <Text text="Inspection Lot" class="columnHeader" />
-                            </Column>
-                            <Column width="8rem" minScreenWidth="Tablet" demandPopin="true">
-                                <Text text="Plant" class="columnHeader" />
-                            </Column>
-                            <Column width="10rem" hAlign="End">
-                                <Text text="Lot Quantity" class="columnHeader" />
-                            </Column>
-                            <Column width="10rem" hAlign="End">
-                                <Text text="Inspected Qty" class="columnHeader" />
-                            </Column>
-                            <Column width="12rem">
-                                <Text text="Decision Code" class="columnHeader" />
-                            </Column>
-                            <Column width="10rem">
-                                <Text text="Status" class="columnHeader" />
-                            </Column>
-                            <Column width="15rem" minScreenWidth="Desktop" demandPopin="true">
-                                <Text text="Message" class="columnHeader" />
-                            </Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem class="usageRow" press="onUsagePress">
-                                <cells>
-                                    <ObjectIdentifier title="{usage>InspectionLotNumber}" 
-                                                    class="lotIdentifier" />
-                                    <Text text="{usage>Plant}" class="cellText" />
-                                    <ObjectNumber number="{usage>LotQuantity}" 
-                                                class="quantityNumber" />
-                                    <ObjectNumber number="{usage>InspectedQuantity}" 
-                                                class="quantityNumber" />
-                                    <ObjectStatus text="{path: 'usage>UsageDecisionCode', formatter: '.formatDecisionText'}"
-                                                state="{path: 'usage>UsageDecisionCode', formatter: '.formatDecisionState'}"
-                                                class="decisionStatus" />
-                                    <ObjectStatus text="{usage>DecisionStatus}"
-                                                state="{path: 'usage>DecisionStatus', formatter: '.formatStatusState'}"
-                                                class="statusIndicator" />
-                                    <Text text="{usage>DecisionMessage}" class="cellText" />
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
-                </content>
-            </Panel>
+                            <VBox alignItems="Center">
+                                <Text text="{= ${usage>/usageDecisions}.filter(function(d) { return d.DecisionStatus === 'Blocked'; }).length }" class="summaryNumber"/>
+                                <Text text="Blocked" class="summaryLabel"/>
+                            </VBox>
+                            <VBox alignItems="Center">
+                                <Text text="{= ${usage>/usageDecisions}.filter(function(d) { return !d.UsageDecisionCode; }).length }" class="summaryNumber"/>
+                                <Text text="Pending" class="summaryLabel"/>
+                            </VBox>
+                            <VBox alignItems="Center">
+                                <Text text="{usage>/usageDecisions/length}" class="summaryNumber"/>
+                                <Text text="Total" class="summaryLabel"/>
+                            </VBox>
+                        </HBox>
+                    </content>
+                </Panel>
+                
+            </VBox>
         </content>
+        
     </Page>
+    
 </mvc:View>

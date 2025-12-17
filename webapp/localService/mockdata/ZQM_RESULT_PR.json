@@ -1,0 +1,42 @@
+[
+  {
+    "InspectionLotNumber": "50000000002",
+    "PlantCode": "0001",
+    "InspectorName": "TRAINEE",
+    "RecordedDate": "2025-06-24T00:00:00",
+    "UsageDecisionCode": "A",
+    "StockCode": "100",
+    "ResultCategory": "Unrestricted Stock",
+    "RecordingStatus": "View Only"
+  },
+  {
+    "InspectionLotNumber": "30000000017",
+    "PlantCode": "0001",
+    "InspectorName": "TRAINEE",
+    "RecordedDate": "2025-06-24T00:00:00",
+    "UsageDecisionCode": "R",
+    "StockCode": "1",
+    "ResultCategory": "Block Stock",
+    "RecordingStatus": "View Only"
+  },
+  {
+    "InspectionLotNumber": "10000000001",
+    "PlantCode": "0001",
+    "InspectorName": "TRAINEE",
+    "RecordedDate": "2025-11-17T00:00:00",
+    "UsageDecisionCode": "A",
+    "StockCode": "100",
+    "ResultCategory": "Unrestricted Stock",
+    "RecordingStatus": "View Only"
+  },
+  {
+    "InspectionLotNumber": "10000000008",
+    "PlantCode": "0001",
+    "InspectorName": "TRAINEE",
+    "RecordedDate": "2025-11-18T00:00:00",
+    "UsageDecisionCode": "R2",
+    "StockCode": "20",
+    "ResultCategory": "Production Stock",
+    "RecordingStatus": "View Only"
+  }
+]

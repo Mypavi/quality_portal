@@ -1,0 +1,47 @@
+[
+  {
+    "InspectionLotNumber": "50000000032",
+    "Plant": "0001",
+    "LotQuantity": "12.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "",
+    "DecisionStatus": "Blocked",
+    "DecisionMessage": "Cannot proceed"
+  },
+  {
+    "InspectionLotNumber": "50000000002",
+    "Plant": "0001",
+    "LotQuantity": "10.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "A",
+    "DecisionStatus": "Allowed",
+    "DecisionMessage": "Checked"
+  },
+  {
+    "InspectionLotNumber": "30000000017",
+    "Plant": "0001",
+    "LotQuantity": "1.000",
+    "InspectedQuantity": "1.000",
+    "UsageDecisionCode": "R",
+    "DecisionStatus": "Allowed",
+    "DecisionMessage": "Checked"
+  },
+  {
+    "InspectionLotNumber": "10000000001",
+    "Plant": "0001",
+    "LotQuantity": "10.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "A",
+    "DecisionStatus": "Allowed",
+    "DecisionMessage": "Checked"
+  },
+  {
+    "InspectionLotNumber": "10000000008",
+    "Plant": "0001",
+    "LotQuantity": "200.000",
+    "InspectedQuantity": "200.000",
+    "UsageDecisionCode": "R2",
+    "DecisionStatus": "Allowed",
+    "DecisionMessage": "Checked"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "InspectionLotNumber": "50000000032",
+    "Plant": "0001",
+    "PlantDescription": "werk_01",
+    "LotOrigin": "05",
+    "ActualQuantity": "12.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "",
+    "SelectedMaterial": "34",
+    "UnitOfMeasure": "EA",
+    "UsageDecisionStatus": "Pending"
+  },
+  {
+    "InspectionLotNumber": "50000000034",
+    "Plant": "0001",
+    "PlantDescription": "werk_01",
+    "LotOrigin": "05",
+    "ActualQuantity": "12.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "",
+    "SelectedMaterial": "35",
+    "UnitOfMeasure": "PC",
+    "UsageDecisionStatus": "Pending"
+  },
+  {
+    "InspectionLotNumber": "50000000002",
+    "Plant": "0001",
+    "PlantDescription": "werk_01",
+    "LotOrigin": "05",
+    "ActualQuantity": "10.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "A",
+    "SelectedMaterial": "35",
+    "UnitOfMeasure": "PC",
+    "UsageDecisionStatus": "Decision Made"
+  },
+  {
+    "InspectionLotNumber": "30000000051",
+    "Plant": "1003",
+    "PlantDescription": "MK",
+    "LotOrigin": "03",
+    "ActualQuantity": "10.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "",
+    "SelectedMaterial": "FIN_MAT_SW",
+    "UnitOfMeasure": "PC",
+    "UsageDecisionStatus": "Pending"
+  },
+  {
+    "InspectionLotNumber": "10000000001",
+    "Plant": "0001",
+    "PlantDescription": "werk_01",
+    "LotOrigin": "01",
+    "ActualQuantity": "10.000",
+    "InspectedQuantity": "10.000",
+    "UsageDecisionCode": "A",
+    "SelectedMaterial": "MEMORY CARD",
+    "UnitOfMeasure": "PC",
+    "UsageDecisionStatus": "Decision Made"
+  }
+]

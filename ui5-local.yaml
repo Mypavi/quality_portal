@@ -1,45 +1,55 @@
-# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
-specVersion: "4.0"
+specVersion: '3.1'
 metadata:
   name: quality
 type: application
-framework:
-  name: SAPUI5
-  version: 1.143.0
-  libraries:
-    - name: sap.m
-    - name: sap.ui.core
-    - name: sap.ushell
-    - name: themelib_sap_horizon
 server:
   customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+        backend:
+          - path: /sap/opu/odata/sap/ZQM_LOG_PR_CDS
+            url: http://172.17.19.24:8000
+            client: '100'
+          - path: /sap/opu/odata/sap/ZQM_INSPECT_PR_CDS
+            url: http://172.17.19.24:8000
+            client: '100'
+          - path: /sap/opu/odata/sap/ZQM_RESULT_PR_CDS
+            url: http://172.17.19.24:8000
+            client: '100'
+          - path: /sap/opu/odata/sap/ZQM_US_PR_CDS
+            url: http://172.17.19.24:8000
+            client: '100'
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
         port: 35729
         path: webapp
         delay: 300
-    - name: fiori-tools-preview
-      afterMiddleware: fiori-tools-appreload
-      configuration:
-        flp:
-          theme: sap_horizon
-    - name: fiori-tools-proxy
-      afterMiddleware: compression
-      configuration:
-        ignoreCertErrors: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
-        backend:
-          - path: /sap
-            url: http://ecc.virtual:8000
-            destination: PORTAL_PR
     - name: sap-fe-mockserver
       beforeMiddleware: csp
       configuration:
         mountPath: /
         services:
-          - urlPath: /sap/opu/odata/sap/ZESHM_PR_SRV
-            metadataPath: ./webapp/localService/mainService/metadata.xml
-            mockdataPath: ./webapp/localService/mainService/data
+          - urlPath: /sap/opu/odata/sap/ZQM_LOG_PR_CDS
+            metadataPath: ./webapp/localService/metadata.xml
+            mockdataPath: ./webapp/localService/mockdata
             generateMockData: true
-        annotations: []
+          - urlPath: /sap/opu/odata/sap/ZQM_INSPECT_PR_CDS
+            metadataPath: ./webapp/localService/metadata.xml
+            mockdataPath: ./webapp/localService/mockdata
+            generateMockData: true
+          - urlPath: /sap/opu/odata/sap/ZQM_RESULT_PR_CDS
+            metadataPath: ./webapp/localService/metadata.xml
+            mockdataPath: ./webapp/localService/mockdata
+            generateMockData: true
+          - urlPath: /sap/opu/odata/sap/ZQM_US_PR_CDS
+            metadataPath: ./webapp/localService/metadata.xml
+            mockdataPath: ./webapp/localService/mockdata
+            generateMockData: true

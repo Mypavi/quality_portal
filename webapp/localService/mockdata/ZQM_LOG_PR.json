@@ -1,0 +1,14 @@
+[
+  {
+    "bname": "K901900",
+    "password": "12345"
+  },
+  {
+    "bname": "demo",
+    "password": "demo"
+  },
+  {
+    "bname": "admin",
+    "password": "admin"
+  }
+]
