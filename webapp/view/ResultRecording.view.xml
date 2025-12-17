@@ -20,6 +20,37 @@
                 </statuses>
             </ObjectHeader>
 
+            <!-- Section: Usage Decision Actions -->
+            <Panel class="sapUiResponsiveMargin" width="auto" visible="{= !!${inspection>InspectionLotNumber} }">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Usage Decision" level="H2" />
+                    </Toolbar>
+                </headerToolbar>
+                <content>
+                    <VBox alignItems="Center" class="sapUiMediumMargin">
+                        <!-- Status Display -->
+                        <HBox visible="{= !!${inspection>UsageDecisionCode} }" alignItems="Center">
+                            <core:Icon src="{= ${inspection>UsageDecisionCode} === 'A' ? 'sap-icon://accept' : 'sap-icon://decline' }" 
+                                       size="2rem" 
+                                       color="{= ${inspection>UsageDecisionCode} === 'A' ? 'Positive' : 'Negative' }" 
+                                       class="sapUiSmallMarginEnd" />
+                            <Title text="{= ${inspection>UsageDecisionCode} === 'A' ? 'LOT ACCEPTED' : 'LOT REJECTED' }" 
+                                   level="H1" 
+                                   class="{= ${inspection>UsageDecisionCode} === 'A' ? 'sapUiPositiveText' : 'sapUiNegativeText' }" />
+                        </HBox>
+
+                        <!-- Action Buttons (Visible if Pending) -->
+                        <HBox visible="{= !${inspection>UsageDecisionCode} }">
+                            <Button text="Accept Lot" type="Accept" press="onAcceptPress" class="sapUiMediumMarginEnd" width="150px" icon="sap-icon://accept" />
+                            <Button text="Reject Lot" type="Reject" press="onRejectPress" width="150px" icon="sap-icon://decline" />
+                        </HBox>
+                        
+                        <Label text="* Decision cannot be reversed once made." visible="{= !${inspection>UsageDecisionCode} }" class="sapUiTinyMarginTop" />
+                    </VBox>
+                </content>
+            </Panel>
+
             <!-- Section: New Result Entry (Incremental) -->
             <Panel headerText="Record New Result (Daily Entry)" visible="{= !${inspection>UsageDecisionCode} &amp;&amp; ${inspection>UsageDecisionStatus} !== 'Decision Made' }" expandable="true" expanded="true" class="sapUiResponsiveMargin" width="auto">
                 <content>

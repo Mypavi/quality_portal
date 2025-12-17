@@ -76,6 +76,32 @@ sap.ui.define([
             oBinding.filter(aFilters, "Application");
         },
 
+        onAcceptPress: function () {
+            // Simulate Acceptance
+            sap.m.MessageToast.show("Inspection Lot Accepted");
+
+            // In a real app, we would call the OData service to update the status.
+            // For now, we update the model locally to reflect the change visually.
+            var oCtx = this.getView().getBindingContext("inspection");
+            if (oCtx) {
+                var oModel = oCtx.getModel();
+                oModel.setProperty(oCtx.getPath() + "/UsageDecisionCode", "A");
+                oModel.setProperty(oCtx.getPath() + "/UsageDecisionStatus", "Decision Made");
+            }
+        },
+
+        onRejectPress: function () {
+            // Simulate Rejection
+            sap.m.MessageToast.show("Inspection Lot Rejected");
+
+            var oCtx = this.getView().getBindingContext("inspection");
+            if (oCtx) {
+                var oModel = oCtx.getModel();
+                oModel.setProperty(oCtx.getPath() + "/UsageDecisionCode", "R");
+                oModel.setProperty(oCtx.getPath() + "/UsageDecisionStatus", "Decision Made");
+            }
+        },
+
         formatCategoryState: function (sCategory) {
             if (sCategory === "Unrestricted Stock") {
                 return "Success";

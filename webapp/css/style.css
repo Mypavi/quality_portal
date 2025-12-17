@@ -35,10 +35,21 @@
     background: linear-gradient(135deg, #11998e, #38ef7d) !important;
 }
 
-.sapMNCValue, .sapMNCIcon {
+.sapMNCValue,
+.sapMNCIcon {
     color: #fff !important;
 }
 
 .sapMGTHdrTxt {
     color: #eee !important;
+}
+
+.sapUiPositiveText,
+.sapUiPositiveText>span {
+    color: #2B7D2C !important;
+}
+
+.sapUiNegativeText,
+.sapUiNegativeText>span {
+    color: #BB0000 !important;
 }
