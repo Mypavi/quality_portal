@@ -94,6 +94,10 @@
                                 type="Transparent" 
                                 press="onQuickNavToDashboard" 
                                 class="demoButton" />
+                        <Button text="🔧 Test Navigation" 
+                                type="Transparent" 
+                                press="onTestNavigation" 
+                                class="demoButton" />
                     </html:div>
                     
                     <!-- Security Badge -->

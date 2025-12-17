@@ -90,31 +90,8 @@ sap.ui.define([
                 });
                 
                 setTimeout(function() {
-                    try {
-                        console.log("Demo login - Attempting navigation to dashboard...");
-                        var oComponent = this.getOwnerComponent();
-                        console.log("Demo login - Component:", oComponent);
-                        
-                        if (oComponent) {
-                            var oRouter = oComponent.getRouter();
-                            console.log("Demo login - Router:", oRouter);
-                            
-                            if (oRouter) {
-                                console.log("Demo login - Navigating to RouteDashboard...");
-                                oRouter.navTo("RouteDashboard");
-                            } else {
-                                console.log("Demo login - No router found, using fallback navigation");
-                                window.location.hash = "#/dashboard";
-                            }
-                        } else {
-                            console.log("Demo login - No component found, using direct navigation");
-                            window.location.hash = "#/dashboard";
-                        }
-                    } catch (e) {
-                        console.error("Demo login - Navigation error:", e);
-                        console.log("Demo login - Using emergency navigation");
-                        window.location.hash = "#/dashboard";
-                    }
+                    console.log("Demo login successful, navigating...");
+                    this._navigateToDashboard();
                 }.bind(this), 1500);
                 return;
             }
@@ -129,16 +106,8 @@ sap.ui.define([
                     onClose: function() {
                         // Navigate to dashboard anyway for demo
                         setTimeout(function() {
-                            try {
-                                var oRouter = this.getOwnerComponent().getRouter();
-                                if (oRouter) {
-                                    oRouter.navTo("RouteDashboard");
-                                } else {
-                                    window.location.hash = "#/dashboard";
-                                }
-                            } catch (e) {
-                                window.location.hash = "#/dashboard";
-                            }
+                            console.log("Service unavailable, using demo navigation...");
+                            this._navigateToDashboard();
                         }.bind(this), 500);
                     }.bind(this)
                 });
@@ -164,31 +133,8 @@ sap.ui.define([
                         
                         // Add success animation delay before navigation
                         setTimeout(function() {
-                            try {
-                                console.log("Attempting navigation to dashboard...");
-                                var oComponent = this.getOwnerComponent();
-                                console.log("Component:", oComponent);
-                                
-                                if (oComponent) {
-                                    var oRouter = oComponent.getRouter();
-                                    console.log("Router:", oRouter);
-                                    
-                                    if (oRouter) {
-                                        console.log("Navigating to RouteDashboard...");
-                                        oRouter.navTo("RouteDashboard");
-                                    } else {
-                                        console.log("No router found, using fallback navigation");
-                                        window.location.hash = "#/dashboard";
-                                    }
-                                } else {
-                                    console.log("No component found, using direct navigation");
-                                    window.location.hash = "#/dashboard";
-                                }
-                            } catch (e) {
-                                console.error("Navigation error:", e);
-                                console.log("Using emergency navigation");
-                                window.location.hash = "#/dashboard";
-                            }
+                            console.log("Backend login successful, navigating...");
+                            this._navigateToDashboard();
                         }.bind(this), 1500);
                         
                     } else {
@@ -284,21 +230,96 @@ sap.ui.define([
 
         // Quick navigation method for testing
         onQuickNavToDashboard: function() {
+            console.log("Quick navigation triggered");
+            this._navigateToDashboard();
+        },
+
+        _navigateToDashboard: function() {
+            console.log("Starting navigation to dashboard...");
+            
+            // Method 1: Try SAP UI5 Router
             try {
-                var oRouter = this.getOwnerComponent().getRouter();
-                if (oRouter) {
-                    oRouter.navTo("RouteDashboard");
-                } else {
-                    window.location.hash = "#/dashboard";
+                var oComponent = this.getOwnerComponent();
+                if (oComponent) {
+                    var oRouter = oComponent.getRouter();
+                    if (oRouter) {
+                        console.log("Using SAP UI5 Router");
+                        oRouter.navTo("RouteDashboard");
+                        return;
+                    }
                 }
             } catch (e) {
-                console.error("Quick nav error:", e);
+                console.error("Router navigation failed:", e);
+            }
+            
+            // Method 2: Try hash navigation
+            try {
+                console.log("Using hash navigation");
                 window.location.hash = "#/dashboard";
+                return;
+            } catch (e) {
+                console.error("Hash navigation failed:", e);
+            }
+            
+            // Method 3: Force page reload with dashboard
+            try {
+                console.log("Using force navigation");
+                var sBaseUrl = window.location.origin + window.location.pathname;
+                window.location.href = sBaseUrl + "#/dashboard";
+            } catch (e) {
+                console.error("All navigation methods failed:", e);
+                MessageToast.show("Navigation failed. Please refresh the page and try again.");
             }
         },
 
         onCloseDemoDialog: function () {
             this._demoDialog.close();
+        },
+
+        onTestNavigation: function() {
+            console.log("=== NAVIGATION TEST ===");
+            
+            // Test 1: Check component
+            var oComponent = this.getOwnerComponent();
+            console.log("Component available:", !!oComponent);
+            
+            if (oComponent) {
+                // Test 2: Check router
+                var oRouter = oComponent.getRouter();
+                console.log("Router available:", !!oRouter);
+                
+                if (oRouter) {
+                    // Test 3: Check routes
+                    var aRoutes = oRouter.getRoutes();
+                    console.log("Available routes:", aRoutes.map(function(route) { return route.getName(); }));
+                    
+                    // Test 4: Try navigation
+                    try {
+                        console.log("Attempting navigation to RouteDashboard...");
+                        oRouter.navTo("RouteDashboard");
+                        MessageToast.show("✅ Navigation attempted via Router");
+                    } catch (e) {
+                        console.error("Router navigation failed:", e);
+                        MessageToast.show("❌ Router navigation failed: " + e.message);
+                    }
+                } else {
+                    MessageToast.show("❌ Router not available");
+                }
+            } else {
+                MessageToast.show("❌ Component not available");
+            }
+            
+            // Test 5: Hash navigation as fallback
+            setTimeout(function() {
+                console.log("Testing hash navigation...");
+                try {
+                    window.location.hash = "#/dashboard";
+                    MessageToast.show("✅ Hash navigation attempted");
+                } catch (e) {
+                    console.error("Hash navigation failed:", e);
+                    MessageToast.show("❌ Hash navigation failed: " + e.message);
+                }
+            }, 2000);
         }
     });
 });
