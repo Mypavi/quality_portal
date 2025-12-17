@@ -17,36 +17,36 @@
     },
     "dataSources": {
       "loginService": {
-        "uri": "/sap/opu/odata/sap/ZQM_LOG_PR_CDS/",
+        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
-          "useBatch": true
+          "useBatch": false
         }
       },
       "inspectionService": {
-        "uri": "/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/",
+        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
-          "useBatch": true
+          "useBatch": false
         }
       },
       "resultService": {
-        "uri": "/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
+        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
-          "useBatch": true,
+          "useBatch": false,
           "defaultBindingMode": "TwoWay"
         }
       },
       "usageService": {
-        "uri": "/sap/opu/odata/sap/ZQM_US_PR_CDS/",
+        "uri": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
-          "useBatch": true
+          "useBatch": false
         }
       }
     }

@@ -612,9 +612,9 @@ sap.ui.define([
             console.log("Testing direct OData call...");
             MessageToast.show("Testing data fetch...");
 
-            // Test direct URL call
+            // Test direct URL call with actual backend
             jQuery.ajax({
-                url: "/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json",
+                url: "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json",
                 type: "GET",
                 success: function (data) {
                     console.log("Direct AJAX call successful:", data);

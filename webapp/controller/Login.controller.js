@@ -43,15 +43,7 @@ sap.ui.define([
                 return;
             }
 
-            // For testing purposes, allow any non-empty credentials
-            // In production, uncomment the OData authentication below
-            
-            MessageToast.show("Login Successful! Welcome to Quality Management System");
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("RouteDashboard");
-            
-            /* 
-            // Uncomment for production OData authentication
+            // Real OData authentication with the actual backend
             var oAuthModel = this.getOwnerComponent().getModel("auth");
             var sPath = "/ZQM_LOG_PR(bname='" + sUserId + "',password='" + sPassword + "')";
 
@@ -60,25 +52,25 @@ sap.ui.define([
             oAuthModel.read(sPath, {
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
-                    if (oData) {
-                        MessageToast.show("Login Successful! Welcome to Quality Management System");
+                    if (oData && oData.bname) {
+                        MessageToast.show("Login Successful! Welcome " + oData.bname);
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("RouteDashboard");
                     } else {
-                         MessageToast.show("Invalid Credentials");
+                        MessageToast.show("Invalid Credentials");
                     }
                 }.bind(this),
                 error: function (oError) {
                     sap.ui.core.BusyIndicator.hide();
+                    console.error("Login error:", oError);
                     try {
                         var oErrorResponse = JSON.parse(oError.responseText);
                         MessageToast.show(oErrorResponse.error.message.value);
                     } catch (e) {
-                         MessageToast.show("Login Failed. Please check your credentials and try again.");
+                        MessageToast.show("Login Failed. Please check your credentials and try again.");
                     }
                 }
             });
-            */
         }
     });
 });

@@ -241,17 +241,22 @@ body,
 
 /* ===== ENHANCED LOGIN PAGE STYLES ===== */
 .loginPage {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    min-height: 100vh !important;
+}
+
+.loginPage .sapMPageBg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
 }
 
 .loginContainer {
-    width: 100%;
-    max-width: 420px;
-    padding: 2rem;
+    width: 100% !important;
+    max-width: 420px !important;
+    padding: 2rem !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .loginCard {
@@ -1376,5 +1381,61 @@ body,
     
     .loginTitle {
         font-size: 1.5rem !important;
+    }
+}
+/* ===== USAGE DECISION PAGE STYLES ===== */
+.usageDecisionPage {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%) !important;
+}
+
+.usageTable {
+    border-radius: 0 0 16px 16px !important;
+}
+
+.usageRow {
+    transition: all 0.2s ease !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.usageRow:hover {
+    background: rgba(102, 126, 234, 0.05) !important;
+    transform: translateX(4px) !important;
+}
+
+.decisionStatus {
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    padding: 0.25rem 0.75rem !important;
+}
+
+/* ===== ENHANCED OBJECT STATUS STYLES ===== */
+.sapMObjectStatus {
+    border-radius: 20px !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+}
+
+/* ===== MOBILE RESPONSIVENESS FOR USAGE PAGE ===== */
+@media (max-width: 768px) {
+    .usageDecisionPage .heroPanel,
+    .usageDecisionPage .actionsPanel,
+    .usageDecisionPage .historyPanel {
+        margin: 1rem !important;
+    }
+    
+    .usageDecisionPage .cardContent {
+        padding: 1.5rem !important;
+    }
+    
+    .usageDecisionPage .actionButtons {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 1.5rem !important;
+    }
+    
+    .usageDecisionPage .actionButton {
+        width: 100% !important;
+        margin: 0.5rem 0 !important;
     }
 }

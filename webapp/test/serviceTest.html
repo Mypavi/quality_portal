@@ -1,38 +1,400 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OData Service Test</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="utf-8">
+    <title>Quality Management - Service Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .service-section {
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+        .result-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            color: #90EE90;
+        }
+        .error {
+            color: #FFB6C1;
+        }
+        .info {
+            color: #87CEEB;
+        }
+        .url-display {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+    </style>
 </head>
 <body>
-    <h1>OData Service Connectivity Test</h1>
-    <div id="results"></div>
+    <div class="container">
+        <h1>🔬 Quality Management System - Service Test</h1>
+        
+        <!-- Login Service Test -->
+        <div class="service-section">
+            <div class="service-title">🔐 Login Service (ZQM_LOG_PR_CDS)</div>
+            <div class="url-display">http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/ZQM_LOG_PR(bname='K901900',password='12345')</div>
+            <button class="test-button" onclick="testLoginService()">Test Login Service</button>
+            <button class="test-button" onclick="testLoginMetadata()">Test Metadata</button>
+            <div id="loginResult" class="result-area"></div>
+        </div>
+
+        <!-- Inspection Service Test -->
+        <div class="service-section">
+            <div class="service-title">🔍 Inspection Service (ZQM_INSPECT_PR_CDS)</div>
+            <div class="url-display">http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR</div>
+            <button class="test-button" onclick="testInspectionService()">Test Inspection Data</button>
+            <button class="test-button" onclick="testInspectionCount()">Test Count</button>
+            <button class="test-button" onclick="testInspectionMetadata()">Test Metadata</button>
+            <div id="inspectionResult" class="result-area"></div>
+        </div>
+
+        <!-- Result Service Test -->
+        <div class="service-section">
+            <div class="service-title">📊 Result Service (ZQM_RESULT_PR_CDS)</div>
+            <div class="url-display">http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR</div>
+            <button class="test-button" onclick="testResultService()">Test Result Data</button>
+            <button class="test-button" onclick="testResultCount()">Test Count</button>
+            <button class="test-button" onclick="testResultMetadata()">Test Metadata</button>
+            <div id="resultResult" class="result-area"></div>
+        </div>
+
+        <!-- Usage Service Test -->
+        <div class="service-section">
+            <div class="service-title">⚖️ Usage Decision Service (ZQM_US_PR_CDS)</div>
+            <div class="url-display">http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR</div>
+            <button class="test-button" onclick="testUsageService()">Test Usage Data</button>
+            <button class="test-button" onclick="testUsageCount()">Test Count</button>
+            <button class="test-button" onclick="testUsageMetadata()">Test Metadata</button>
+            <div id="usageResult" class="result-area"></div>
+        </div>
+
+        <!-- All Services Test -->
+        <div class="service-section">
+            <div class="service-title">🚀 All Services Test</div>
+            <button class="test-button" onclick="testAllServices()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 1.1rem; padding: 15px 30px;">Test All Services</button>
+            <div id="allResult" class="result-area"></div>
+        </div>
+    </div>
 
     <script>
-        function testService(serviceName, url) {
-            console.log(`Testing ${serviceName}: ${url}`);
+        function logResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            element.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            element.scrollTop = element.scrollHeight;
+        }
+
+        function clearResult(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        // Login Service Tests
+        function testLoginService() {
+            clearResult('loginResult');
+            logResult('loginResult', '🔐 Testing Login Service...', 'info');
             
-            $.ajax({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    console.log(`${serviceName} - Success:`, data);
-                    $('#results').append(`<p style="color: green;">${serviceName}: SUCCESS - ${data.d?.results?.length || 'Unknown'} records</p>`);
-                },
-                error: function(xhr, status, error) {
-                    console.error(`${serviceName} - Error:`, error);
-                    $('#results').append(`<p style="color: red;">${serviceName}: ERROR - ${error}</p>`);
-                }
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/ZQM_LOG_PR(bname=\'K901900\',password=\'12345\')';
+            
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                })
+                .then(data => {
+                    logResult('loginResult', '✅ Login service is working!', 'success');
+                    logResult('loginResult', `📄 Response: ${data.substring(0, 200)}...`, 'info');
+                })
+                .catch(error => {
+                    logResult('loginResult', `❌ Login service failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testLoginMetadata() {
+            clearResult('loginResult');
+            logResult('loginResult', '🔍 Testing Login Metadata...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/$metadata';
+            
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    logResult('loginResult', '✅ Login metadata is available!', 'success');
+                    logResult('loginResult', `📄 Metadata length: ${data.length} characters`, 'info');
+                })
+                .catch(error => {
+                    logResult('loginResult', `❌ Login metadata failed: ${error.message}`, 'error');
+                });
+        }
+
+        // Inspection Service Tests
+        function testInspectionService() {
+            clearResult('inspectionResult');
+            logResult('inspectionResult', '🔍 Testing Inspection Service...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json&$top=5';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.d?.results || [];
+                    logResult('inspectionResult', `✅ Inspection service is working! Found ${results.length} records`, 'success');
+                    if (results.length > 0) {
+                        logResult('inspectionResult', `📊 Sample record: Lot ${results[0].InspectionLotNumber}, Plant ${results[0].Plant}`, 'info');
+                    }
+                })
+                .catch(error => {
+                    logResult('inspectionResult', `❌ Inspection service failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testInspectionCount() {
+            clearResult('inspectionResult');
+            logResult('inspectionResult', '📊 Testing Inspection Count...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const count = data.d?.results?.length || 0;
+                    logResult('inspectionResult', `✅ Total inspection lots: ${count}`, 'success');
+                })
+                .catch(error => {
+                    logResult('inspectionResult', `❌ Count failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testInspectionMetadata() {
+            clearResult('inspectionResult');
+            logResult('inspectionResult', '🔍 Testing Inspection Metadata...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/$metadata';
+            
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    logResult('inspectionResult', '✅ Inspection metadata is available!', 'success');
+                    logResult('inspectionResult', `📄 Metadata length: ${data.length} characters`, 'info');
+                })
+                .catch(error => {
+                    logResult('inspectionResult', `❌ Inspection metadata failed: ${error.message}`, 'error');
+                });
+        }
+
+        // Result Service Tests
+        function testResultService() {
+            clearResult('resultResult');
+            logResult('resultResult', '📊 Testing Result Service...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json&$top=5';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.d?.results || [];
+                    logResult('resultResult', `✅ Result service is working! Found ${results.length} records`, 'success');
+                    if (results.length > 0) {
+                        logResult('resultResult', `📊 Sample record: Lot ${results[0].InspectionLotNumber}, Category ${results[0].ResultCategory}`, 'info');
+                    }
+                })
+                .catch(error => {
+                    logResult('resultResult', `❌ Result service failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testResultCount() {
+            clearResult('resultResult');
+            logResult('resultResult', '📊 Testing Result Count...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const count = data.d?.results?.length || 0;
+                    logResult('resultResult', `✅ Total result records: ${count}`, 'success');
+                })
+                .catch(error => {
+                    logResult('resultResult', `❌ Count failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testResultMetadata() {
+            clearResult('resultResult');
+            logResult('resultResult', '🔍 Testing Result Metadata...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/$metadata';
+            
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    logResult('resultResult', '✅ Result metadata is available!', 'success');
+                    logResult('resultResult', `📄 Metadata length: ${data.length} characters`, 'info');
+                })
+                .catch(error => {
+                    logResult('resultResult', `❌ Result metadata failed: ${error.message}`, 'error');
+                });
+        }
+
+        // Usage Service Tests
+        function testUsageService() {
+            clearResult('usageResult');
+            logResult('usageResult', '⚖️ Testing Usage Service...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR?$format=json&$top=5';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.d?.results || [];
+                    logResult('usageResult', `✅ Usage service is working! Found ${results.length} records`, 'success');
+                    if (results.length > 0) {
+                        logResult('usageResult', `📊 Sample record: Lot ${results[0].InspectionLotNumber}, Decision ${results[0].UsageDecisionCode || 'Pending'}`, 'info');
+                    }
+                })
+                .catch(error => {
+                    logResult('usageResult', `❌ Usage service failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testUsageCount() {
+            clearResult('usageResult');
+            logResult('usageResult', '📊 Testing Usage Count...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR?$format=json';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const count = data.d?.results?.length || 0;
+                    logResult('usageResult', `✅ Total usage decision records: ${count}`, 'success');
+                })
+                .catch(error => {
+                    logResult('usageResult', `❌ Count failed: ${error.message}`, 'error');
+                });
+        }
+
+        function testUsageMetadata() {
+            clearResult('usageResult');
+            logResult('usageResult', '🔍 Testing Usage Metadata...', 'info');
+            
+            const url = 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/$metadata';
+            
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    logResult('usageResult', '✅ Usage metadata is available!', 'success');
+                    logResult('usageResult', `📄 Metadata length: ${data.length} characters`, 'info');
+                })
+                .catch(error => {
+                    logResult('usageResult', `❌ Usage metadata failed: ${error.message}`, 'error');
+                });
+        }
+
+        // Test All Services
+        function testAllServices() {
+            clearResult('allResult');
+            logResult('allResult', '🚀 Testing All Services...', 'info');
+            
+            const services = [
+                { name: 'Login', url: 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_LOG_PR_CDS/ZQM_LOG_PR(bname=\'K901900\',password=\'12345\')' },
+                { name: 'Inspection', url: 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json&$top=1' },
+                { name: 'Result', url: 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json&$top=1' },
+                { name: 'Usage', url: 'http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR?$format=json&$top=1' }
+            ];
+
+            let completedTests = 0;
+            let successfulTests = 0;
+
+            services.forEach(service => {
+                fetch(service.url)
+                    .then(response => {
+                        if (response.ok) {
+                            logResult('allResult', `✅ ${service.name} service: OK`, 'success');
+                            successfulTests++;
+                        } else {
+                            logResult('allResult', `❌ ${service.name} service: HTTP ${response.status}`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        logResult('allResult', `❌ ${service.name} service: ${error.message}`, 'error');
+                    })
+                    .finally(() => {
+                        completedTests++;
+                        if (completedTests === services.length) {
+                            logResult('allResult', `\n🎯 Test Summary: ${successfulTests}/${services.length} services working`, 
+                                successfulTests === services.length ? 'success' : 'error');
+                        }
+                    });
             });
         }
 
-        // Test all services
-        $(document).ready(function() {
-            testService('Inspection', '/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json');
-            testService('Result', '/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json');
-            testService('Usage', '/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR?$format=json');
-        });
+        // Auto-run all tests on page load
+        window.onload = function() {
+            setTimeout(testAllServices, 1000);
+        };
     </script>
 </body>
 </html>

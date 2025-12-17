@@ -23,30 +23,51 @@ sap.ui.define([
         _fetchCounts: function () {
             var oComponent = this.getOwnerComponent();
 
-            // Helper to fetch count
-            var fnFetchCount = function (sModelName, sEntitySet, sTargetModel, sTargetProperty) {
+            // Helper to fetch count using direct OData calls
+            var fnFetchCount = function (sModelName, sEntitySet, sTargetModel, sTargetProperty, sBaseUrl) {
                 var oModel = oComponent.getModel(sModelName);
                 if (oModel) {
-                    var sUrl = oModel.sServiceUrl + sEntitySet + "/$count";
-                    // Use jQuery/Ajax for lightweight count fetch to avoid loading all data
+                    // Try to get count using $inlinecount first, fallback to loading data
+                    var sUrl = sBaseUrl + sEntitySet + "?$top=0&$inlinecount=allpages&$format=json";
+                    
                     jQuery.ajax({
                         url: sUrl,
                         type: "GET",
                         success: function (data) {
-                            // Data is the count as plain text (or number)
-                            var iCount = parseInt(data, 10);
+                            var iCount = 0;
+                            if (data && data.d && data.d.__count) {
+                                iCount = parseInt(data.d.__count, 10);
+                            } else if (data && data.d && data.d.results) {
+                                // Fallback: load all data and count
+                                var sCountUrl = sBaseUrl + sEntitySet + "?$format=json";
+                                jQuery.ajax({
+                                    url: sCountUrl,
+                                    type: "GET",
+                                    success: function (countData) {
+                                        var count = countData && countData.d && countData.d.results ? countData.d.results.length : 0;
+                                        this.getView().getModel(sTargetModel).setProperty(sTargetProperty, count);
+                                    }.bind(this),
+                                    error: function (e) {
+                                        console.error("Failed to fetch count for " + sEntitySet, e);
+                                        this.getView().getModel(sTargetModel).setProperty(sTargetProperty, 0);
+                                    }.bind(this)
+                                });
+                                return;
+                            }
                             this.getView().getModel(sTargetModel).setProperty(sTargetProperty, isNaN(iCount) ? 0 : iCount);
                         }.bind(this),
                         error: function (e) {
                             console.error("Failed to fetch count for " + sEntitySet, e);
-                        }
+                            this.getView().getModel(sTargetModel).setProperty(sTargetProperty, 0);
+                        }.bind(this)
                     });
                 }
             }.bind(this);
 
-            fnFetchCount("inspection", "/ZQM_INSPECT_PR", "inspectionCount", "/count");
-            fnFetchCount("result", "/ZQM_RESULT_PR", "resultCount", "/count");
-            fnFetchCount("usage", "/ZQM_US_PR", "usageCount", "/count");
+            // Use the actual backend URLs
+            fnFetchCount("inspection", "ZQM_INSPECT_PR", "inspectionCount", "/count", "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/");
+            fnFetchCount("result", "ZQM_RESULT_PR", "resultCount", "/count", "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/");
+            fnFetchCount("usage", "ZQM_US_PR", "usageCount", "/count", "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/");
         },
 
         onNavBack: function () {
