@@ -617,7 +617,11 @@ body,
 .loginForm {
     width: 100% !important;
     margin-top: var(--space-lg) !important;
-    animation: slideUp 1s ease-out 1.4s both !important;
+    /* animation: slideUp 1s ease-out 1.4s both !important; */
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 100 !important;
+    display: block !important;
 }
 
 /* Ensure form inputs align properly in right-aligned layout */
@@ -626,6 +630,9 @@ body,
     text-align: left !important;
     position: relative !important;
     width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 50 !important;
 }
 
 .loginInputGroup {
@@ -641,21 +648,31 @@ body,
     font-size: 0.9rem !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
 }
 
 .inputWrapper {
     position: relative !important;
     display: flex !important;
     align-items: center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 20 !important;
+    width: 100% !important;
 }
 
 .inputIcon {
     position: absolute !important;
     left: var(--space-md) !important;
-    z-index: 2 !important;
+    z-index: 25 !important;
     color: var(--neutral-400) !important;
     font-size: 1.2rem !important;
     transition: all var(--transition-normal) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
 }
 
 .loginInputField .sapMInputBase {
@@ -665,6 +682,10 @@ body,
     transition: all var(--transition-normal) !important;
     height: 56px !important;
     box-shadow: var(--shadow-sm) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    z-index: 10 !important;
 }
 
 .loginInputField .sapMInputBaseInner {
@@ -672,6 +693,71 @@ body,
     padding-left: 3.5rem !important;
     color: var(--neutral-700) !important;
     font-weight: 500 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* Ensure SAP UI5 Input components are visible */
+.loginInputField,
+.loginInputField .sapMInput,
+.loginInputField .sapMInputBase,
+.loginInputField .sapMInputBaseContentWrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    width: 100% !important;
+}
+
+/* Force visibility of all login form elements */
+.loginForm *,
+.loginInputGroup *,
+.inputWrapper *,
+.loginInputField * {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Debug: Temporary background to see form boundaries */
+.loginForm {
+    background: rgba(255, 0, 0, 0.1) !important;
+    border: 2px solid red !important;
+    min-height: 200px !important;
+}
+
+.loginInputGroup {
+    background: rgba(0, 255, 0, 0.1) !important;
+    border: 1px solid green !important;
+    min-height: 80px !important;
+}
+
+/* Specific fixes for SAP UI5 input elements */
+.sapMInput {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+    width: 100% !important;
+}
+
+.sapMInputBase {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    width: 100% !important;
+}
+
+.sapMInputBaseContentWrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    width: 100% !important;
+}
+
+.sapMInputBaseInner {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    width: 100% !important;
 }
 
 .loginInputField .sapMInputBase:focus-within {
