@@ -9,12 +9,58 @@ sap.ui.define([
     return Controller.extend("quality.controller.Dashboard", {
         onInit: function () {
             // Initialize counts or other local data
-            var oViewModel = new sap.ui.model.json.JSONModel({
-                count: 0
-            });
-            this.getView().setModel(oViewModel, "inspectionCount");
-            this.getView().setModel(oViewModel, "resultCount");
-            this.getView().setModel(oViewModel, "usageCount");
+            var oInspectionModel = new sap.ui.model.json.JSONModel({ count: 0 });
+            var oResultModel = new sap.ui.model.json.JSONModel({ count: 0 });
+            var oUsageModel = new sap.ui.model.json.JSONModel({ count: 0 });
+
+            this.getView().setModel(oInspectionModel, "inspectionCount");
+            this.getView().setModel(oResultModel, "resultCount");
+            this.getView().setModel(oUsageModel, "usageCount");
+
+            this._fetchCounts();
+        },
+
+        _fetchCounts: function () {
+            var oComponent = this.getOwnerComponent();
+
+            // Fetch Inspection Count
+            var oInspectionService = oComponent.getModel("inspection");
+            if (oInspectionService) {
+                oInspectionService.read("/ZQM_INSPECT_PR", {
+                    success: function (oData) {
+                        this.getView().getModel("inspectionCount").setProperty("/count", oData.results.length);
+                    }.bind(this),
+                    error: function () {
+                        console.error("Failed to fetch inspection count");
+                    }
+                });
+            }
+
+            // Fetch Result Count
+            var oResultService = oComponent.getModel("result");
+            if (oResultService) {
+                oResultService.read("/ZQM_RESULT_PR", {
+                    success: function (oData) {
+                        this.getView().getModel("resultCount").setProperty("/count", oData.results.length);
+                    }.bind(this),
+                    error: function () {
+                        console.error("Failed to fetch result count");
+                    }
+                });
+            }
+
+            // Fetch Usage Count
+            var oUsageService = oComponent.getModel("usage");
+            if (oUsageService) {
+                oUsageService.read("/ZQM_US_PR", {
+                    success: function (oData) {
+                        this.getView().getModel("usageCount").setProperty("/count", oData.results.length);
+                    }.bind(this),
+                    error: function () {
+                        console.error("Failed to fetch usage count");
+                    }
+                });
+            }
         },
 
         onNavBack: function () {
@@ -23,7 +69,10 @@ sap.ui.define([
         },
 
         onTilePress: function () {
-            // For now just stay or filter
+            // This tile represents the current view (Inspection Lots)
+            // Can be used to refresh the table or counts if needed
+            this._fetchCounts();
+            this.getView().byId("inspectionTable").getBinding("items").refresh();
         },
 
         onResultRecordingPress: function () {
