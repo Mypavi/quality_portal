@@ -42,9 +42,13 @@
                             <Text text="{result>PlantCode}" />
                             <Text text="{result>InspectorName}" />
                             <Text text="{path: 'result>RecordedDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium' }}" />
-                            <ObjectStatus text="{result>ResultCategory}" state="{= ${result>ResultCategory} === 'Block Stock' ? 'Error' : 'Success' }" />
+                            <ObjectStatus text="{result>ResultCategory}" state="{path: 'result>ResultCategory', formatter: '.formatCategoryState'}" />
                             <ObjectNumber number="{result>StockCode}" />
-                            <Text text="{result>RecordingStatus}" />
+                            <!-- Display Booking Status based on Usage Decision Code availability. If code exists, it's View Only. -->
+                            <ObjectStatus 
+                                text="{= ${result>UsageDecisionCode} ? 'View Only' : 'Editable' }"
+                                state="{= ${result>UsageDecisionCode} ? 'Warning' : 'Success' }"
+                                icon="{= ${result>UsageDecisionCode} ? 'sap-icon://display' : 'sap-icon://edit' }" />
                         </cells>
                     </ColumnListItem>
                 </items>

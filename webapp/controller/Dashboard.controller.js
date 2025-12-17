@@ -102,14 +102,13 @@ sap.ui.define([
         onInspectionLotPress: function (oEvent) {
             var oItem = oEvent.getSource();
             var oContext = oItem.getBindingContext("inspection");
-            var sPath = oContext.getPath();
-            // sPath is like /ZQM_INSPECT_PR('...')
-            // We might want to pass the ID to a detail page
+            // The property name in the OData entity is InspectionLotNumber
+            var sInspectionLot = oContext.getProperty("InspectionLotNumber");
 
-            // var oRouter = UIComponent.getRouterFor(this);
-            // oRouter.navTo("RouteInspectionDetail", {
-            //    inspectionPath: encodeURIComponent(sPath.substr(1))
-            // });
+            var oRouter = UIComponent.getRouterFor(this);
+            oRouter.navTo("RouteResultRecording", {
+                inspectionLot: sInspectionLot
+            });
         }
     });
 });

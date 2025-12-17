@@ -135,7 +135,7 @@
         },
         {
           "name": "RouteResultRecording",
-          "pattern": "result",
+          "pattern": "result/{inspectionLot}",
           "target": [
             "TargetResultRecording"
           ]
