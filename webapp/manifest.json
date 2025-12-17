@@ -51,6 +51,10 @@
           "localUri": "localService/metadata.xml",
           "odataVersion": "2.0"
         }
+      },
+      "i18n": {
+        "uri": "i18n/i18n.properties",
+        "type": "ResourceBundle"
       }
     }
   },
@@ -133,6 +137,69 @@
           "defaultCountMode": "Request"
         }
       }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "quality.view",
+        "controllerPath": "quality.controller",
+        "controlId": "App",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "login",
+          "pattern": "",
+          "target": ["login"]
+        },
+        {
+          "name": "dashboard",
+          "pattern": "dashboard",
+          "target": ["dashboard"]
+        },
+        {
+          "name": "results",
+          "pattern": "results",
+          "target": ["results"]
+        },
+        {
+          "name": "usage",
+          "pattern": "usage",
+          "target": ["usage"]
+        }
+      ],
+      "targets": {
+        "login": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "login",
+          "viewName": "Login"
+        },
+        "dashboard": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "dashboard",
+          "viewName": "Dashboard"
+        },
+        "results": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "results",
+          "viewName": "ResultRecording"
+        },
+        "usage": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "usage",
+          "viewName": "UsageDecision"
+        }
+      }
     }
   },
   "sap.cloud": {
@@ -142,69 +209,6 @@
   "sap.platform.cf": {
     "ui5ComponentLoader": {
       "url": "https://ui5.sap.com/resources/sap-ui-cachebuster/sap-ui-core.js"
-    }
-  },
-  "routing": {
-    "config": {
-      "routerClass": "sap.m.routing.Router",
-      "viewType": "XML",
-      "async": true,
-      "viewPath": "quality.view",
-      "controllerPath": "quality.controller",
-      "controlId": "App",
-      "clearControlAggregation": false
-    },
-    "routes": [
-      {
-        "name": "login",
-        "pattern": "",
-        "target": ["login"]
-      },
-      {
-        "name": "dashboard",
-        "pattern": "dashboard",
-        "target": ["dashboard"]
-      },
-      {
-        "name": "results",
-        "pattern": "results",
-        "target": ["results"]
-      },
-      {
-        "name": "usage",
-        "pattern": "usage",
-        "target": ["usage"]
-      }
-    ],
-    "targets": {
-      "login": {
-        "viewType": "XML",
-        "transition": "slide",
-        "clearControlAggregation": false,
-        "viewId": "login",
-        "viewName": "Login"
-      },
-      "dashboard": {
-        "viewType": "XML",
-        "transition": "slide",
-        "clearControlAggregation": false,
-        "viewId": "dashboard",
-        "viewName": "Dashboard"
-      },
-      "results": {
-        "viewType": "XML",
-        "transition": "slide",
-        "clearControlAggregation": false,
-        "viewId": "results",
-        "viewName": "ResultRecording"
-      },
-      "usage": {
-        "viewType": "XML",
-        "transition": "slide",
-        "clearControlAggregation": false,
-        "viewId": "usage",
-        "viewName": "UsageDecision"
-      }
     }
   }
 }
