@@ -391,58 +391,67 @@ body,
     transform-origin: center !important;
 }
 
-/* Login Container */
+/* Login Container - Force Right Alignment */
 .loginContainer {
-    width: 100% !important;
-    max-width: 520px !important;
-    padding: var(--space-xl) !important;
-    min-height: 100vh !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 50% !important;
+    max-width: 600px !important;
+    min-width: 480px !important;
+    height: 100vh !important;
+    padding: var(--space-xl) 5% var(--space-xl) var(--space-xl) !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-end !important;
-    margin-left: auto !important;
-    margin-right: 8% !important;
-    position: relative !important;
+    justify-content: center !important;
     z-index: 10 !important;
 }
 
-/* Force right alignment for desktop */
+/* Override SAP UI5 FlexBox alignment */
+.loginPage .loginContainer,
+.loginPage .loginContainer .sapMFlexBox {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 50% !important;
+    max-width: 600px !important;
+    min-width: 480px !important;
+    height: 100vh !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+}
+
+/* Desktop: Force all child elements to align right */
 @media (min-width: 769px) {
-    .loginContainer .sapMFlexBox {
-        align-items: flex-end !important;
-        justify-content: flex-end !important;
-    }
-    
-    .loginCard {
-        align-items: flex-end !important;
-    }
-    
-    .loginCard .sapMVBox {
-        align-items: flex-end !important;
-    }
-    
-    .logoSection .sapMVBox {
-        align-items: flex-end !important;
-    }
-    
-    .companyBranding .sapMVBox {
-        align-items: flex-end !important;
-    }
-    
-    .systemTitle .sapMVBox {
-        align-items: flex-end !important;
-    }
-    
-    .demoSection .sapMVBox {
-        align-items: flex-end !important;
-    }
-    
-    .securityBadge .sapMVBox {
-        align-items: flex-end !important;
-    }
-    
+    .loginCard,
+    .loginCard .sapMVBox,
+    .logoSection,
+    .logoSection .sapMVBox,
+    .companyBranding,
+    .companyBranding .sapMVBox,
+    .systemTitle,
+    .systemTitle .sapMVBox,
+    .demoSection,
+    .demoSection .sapMVBox,
+    .securityBadge,
+    .securityBadge .sapMVBox,
+    .loginFooter,
     .loginFooter .sapMVBox {
         align-items: flex-end !important;
+        text-align: right !important;
+    }
+    
+    /* Ensure the login form inputs remain left-aligned for usability */
+    .loginForm,
+    .loginInputGroup,
+    .loginInputField,
+    .buttonSection {
+        text-align: left !important;
+    }
+    
+    .loginInputGroup .sapMVBox {
+        align-items: flex-start !important;
     }
 }
 
@@ -453,13 +462,15 @@ body,
     border-radius: var(--radius-2xl) !important;
     box-shadow: var(--shadow-2xl), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
     padding: var(--space-3xl) var(--space-2xl) !important;
-    text-align: left !important;
+    text-align: right !important;
     border: 1px solid rgba(255, 255, 255, 0.4) !important;
     animation: slideUp var(--transition-bounce) !important;
     position: relative !important;
     overflow: hidden !important;
     width: 100% !important;
+    max-width: 450px !important;
     transform-origin: right center !important;
+    align-items: flex-end !important;
 }
 
 .loginCard::before {
@@ -609,6 +620,14 @@ body,
     animation: slideUp 1s ease-out 1.4s both !important;
 }
 
+/* Ensure form inputs align properly in right-aligned layout */
+.loginInputGroup {
+    margin-bottom: var(--space-xl) !important;
+    text-align: left !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
 .loginInputGroup {
     margin-bottom: var(--space-xl) !important;
     text-align: left !important;
@@ -727,6 +746,11 @@ body,
     width: 100% !important;
     animation: slideInLeft 1s ease-out 2s both !important;
     justify-content: space-between !important;
+}
+
+.loginExtras .sapMHBox {
+    justify-content: space-between !important;
+    width: 100% !important;
 }
 
 .rememberMe .sapMCb {
@@ -1613,13 +1637,19 @@ body,
         padding: var(--space-lg) !important;
     }
     
-    .loginContainer {
-        justify-content: center !important;
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-    }
-    
-    .loginContainer .sapMFlexBox {
+    /* Mobile: Center the login form */
+    .loginContainer,
+    .loginPage .loginContainer,
+    .loginPage .loginContainer .sapMFlexBox {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: auto !important;
+        height: 100vh !important;
+        padding: var(--space-md) !important;
         align-items: center !important;
         justify-content: center !important;
     }
@@ -1629,17 +1659,24 @@ body,
         margin: var(--space-md) !important;
         text-align: center !important;
         align-items: center !important;
+        max-width: 400px !important;
     }
     
-    .loginCard .sapMVBox {
+    .loginCard,
+    .loginCard .sapMVBox,
+    .logoSection,
+    .logoSection .sapMVBox,
+    .companyBranding,
+    .companyBranding .sapMVBox,
+    .systemTitle,
+    .systemTitle .sapMVBox,
+    .demoSection,
+    .demoSection .sapMVBox,
+    .securityBadge,
+    .securityBadge .sapMVBox,
+    .loginFooter,
+    .loginFooter .sapMVBox {
         align-items: center !important;
-    }
-    
-    .logoSection {
-        align-items: center !important;
-    }
-    
-    .companyBranding {
         text-align: center !important;
     }
     
@@ -1658,22 +1695,8 @@ body,
         margin: 0 auto var(--space-lg) !important;
     }
     
-    .systemTitle {
-        text-align: center !important;
-    }
-    
     .titleUnderline {
         margin: 0 auto !important;
-    }
-    
-    .loginFooter,
-    .demoSection,
-    .securityBadge {
-        text-align: center !important;
-    }
-    
-    .securityBadge {
-        justify-content: center !important;
     }
     
     .kaarWatermark {
@@ -1685,17 +1708,20 @@ body,
 }
 
 @media (max-width: 640px) {
-    .loginContainer {
+    .loginContainer,
+    .loginPage .loginContainer,
+    .loginPage .loginContainer .sapMFlexBox {
         padding: var(--space-md) !important;
+        width: 100% !important;
         max-width: 100% !important;
-        justify-content: center !important;
-        margin-right: 0 !important;
+        min-width: auto !important;
     }
     
     .loginCard {
         padding: var(--space-xl) var(--space-md) !important;
         border-radius: var(--radius-xl) !important;
         text-align: center !important;
+        max-width: 350px !important;
     }
     
     .companyName {
