@@ -1,27 +1,44 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
+    "sap/m/MessageBox",
     "sap/ui/model/json/JSONModel"
-], function (Controller, MessageToast, JSONModel) {
+], function (Controller, MessageToast, MessageBox, JSONModel) {
     "use strict";
 
     return Controller.extend("quality.controller.Login", {
         onInit: function () {
-            // Local model for login form inputs
+            // Local model for login form inputs and UI state
             var oModel = new JSONModel({
                 userId: "",
-                password: ""
+                password: "",
+                isLoading: false,
+                showWelcome: false
             });
             this.getView().setModel(oModel, "login");
+            
+            // Add welcome animation on page load
+            setTimeout(function() {
+                this.getView().getModel("login").setProperty("/showWelcome", true);
+            }.bind(this), 500);
         },
 
-        onInputChange: function () {
-            // Optional: Add real-time validation or UI updates
+        onInputChange: function (oEvent) {
             var oLoginModel = this.getView().getModel("login");
             var sUserId = oLoginModel.getProperty("/userId");
             var sPassword = oLoginModel.getProperty("/password");
             
-            // You can add validation logic here
+            // Add visual feedback for input validation
+            var oInput = oEvent.getSource();
+            var sValue = oInput.getValue();
+            
+            if (sValue && sValue.trim()) {
+                oInput.addStyleClass("inputSuccess");
+                oInput.removeStyleClass("inputError");
+            } else {
+                oInput.removeStyleClass("inputSuccess");
+            }
+            
             console.log("Input changed - UserId:", sUserId, "Password:", sPassword ? "***" : "");
         },
 
@@ -38,39 +55,146 @@ sap.ui.define([
             var sUserId = oLoginModel.getProperty("/userId");
             var sPassword = oLoginModel.getProperty("/password");
 
+            // Validate inputs
             if (!sUserId || !sPassword) {
-                MessageToast.show("Please enter both User ID and Password.");
+                MessageBox.error("Please enter both User ID and Password.", {
+                    title: "Missing Credentials",
+                    styleClass: "sapUiSizeCompact"
+                });
                 return;
             }
+
+            if (sUserId.trim().length < 3) {
+                MessageBox.error("User ID must be at least 3 characters long.", {
+                    title: "Invalid User ID",
+                    styleClass: "sapUiSizeCompact"
+                });
+                return;
+            }
+
+            // Set loading state
+            oLoginModel.setProperty("/isLoading", true);
+            
+            // Show loading message
+            MessageToast.show("🔐 Authenticating with Kaar Technologies servers...", {
+                duration: 2000,
+                width: "20em"
+            });
 
             // Real OData authentication with the actual backend
             var oAuthModel = this.getOwnerComponent().getModel("auth");
             var sPath = "/ZQM_LOG_PR(bname='" + sUserId + "',password='" + sPassword + "')";
 
-            sap.ui.core.BusyIndicator.show();
+            sap.ui.core.BusyIndicator.show(0);
 
             oAuthModel.read(sPath, {
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
+                    oLoginModel.setProperty("/isLoading", false);
+                    
                     if (oData && oData.bname) {
-                        MessageToast.show("Login Successful! Welcome " + oData.bname);
-                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                        oRouter.navTo("RouteDashboard");
+                        // Success animation and navigation
+                        MessageToast.show("🎉 Welcome to Quality Management System, " + oData.bname + "!", {
+                            duration: 3000,
+                            width: "25em"
+                        });
+                        
+                        // Add success animation delay before navigation
+                        setTimeout(function() {
+                            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                            oRouter.navTo("RouteDashboard");
+                        }.bind(this), 1500);
+                        
                     } else {
-                        MessageToast.show("Invalid Credentials");
+                        MessageBox.error("Invalid credentials. Please check your User ID and Password.", {
+                            title: "Authentication Failed",
+                            styleClass: "sapUiSizeCompact"
+                        });
                     }
                 }.bind(this),
                 error: function (oError) {
                     sap.ui.core.BusyIndicator.hide();
+                    oLoginModel.setProperty("/isLoading", false);
+                    
                     console.error("Login error:", oError);
+                    
+                    var sErrorMessage = "Authentication failed. Please check your credentials and try again.";
+                    var sErrorTitle = "Login Error";
+                    
                     try {
                         var oErrorResponse = JSON.parse(oError.responseText);
-                        MessageToast.show(oErrorResponse.error.message.value);
+                        if (oErrorResponse.error && oErrorResponse.error.message) {
+                            sErrorMessage = oErrorResponse.error.message.value || sErrorMessage;
+                        }
                     } catch (e) {
-                        MessageToast.show("Login Failed. Please check your credentials and try again.");
+                        // Use default error message
+                        if (oError.status === 0) {
+                            sErrorMessage = "Unable to connect to Kaar Technologies servers. Please check your network connection.";
+                            sErrorTitle = "Connection Error";
+                        } else if (oError.status === 401) {
+                            sErrorMessage = "Invalid credentials. Please verify your User ID and Password.";
+                            sErrorTitle = "Authentication Failed";
+                        } else if (oError.status >= 500) {
+                            sErrorMessage = "Server error occurred. Please try again later or contact support.";
+                            sErrorTitle = "Server Error";
+                        }
                     }
-                }
+                    
+                    MessageBox.error(sErrorMessage, {
+                        title: sErrorTitle,
+                        styleClass: "sapUiSizeCompact",
+                        actions: [MessageBox.Action.OK],
+                        onClose: function() {
+                            // Focus back to user input for retry
+                            this.byId("userInput").focus();
+                        }.bind(this)
+                    });
+                }.bind(this)
             });
+        },
+
+        onForgotPassword: function () {
+            MessageBox.information(
+                "Please contact your system administrator or IT support team to reset your password.\n\n" +
+                "📧 Email: support@kaartechnologies.com\n" +
+                "📞 Phone: +91-XXX-XXX-XXXX\n\n" +
+                "For security reasons, passwords can only be reset by authorized personnel.",
+                {
+                    title: "Password Reset",
+                    styleClass: "sapUiSizeCompact"
+                }
+            );
+        },
+
+        onKeyPress: function (oEvent) {
+            // Allow Enter key to trigger login
+            if (oEvent.getParameter("keyCode") === 13) { // Enter key
+                this.onLoginPress();
+            }
+        },
+
+        onShowDemoCredentials: function () {
+            if (!this._demoDialog) {
+                this._demoDialog = sap.ui.xmlfragment("quality.view.fragments.DemoCredentials", this);
+                this.getView().addDependent(this._demoDialog);
+            }
+            this._demoDialog.open();
+        },
+
+        onUseDemoCredentials: function () {
+            var oLoginModel = this.getView().getModel("login");
+            oLoginModel.setProperty("/userId", "K901900");
+            oLoginModel.setProperty("/password", "12345");
+            
+            MessageToast.show("✅ Demo credentials loaded! You can now sign in.", {
+                duration: 2000
+            });
+            
+            this._demoDialog.close();
+        },
+
+        onCloseDemoDialog: function () {
+            this._demoDialog.close();
         }
     });
 });
