@@ -16,6 +16,9 @@
 
 ### Prerequisites Check
 ```bash
+# Run diagnostic tool
+node diagnose.js
+
 # Check Node.js version (should be 14+)
 node --version
 
@@ -26,16 +29,19 @@ ui5 --version
 npm install -g @ui5/cli
 ```
 
-### Start Application
+### Start Application (Multiple Options)
 ```bash
-# Method 1: Using npm script
+# Method 1: Fallback page (recommended)
 npm start
 
-# Method 2: Using UI5 CLI directly
-ui5 serve --config ui5-local.yaml --open index.html
+# Method 2: Direct app launch
+npm run start-app
 
-# Method 3: Using start script
-node start.js
+# Method 3: Local development mode
+npm run start-local
+
+# Method 4: Test UI5 CDN connectivity
+npm run test-ui5
 ```
 
 ### Login Credentials
@@ -45,7 +51,15 @@ node start.js
 
 ## 🔍 Common Issues & Solutions
 
-### 1. Component Load Errors
+### 1. UI5 Resource Loading Errors
+**Symptoms**: "failed to load 'sap/m/Icon.js'" or "script load error"
+**Solution**: 
+- Check internet connectivity: `npm run test-ui5`
+- Use fallback page: `npm start` (opens fallback.html)
+- Try local mode: `npm run start-local`
+- Use specific UI5 version in index.html
+
+### 2. Component Load Errors
 **Symptoms**: "Failed to load component" or "dataSource not found"
 **Solution**: 
 - Check manifest.json syntax

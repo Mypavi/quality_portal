@@ -4,21 +4,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quality Management System</title>
+    <script>
+        window["sap-ui-config"] = {
+            async: true,
+            resourceroots: {
+                "quality": "./"
+            },
+            theme: "sap_horizon",
+            compatVersion: "edge",
+            frameOptions: "trusted",
+            libs: "sap.m,sap.ui.core,sap.f"
+        };
+    </script>
     <script
         id="sap-ui-bootstrap"
-        src="https://ui5.sap.com/resources/sap-ui-core.js"
-        data-sap-ui-theme="sap_horizon"
-        data-sap-ui-resourceroots='{
-            "quality": "./"
-        }'
-        data-sap-ui-oninit="module:sap/ui/core/ComponentSupport"
-        data-sap-ui-compatVersion="edge"
-        data-sap-ui-async="true"
-        data-sap-ui-frameOptions="trusted">
+        src="https://ui5.sap.com/1.120.17/resources/sap-ui-core.js"
+        data-sap-ui-oninit="module:sap/ui/core/ComponentSupport">
     </script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body class="sapUiBody">
-    <div data-sap-ui-component data-name="quality" data-id="container" data-settings='{"id" : "quality"}'></div>
+    <div id="content">
+        <div data-sap-ui-component data-name="quality" data-id="container" data-settings='{"id" : "quality"}'></div>
+    </div>
+    
+    <script>
+        // Error handling for UI5 loading
+        window.addEventListener('error', function(e) {
+            if (e.message && e.message.includes('ui5')) {
+                console.error('UI5 Loading Error:', e);
+                document.getElementById('content').innerHTML = 
+                    '<div style="padding: 20px; text-align: center; font-family: Arial;">' +
+                    '<h2>Loading Error</h2>' +
+                    '<p>Unable to load UI5 resources. Please check your internet connection.</p>' +
+                    '<p>Error: ' + e.message + '</p>' +
+                    '<button onclick="location.reload()">Retry</button>' +
+                    '</div>';
+            }
+        });
+    </script>
 </body>
 </html>

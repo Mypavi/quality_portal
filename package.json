@@ -15,16 +15,18 @@
     "@sap-ux/ui5-middleware-fe-mockserver": "2"
   },
   "scripts": {
-    "start": "ui5 serve --config ui5-local.yaml --open index.html",
-    "start-local": "ui5 serve --config ui5-local.yaml --open index.html",
+    "start": "ui5 serve --config ui5-local.yaml --open webapp/fallback.html",
+    "start-app": "ui5 serve --config ui5-local.yaml --open webapp/index.html",
+    "start-local": "ui5 serve --config ui5-local.yaml --open webapp/index-local.html",
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
     "deploy": "fiori verify",
     "deploy-config": "fiori add deploy-config",
-    "start-noflp": "ui5 serve --open index.html",
-    "start-mock": "ui5 serve --config ui5-mock.yaml --open index.html",
+    "start-noflp": "ui5 serve --open webapp/index.html",
+    "start-mock": "ui5 serve --config ui5-mock.yaml --open webapp/index.html",
     "int-test": "ui5 serve --config ui5-mock.yaml --open test/integration/opaTests.qunit.html",
     "start-variants-management": "ui5 serve --open preview.html",
-    "unit-test": "ui5 serve --config ui5-mock.yaml --open test/unit/unitTests.qunit.html"
+    "unit-test": "ui5 serve --config ui5-mock.yaml --open test/unit/unitTests.qunit.html",
+    "test-ui5": "node -e \"console.log('Testing UI5 CDN...'); require('https').get('https://ui5.sap.com/1.120.17/resources/sap-ui-core.js', (res) => { console.log('UI5 CDN Status:', res.statusCode); }).on('error', (err) => { console.log('UI5 CDN Error:', err.message); });\""
   },
   "sapuxLayer": "CUSTOMER_BASE"
 }
