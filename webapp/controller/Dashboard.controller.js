@@ -15,8 +15,8 @@ sap.ui.define([
             // Initialize loading state
             this._initializeLoadingState();
             
-            // Load real data from SAP services
-            this._loadRealData();
+            // Wait for models to be ready before loading data
+            this._waitForModelsAndLoadData();
         },
 
         _initializeLoadingState: function() {
@@ -35,6 +35,47 @@ sap.ui.define([
                 loading: true
             });
             this.getView().setModel(oInspectionDataModel, "inspection");
+        },
+
+        _waitForModelsAndLoadData: function() {
+            console.log("⏳ Waiting for OData models to be ready...");
+            
+            var oComponent = this.getOwnerComponent();
+            var that = this;
+            
+            // Check if models are ready, if not wait a bit
+            var fnCheckModels = function() {
+                var oInspectionModel = oComponent.getModel("inspection");
+                var oResultModel = oComponent.getModel("result");
+                var oUsageModel = oComponent.getModel("usage");
+                
+                console.log("🔍 Model availability check:");
+                console.log("- Inspection model:", !!oInspectionModel);
+                console.log("- Result model:", !!oResultModel);
+                console.log("- Usage model:", !!oUsageModel);
+                
+                if (oInspectionModel || oResultModel || oUsageModel) {
+                    // At least one model is available, proceed with data loading
+                    console.log("✅ Models are ready, loading data...");
+                    that._loadRealData();
+                } else {
+                    console.log("⚠️ Models not ready yet, trying fallback data...");
+                    // Models not ready, show fallback data immediately
+                    that._showFallbackData();
+                }
+            };
+            
+            // Try immediately first
+            fnCheckModels();
+            
+            // If models still not ready, try again after a short delay
+            setTimeout(function() {
+                var oInspectionModel = oComponent.getModel("inspection");
+                if (!oInspectionModel) {
+                    console.log("🔄 Retrying model check after delay...");
+                    fnCheckModels();
+                }
+            }, 2000);
         },
 
         _loadRealData: function() {
@@ -57,43 +98,106 @@ sap.ui.define([
             var oInspectionModel = this.getOwnerComponent().getModel("inspection");
             
             if (!oInspectionModel) {
-                console.error("❌ Inspection model not available");
-                this._showFallbackData();
+                console.error("❌ Inspection model not available, trying direct AJAX call...");
+                this._tryDirectInspectionCall();
                 return;
             }
 
             console.log("📋 Fetching inspection lots from ZQM_INSPECT_PR...");
             
+            // Add timeout to the OData call
+            var iTimeout = setTimeout(function() {
+                console.warn("⏰ OData call timeout, falling back to demo data");
+                this._showFallbackData();
+            }.bind(this), 10000); // 10 second timeout
+            
             oInspectionModel.read("/ZQM_INSPECT_PR", {
                 success: function(oData) {
-                    console.log("✅ Successfully loaded inspection lots:", oData.results.length, "records");
+                    clearTimeout(iTimeout);
+                    console.log("✅ Successfully loaded inspection lots:", oData.results?.length || 0, "records");
                     
-                    // Process and enhance the data
-                    var aProcessedData = this._processInspectionData(oData.results);
-                    
-                    // Update the model
-                    var oDataModel = new sap.ui.model.json.JSONModel({
-                        ZQM_INSPECT_PR: aProcessedData,
-                        loading: false
-                    });
-                    this.getView().setModel(oDataModel, "inspection");
-                    
-                    // Update inspection count
-                    this.getView().getModel("inspectionCount").setData({
-                        count: aProcessedData.length,
-                        loading: false
-                    });
-                    
-                    // Show success message
-                    MessageToast.show("✅ Loaded " + aProcessedData.length + " inspection lots", {
-                        duration: 2000
-                    });
-                    
+                    if (oData.results && oData.results.length > 0) {
+                        // Process and enhance the data
+                        var aProcessedData = this._processInspectionData(oData.results);
+                        
+                        // Update the model
+                        var oDataModel = new sap.ui.model.json.JSONModel({
+                            ZQM_INSPECT_PR: aProcessedData,
+                            loading: false
+                        });
+                        this.getView().setModel(oDataModel, "inspection");
+                        
+                        // Update inspection count
+                        this.getView().getModel("inspectionCount").setData({
+                            count: aProcessedData.length,
+                            loading: false
+                        });
+                        
+                        // Show success message
+                        MessageToast.show("✅ Loaded " + aProcessedData.length + " inspection lots from SAP", {
+                            duration: 3000
+                        });
+                    } else {
+                        console.warn("⚠️ No inspection data returned from SAP");
+                        this._showFallbackData();
+                    }
                 }.bind(this),
                 error: function(oError) {
+                    clearTimeout(iTimeout);
                     console.error("❌ Failed to load inspection lots:", oError);
+                    console.log("🔄 Trying direct AJAX call as fallback...");
+                    this._tryDirectInspectionCall();
+                }.bind(this)
+            });
+        },
+
+        _tryDirectInspectionCall: function() {
+            console.log("🔗 Attempting direct AJAX call to inspection service...");
+            
+            var sUrl = "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json";
+            
+            jQuery.ajax({
+                url: sUrl,
+                type: "GET",
+                timeout: 8000, // 8 second timeout
+                success: function(data) {
+                    console.log("✅ Direct AJAX call successful:", data);
+                    
+                    var aResults = data.d?.results || data.results || [];
+                    if (aResults.length > 0) {
+                        // Process and enhance the data
+                        var aProcessedData = this._processInspectionData(aResults);
+                        
+                        // Update the model
+                        var oDataModel = new sap.ui.model.json.JSONModel({
+                            ZQM_INSPECT_PR: aProcessedData,
+                            loading: false
+                        });
+                        this.getView().setModel(oDataModel, "inspection");
+                        
+                        // Update inspection count
+                        this.getView().getModel("inspectionCount").setData({
+                            count: aProcessedData.length,
+                            loading: false
+                        });
+                        
+                        MessageToast.show("✅ Loaded " + aProcessedData.length + " inspection lots via direct call", {
+                            duration: 3000
+                        });
+                    } else {
+                        console.warn("⚠️ No data from direct call");
+                        this._showFallbackData();
+                    }
+                }.bind(this),
+                error: function(xhr, status, error) {
+                    console.error("❌ Direct AJAX call failed:", error);
+                    console.log("📋 Falling back to demo data");
+                    
+                    MessageToast.show("⚠️ Unable to connect to SAP services. Loading demo data...", {
+                        duration: 3000
+                    });
+                    
                     this._showFallbackData();
-                    MessageBox.error("Failed to load inspection data. Using demo data for now.");
                 }.bind(this)
             });
         },
@@ -149,14 +253,25 @@ sap.ui.define([
             var oModel = this.getOwnerComponent().getModel(sModelName);
             
             if (!oModel) {
-                console.log("⚠️ Model " + sModelName + " not available");
+                console.log("⚠️ Model " + sModelName + " not available, trying direct call...");
+                this._tryDirectCountCall(sModelName, sEntitySet, sCountModelName);
                 return;
             }
 
             console.log("📊 Loading count for " + sEntitySet + "...");
             
+            // Add timeout for count calls
+            var iTimeout = setTimeout(function() {
+                console.warn("⏰ Count call timeout for " + sEntitySet);
+                this.getView().getModel(sCountModelName).setData({
+                    count: 0,
+                    loading: false
+                });
+            }.bind(this), 5000); // 5 second timeout for counts
+            
             oModel.read("/" + sEntitySet, {
                 success: function(oData) {
+                    clearTimeout(iTimeout);
                     var iCount = oData.results ? oData.results.length : 0;
                     console.log("✅ " + sEntitySet + " count:", iCount);
                     
@@ -166,7 +281,44 @@ sap.ui.define([
                     });
                 }.bind(this),
                 error: function(oError) {
+                    clearTimeout(iTimeout);
                     console.error("❌ Failed to load " + sEntitySet + " count:", oError);
+                    console.log("🔄 Trying direct call for " + sEntitySet + " count...");
+                    this._tryDirectCountCall(sModelName, sEntitySet, sCountModelName);
+                }.bind(this)
+            });
+        },
+
+        _tryDirectCountCall: function(sModelName, sEntitySet, sCountModelName) {
+            var mServiceUrls = {
+                "result": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
+                "usage": "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/"
+            };
+            
+            var sBaseUrl = mServiceUrls[sModelName];
+            if (!sBaseUrl) {
+                console.warn("⚠️ No URL mapping for service:", sModelName);
+                this.getView().getModel(sCountModelName).setData({ count: 0, loading: false });
+                return;
+            }
+            
+            var sUrl = sBaseUrl + sEntitySet + "?$format=json&$top=1&$inlinecount=allpages";
+            
+            jQuery.ajax({
+                url: sUrl,
+                type: "GET",
+                timeout: 5000,
+                success: function(data) {
+                    var iCount = data.d?.__count || data.__count || (data.d?.results?.length) || 0;
+                    console.log("✅ Direct count for " + sEntitySet + ":", iCount);
+                    
+                    this.getView().getModel(sCountModelName).setData({
+                        count: iCount,
+                        loading: false
+                    });
+                }.bind(this),
+                error: function(xhr, status, error) {
+                    console.error("❌ Direct count call failed for " + sEntitySet + ":", error);
                     this.getView().getModel(sCountModelName).setData({
                         count: 0,
                         loading: false
@@ -246,11 +398,11 @@ sap.ui.define([
             
             console.log("✅ Demo inspection data loaded");
             
-            // Show welcome message
+            // Show welcome message with info about demo mode
             setTimeout(function() {
-                MessageToast.show("🎉 Welcome to Kaar Technologies Quality Management Dashboard!", {
-                    duration: 3000,
-                    width: "25em"
+                MessageToast.show("🎉 Welcome to Quality Management Dashboard! (Demo Mode - SAP services unavailable)", {
+                    duration: 4000,
+                    width: "30em"
                 });
             }, 500);
         },
@@ -290,9 +442,34 @@ sap.ui.define([
 
         onRefresh: function() {
             // Manual refresh button
-            MessageToast.show("🔄 Refreshing all data...");
+            console.log("🔄 Manual refresh triggered");
+            MessageToast.show("🔄 Refreshing all data from SAP services...");
+            
+            // Reset loading state
             this._initializeLoadingState();
-            this._loadRealData();
+            
+            // Force refresh all OData models
+            this._refreshODataModels();
+            
+            // Wait a moment then reload data
+            setTimeout(function() {
+                this._waitForModelsAndLoadData();
+            }.bind(this), 1000);
+        },
+
+        _refreshODataModels: function() {
+            console.log("🔄 Refreshing OData models...");
+            
+            var oComponent = this.getOwnerComponent();
+            var aModelNames = ["inspection", "result", "usage"];
+            
+            aModelNames.forEach(function(sModelName) {
+                var oModel = oComponent.getModel(sModelName);
+                if (oModel && oModel.refresh) {
+                    console.log("🔄 Refreshing " + sModelName + " model");
+                    oModel.refresh(true); // Force refresh
+                }
+            });
         },
 
         onResultRecordingPress: function () {
@@ -350,6 +527,60 @@ sap.ui.define([
                 return "Decision Made (" + sCode + ")";
             }
             return "Pending";
+        },
+
+        // Debug method to test all services
+        onTestServices: function() {
+            console.log("🧪 Testing all SAP services...");
+            MessageToast.show("🧪 Testing SAP service connectivity...");
+            
+            var aServices = [
+                {
+                    name: "Inspection",
+                    url: "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json&$top=1"
+                },
+                {
+                    name: "Result", 
+                    url: "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json&$top=1"
+                },
+                {
+                    name: "Usage",
+                    url: "http://172.17.19.24:8000/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR?$format=json&$top=1"
+                }
+            ];
+            
+            var iCompleted = 0;
+            var iSuccessful = 0;
+            
+            aServices.forEach(function(oService) {
+                jQuery.ajax({
+                    url: oService.url,
+                    type: "GET",
+                    timeout: 5000,
+                    success: function(data) {
+                        console.log("✅ " + oService.name + " service: OK");
+                        iSuccessful++;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("❌ " + oService.name + " service: " + error);
+                    },
+                    complete: function() {
+                        iCompleted++;
+                        if (iCompleted === aServices.length) {
+                            var sMessage = "Service Test Complete: " + iSuccessful + "/" + aServices.length + " services working";
+                            console.log("🎯 " + sMessage);
+                            MessageToast.show(sMessage, { duration: 3000 });
+                            
+                            if (iSuccessful > 0) {
+                                // At least one service is working, try to reload data
+                                setTimeout(function() {
+                                    this.onRefresh();
+                                }.bind(this), 1000);
+                            }
+                        }
+                    }.bind(this)
+                });
+            }.bind(this));
         }
     });
 });

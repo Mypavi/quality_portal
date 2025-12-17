@@ -35,6 +35,8 @@
                 <Toolbar class="sapUiSmallMarginBottom">
                     <Title text="Inspection Lots" level="H2" />
                     <ToolbarSpacer />
+                    <Button text="Test Services" icon="sap-icon://test-automation" press="onTestServices" type="Emphasized" class="sapUiTinyMarginEnd" />
+                    <Button text="Refresh" icon="sap-icon://refresh" press="onRefresh" type="Default" class="sapUiTinyMarginEnd" />
                     <SearchField search="onSearch" width="auto" placeholder="Search Inspection Lot" />
                 </Toolbar>
                 
