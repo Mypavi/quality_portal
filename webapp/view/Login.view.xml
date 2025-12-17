@@ -14,6 +14,9 @@
                 <html:div class="floatingShape shape3"></html:div>
                 <html:div class="floatingShape shape4"></html:div>
                 <html:div class="floatingShape shape5"></html:div>
+                <html:div class="floatingShape shape6"></html:div>
+                <html:div class="floatingShape shape7"></html:div>
+                <html:div class="kaarWatermark">KAAR</html:div>
             </html:div>
             
             <!-- Main Login Container -->
