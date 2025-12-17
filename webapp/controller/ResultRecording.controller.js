@@ -111,6 +111,28 @@ sap.ui.define([
             // Case 1: If usage decision is taken (Code exists), cannot record.
             // Returning false if code exists, true otherwise.
             return !sUsageDecisionCode;
+        },
+
+        formatUDState: function (sCode) {
+            if (sCode === 'A') {
+                return "Success"; // Green
+            } else if (sCode === 'R' || sCode === 'R2') {
+                return "Error"; // Red
+            } else if (sCode) {
+                return "Warning";
+            }
+            return "None"; // Pending
+        },
+
+        formatUDText: function (sCode) {
+            if (sCode === 'A') {
+                return "Approved";
+            } else if (sCode === 'R' || sCode === 'R2') {
+                return "Rejected";
+            } else if (sCode) {
+                return "Decision Made (" + sCode + ")";
+            }
+            return "Pending";
         }
     });
 });

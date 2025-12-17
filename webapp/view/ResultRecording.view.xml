@@ -16,7 +16,9 @@
                     <ObjectAttribute title="Origin" text="{inspection>LotOrigin}" />
                 </attributes>
                 <statuses>
-                    <ObjectStatus title="Status" text="{inspection>UsageDecisionStatus}" state="{= ${inspection>UsageDecisionStatus} === 'Decision Made' ? 'Success' : 'Warning' }" />
+                    <ObjectStatus title="Status"
+                        text="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDText'}"
+                        state="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDState'}" />
                 </statuses>
             </ObjectHeader>
 
