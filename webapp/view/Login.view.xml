@@ -1,11 +1,10 @@
 <mvc:View controllerName="quality.controller.Login"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc" 
+    displayBlock="true"
     xmlns="sap.m"
-    xmlns:f="sap.f"
-    xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core">
     
-    <Page id="page" title="{i18n>title}" showHeader="false" class="loginPage">
+    <Page id="page" title="Quality Management Login" showHeader="false" class="loginPage">
         <content>
             <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column" class="loginContainer">
                 <VBox class="loginCard" alignItems="Center">
@@ -45,7 +44,7 @@
                                 press="onLoginPress" 
                                 class="loginButton"
                                 icon="sap-icon://log"
-                                enabled="{= ${login>/userId} &amp;&amp; ${login>/password} }" />
+                                enabled="{parts: [{path: 'login>/userId'}, {path: 'login>/password'}], formatter: '.formatLoginEnabled'}" />
                         
                         <!-- Additional Features -->
                         <HBox justifyContent="SpaceBetween" alignItems="Center" class="loginExtras">

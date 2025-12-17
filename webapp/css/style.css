@@ -1174,3 +1174,207 @@ body,
         margin: 0.25rem 0 !important;
     }
 }
+/* ===== LOGIN PAGE FIXES ===== */
+.loginPage .sapMPageBg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.loginContainer {
+    min-height: 100vh !important;
+    padding: 2rem !important;
+}
+
+.loginCard {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    padding: 3rem 2.5rem !important;
+    text-align: center !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    animation: slideUp 0.8s ease-out !important;
+    max-width: 420px !important;
+    width: 100% !important;
+}
+
+.loginLogo {
+    width: 100px !important;
+    height: 100px !important;
+    margin: 0 auto 2rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-size: 2.5rem !important;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3) !important;
+}
+
+.loginTitle {
+    color: #1a202c !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 700 !important;
+    font-size: 1.75rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+.loginSubtitle {
+    color: #718096 !important;
+    margin-bottom: 2.5rem !important;
+    font-size: 1rem !important;
+}
+
+.loginForm {
+    width: 100% !important;
+    margin-top: 1rem !important;
+}
+
+.loginInput {
+    margin-bottom: 1.5rem !important;
+    text-align: left !important;
+}
+
+.inputLabel {
+    color: #4a5568 !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 0.875rem !important;
+}
+
+.loginInputField .sapMInputBase {
+    border-radius: 12px !important;
+    border: 2px solid #e2e8f0 !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.3s ease !important;
+    height: 50px !important;
+}
+
+.loginInputField .sapMInputBase:focus-within {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1) !important;
+    background: white !important;
+}
+
+.loginInputField .sapMInputBaseInner {
+    font-size: 1rem !important;
+    padding: 0 1rem !important;
+}
+
+.loginButton {
+    width: 100% !important;
+    margin-top: 1.5rem !important;
+}
+
+.loginButton .sapMBtn {
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    padding: 15px 24px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    height: 50px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+    width: 100% !important;
+}
+
+.loginButton .sapMBtn:hover:not(.sapMBtnDisabled) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.loginButton .sapMBtn:active {
+    transform: translateY(0) !important;
+}
+
+.loginButton .sapMBtn.sapMBtnDisabled {
+    background: #cbd5e0 !important;
+    color: #a0aec0 !important;
+    box-shadow: none !important;
+}
+
+.loginExtras {
+    margin-top: 1.5rem !important;
+    width: 100% !important;
+}
+
+.rememberMe .sapMCb {
+    font-size: 0.875rem !important;
+    color: #718096 !important;
+}
+
+.forgotPassword {
+    font-size: 0.875rem !important;
+    color: #667eea !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+.forgotPassword:hover {
+    color: #764ba2 !important;
+    text-decoration: underline !important;
+}
+
+.loginFooter {
+    margin-top: 2rem !important;
+    padding-top: 1.5rem !important;
+    border-top: 1px solid #e2e8f0 !important;
+    width: 100% !important;
+}
+
+.footerText {
+    color: #718096 !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.copyrightText {
+    color: #a0aec0 !important;
+    font-size: 0.75rem !important;
+}
+
+/* ===== ENSURE PROPER DISPLAY ===== */
+.sapMPage {
+    height: 100vh !important;
+}
+
+.sapMFlexBox {
+    min-height: 100vh !important;
+}
+
+/* ===== ANIMATION KEYFRAMES ===== */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .loginContainer {
+        padding: 1rem !important;
+    }
+    
+    .loginCard {
+        padding: 2rem 1.5rem !important;
+        margin: 0 !important;
+    }
+    
+    .loginLogo {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .loginTitle {
+        font-size: 1.5rem !important;
+    }
+}

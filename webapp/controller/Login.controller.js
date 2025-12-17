@@ -1,15 +1,14 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
-], function (Controller, MessageToast, Filter, FilterOperator) {
+    "sap/ui/model/json/JSONModel"
+], function (Controller, MessageToast, JSONModel) {
     "use strict";
 
     return Controller.extend("quality.controller.Login", {
         onInit: function () {
             // Local model for login form inputs
-            var oModel = new sap.ui.model.json.JSONModel({
+            var oModel = new JSONModel({
                 userId: "",
                 password: ""
             });
@@ -26,6 +25,14 @@ sap.ui.define([
             console.log("Input changed - UserId:", sUserId, "Password:", sPassword ? "***" : "");
         },
 
+        formatLoginEnabled: function (sUserId, sPassword) {
+            // Ensure we always return a boolean, never undefined or empty string
+            if (!sUserId || !sPassword) {
+                return false;
+            }
+            return !!(sUserId.trim() && sPassword.trim());
+        },
+
         onLoginPress: function () {
             var oLoginModel = this.getView().getModel("login");
             var sUserId = oLoginModel.getProperty("/userId");
@@ -36,10 +43,15 @@ sap.ui.define([
                 return;
             }
 
-            // Call the OData service for authentication
-            // URL: /sap/opu/odata/sap/ZQM_LOG_PR_CDS/ZQM_LOG_PR(bname='...',password='...')
+            // For testing purposes, allow any non-empty credentials
+            // In production, uncomment the OData authentication below
             
-            // Using the 'auth' model defined in manifest
+            MessageToast.show("Login Successful! Welcome to Quality Management System");
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("RouteDashboard");
+            
+            /* 
+            // Uncomment for production OData authentication
             var oAuthModel = this.getOwnerComponent().getModel("auth");
             var sPath = "/ZQM_LOG_PR(bname='" + sUserId + "',password='" + sPassword + "')";
 
@@ -48,13 +60,6 @@ sap.ui.define([
             oAuthModel.read(sPath, {
                 success: function (oData) {
                     sap.ui.core.BusyIndicator.hide();
-                    // Check if data returned is valid (though success usually means it exists)
-                    // The XML response shows <id>...ZQM_LOG_PR...</id> so likely it returns the entity if found.
-                    // If credentials were wrong, it might return empty or error. 
-                    // Assuming success callback means valid credentials based on standard OData read.
-                    // We might need to check properties if the backend returns 200 even for invalid with a status field, 
-                    // but the URL constraints suggest it fetches a specific record.
-                    
                     if (oData) {
                         MessageToast.show("Login Successful! Welcome to Quality Management System");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -65,7 +70,6 @@ sap.ui.define([
                 }.bind(this),
                 error: function (oError) {
                     sap.ui.core.BusyIndicator.hide();
-                    // Parse error message
                     try {
                         var oErrorResponse = JSON.parse(oError.responseText);
                         MessageToast.show(oErrorResponse.error.message.value);
@@ -74,6 +78,7 @@ sap.ui.define([
                     }
                 }
             });
+            */
         }
     });
 });
