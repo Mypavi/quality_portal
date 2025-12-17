@@ -16,6 +16,16 @@ sap.ui.define([
             this.getView().setModel(oModel, "login");
         },
 
+        onInputChange: function () {
+            // Optional: Add real-time validation or UI updates
+            var oLoginModel = this.getView().getModel("login");
+            var sUserId = oLoginModel.getProperty("/userId");
+            var sPassword = oLoginModel.getProperty("/password");
+            
+            // You can add validation logic here
+            console.log("Input changed - UserId:", sUserId, "Password:", sPassword ? "***" : "");
+        },
+
         onLoginPress: function () {
             var oLoginModel = this.getView().getModel("login");
             var sUserId = oLoginModel.getProperty("/userId");
@@ -46,7 +56,7 @@ sap.ui.define([
                     // but the URL constraints suggest it fetches a specific record.
                     
                     if (oData) {
-                        MessageToast.show("Login Successful");
+                        MessageToast.show("Login Successful! Welcome to Quality Management System");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("RouteDashboard");
                     } else {
@@ -60,7 +70,7 @@ sap.ui.define([
                         var oErrorResponse = JSON.parse(oError.responseText);
                         MessageToast.show(oErrorResponse.error.message.value);
                     } catch (e) {
-                         MessageToast.show("Login Failed. Please check credentials.");
+                         MessageToast.show("Login Failed. Please check your credentials and try again.");
                     }
                 }
             });

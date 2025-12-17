@@ -238,3 +238,890 @@ body,
     /* Slate 600 */
     font-weight: 600 !important;
 }
+
+/* ===== ENHANCED LOGIN PAGE STYLES ===== */
+.loginPage {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginContainer {
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+}
+
+.loginCard {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 3rem 2.5rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideUp 0.8s ease-out;
+}
+
+.loginLogo {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.loginTitle {
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    font-size: 1.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.loginSubtitle {
+    color: #718096;
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+}
+
+.loginInput {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.loginInput .sapMInputBase {
+    border-radius: 12px !important;
+    border: 2px solid #e2e8f0 !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.3s ease !important;
+    height: 50px !important;
+}
+
+.loginInput .sapMInputBase:focus-within {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1) !important;
+    background: white !important;
+}
+
+.loginButton {
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.loginButton .sapMBtn {
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    padding: 15px 24px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    height: 50px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+}
+
+.loginButton .sapMBtn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.loginButton .sapMBtn:active {
+    transform: translateY(0) !important;
+}
+
+/* ===== ENHANCED RESULT RECORDING PAGE STYLES ===== */
+.resultRecordingPage {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%) !important;
+}
+
+.customHeaderBar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+}
+
+.headerTitle {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.customHeaderBar .sapMBtn {
+    color: white !important;
+    border-radius: 8px !important;
+}
+
+.customHeaderBar .sapMBtn:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Hero Panel Styles */
+.heroPanel {
+    background: transparent !important;
+    border: none !important;
+    margin: 1.5rem !important;
+}
+
+.lotInfoCard {
+    border-radius: 16px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+    background: white !important;
+}
+
+.lotInfoCard:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+.lotInfoCard .sapFCardHeader {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%) !important;
+    color: white !important;
+    padding: 2rem !important;
+}
+
+.cardContent {
+    padding: 2rem !important;
+}
+
+.cardLabel {
+    font-size: 0.875rem !important;
+    color: #718096 !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.cardValue {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+}
+
+.progressBar .sapMPI {
+    height: 12px !important;
+    border-radius: 6px !important;
+    background: #e2e8f0 !important;
+}
+
+.progressBar .sapMPIBar {
+    border-radius: 6px !important;
+    background: linear-gradient(90deg, #48bb78 0%, #38a169 100%) !important;
+}
+
+.statusBadge {
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 25px !important;
+    font-size: 0.875rem !important;
+}
+
+/* Actions Panel */
+.actionsPanel {
+    margin: 1.5rem !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border: none !important;
+    background: white !important;
+}
+
+.actionToolbar {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%) !important;
+    border-radius: 16px 16px 0 0 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.actionTitle {
+    color: #2d3748 !important;
+    font-weight: 700 !important;
+}
+
+.actionButtons {
+    padding: 2rem !important;
+    gap: 1rem !important;
+    justify-content: center !important;
+}
+
+.actionButton {
+    min-width: 160px !important;
+    margin: 0.5rem !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    height: 50px !important;
+}
+
+.acceptButton .sapMBtn {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3) !important;
+}
+
+.acceptButton .sapMBtn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4) !important;
+}
+
+.rejectButton .sapMBtn {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3) !important;
+}
+
+.rejectButton .sapMBtn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4) !important;
+}
+
+.usageButton .sapMBtn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+}
+
+.usageButton .sapMBtn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.refreshButton .sapMBtn {
+    background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(79, 209, 199, 0.3) !important;
+}
+
+.refreshButton .sapMBtn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(79, 209, 199, 0.4) !important;
+}
+
+/* Entry Panel */
+.entryPanel {
+    margin: 1.5rem !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border: none !important;
+    background: white !important;
+}
+
+.entryToolbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-radius: 16px 16px 0 0 !important;
+}
+
+.entryTitle {
+    color: white !important;
+    font-weight: 700 !important;
+}
+
+.entrySubtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.875rem !important;
+}
+
+.entryForm {
+    padding: 2.5rem !important;
+}
+
+.inputGrid {
+    margin-bottom: 2rem !important;
+}
+
+.inputGroup {
+    padding: 1.5rem !important;
+    border-radius: 12px !important;
+    border: 2px solid #e2e8f0 !important;
+    transition: all 0.3s ease !important;
+    margin-bottom: 1rem !important;
+    background: #f7fafc !important;
+}
+
+.inputGroup:hover {
+    border-color: #cbd5e0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-2px) !important;
+}
+
+.unrestrictedGroup {
+    border-color: rgba(72, 187, 120, 0.4) !important;
+    background: rgba(72, 187, 120, 0.05) !important;
+}
+
+.unrestrictedGroup:hover {
+    border-color: #48bb78 !important;
+    background: rgba(72, 187, 120, 0.1) !important;
+}
+
+.blockedGroup {
+    border-color: rgba(245, 101, 101, 0.4) !important;
+    background: rgba(245, 101, 101, 0.05) !important;
+}
+
+.blockedGroup:hover {
+    border-color: #f56565 !important;
+    background: rgba(245, 101, 101, 0.1) !important;
+}
+
+.productionGroup {
+    border-color: rgba(237, 137, 54, 0.4) !important;
+    background: rgba(237, 137, 54, 0.05) !important;
+}
+
+.productionGroup:hover {
+    border-color: #ed8936 !important;
+    background: rgba(237, 137, 54, 0.1) !important;
+}
+
+.inputLabel {
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1rem !important;
+}
+
+.inputDescription {
+    font-size: 0.875rem !important;
+    color: #718096 !important;
+    margin-bottom: 1rem !important;
+}
+
+.inputField .sapMInputBase {
+    border-radius: 8px !important;
+    border: 2px solid #e2e8f0 !important;
+    transition: all 0.3s ease !important;
+    height: 45px !important;
+}
+
+.inputField .sapMInputBase:focus-within {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+.saveButton {
+    min-width: 220px !important;
+    padding: 15px 30px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    height: 55px !important;
+    font-size: 1rem !important;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3) !important;
+}
+
+.saveButton .sapMBtn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4) !important;
+}
+
+.helpMessage {
+    border-radius: 12px !important;
+    border: none !important;
+    background: rgba(102, 126, 234, 0.1) !important;
+    color: #667eea !important;
+    padding: 1rem 1.5rem !important;
+}
+
+/* History Panel */
+.historyPanel {
+    margin: 1.5rem !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border: none !important;
+    background: white !important;
+}
+
+.historyToolbar {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%) !important;
+    border-radius: 16px 16px 0 0 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.historyTitle {
+    color: #2d3748 !important;
+    font-weight: 700 !important;
+}
+
+.recordCount {
+    color: #718096 !important;
+    font-size: 0.875rem !important;
+    margin-right: 1rem !important;
+    font-weight: 600 !important;
+}
+
+.searchField .sapMSF {
+    border-radius: 25px !important;
+    border: 2px solid #e2e8f0 !important;
+}
+
+.searchField .sapMSF:focus-within {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+.noDataMessage {
+    padding: 4rem !important;
+    text-align: center !important;
+}
+
+.resultsTable {
+    border-radius: 0 0 16px 16px !important;
+}
+
+.columnHeader {
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+    font-size: 0.875rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.resultRow {
+    transition: all 0.2s ease !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.resultRow:hover {
+    background: rgba(102, 126, 234, 0.05) !important;
+    transform: translateX(4px) !important;
+}
+
+.lotIdentifier {
+    font-weight: 700 !important;
+    color: #667eea !important;
+}
+
+.cellText {
+    color: #4a5568 !important;
+    font-weight: 500 !important;
+}
+
+.categoryStatus {
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    padding: 0.25rem 0.75rem !important;
+}
+
+.quantityNumber {
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+}
+
+.statusIndicator {
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    padding: 0.25rem 0.75rem !important;
+}
+
+/* ===== ENHANCED ANIMATIONS ===== */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.lotInfoCard,
+.actionsPanel,
+.entryPanel,
+.historyPanel {
+    animation: fadeInScale 0.6s ease-out;
+}
+
+.actionButton,
+.inputGroup {
+    animation: slideUp 0.4s ease-out;
+}
+
+/* ===== RESPONSIVE ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    .heroPanel,
+    .actionsPanel,
+    .entryPanel,
+    .historyPanel {
+        margin: 1rem !important;
+    }
+    
+    .cardContent {
+        padding: 1.5rem !important;
+    }
+    
+    .actionButtons {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 1.5rem !important;
+    }
+    
+    .actionButton {
+        width: 100% !important;
+        margin: 0.5rem 0 !important;
+    }
+    
+    .entryForm {
+        padding: 1.5rem !important;
+    }
+    
+    .inputGrid .sapUiLayoutGridSpan {
+        width: 100% !important;
+    }
+    
+    .loginCard {
+        margin: 1rem !important;
+        padding: 2rem 1.5rem !important;
+    }
+}
+
+/* ===== LOADING STATES ===== */
+.sapMBusyIndicator {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-xl {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+}
+/* ===== ADDITIONAL LOGIN ENHANCEMENTS ===== */
+.loginForm {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.inputLabel {
+    color: #4a5568 !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 0.875rem !important;
+}
+
+.loginInputField .sapMInputBase {
+    background: rgba(255, 255, 255, 0.9) !important;
+    padding-left: 1rem !important;
+}
+
+.loginInputField .sapMInputBaseInner {
+    font-size: 1rem !important;
+    padding: 0 1rem !important;
+}
+
+.loginExtras {
+    margin-top: 1.5rem !important;
+    width: 100% !important;
+}
+
+.rememberMe .sapMCb {
+    font-size: 0.875rem !important;
+    color: #718096 !important;
+}
+
+.forgotPassword {
+    font-size: 0.875rem !important;
+    color: #667eea !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+.forgotPassword:hover {
+    color: #764ba2 !important;
+    text-decoration: underline !important;
+}
+
+.loginFooter {
+    margin-top: 2rem !important;
+    padding-top: 1.5rem !important;
+    border-top: 1px solid #e2e8f0 !important;
+    width: 100% !important;
+}
+
+.footerText {
+    color: #718096 !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.copyrightText {
+    color: #a0aec0 !important;
+    font-size: 0.75rem !important;
+}
+
+/* ===== RESULT RECORDING DATA FETCHING ENHANCEMENTS ===== */
+.dataLoadingIndicator {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 1000 !important;
+}
+
+.refreshButton {
+    animation: pulse 2s infinite !important;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.errorMessage {
+    background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%) !important;
+    color: #c53030 !important;
+    border: 1px solid #fc8181 !important;
+    border-radius: 12px !important;
+    padding: 1rem 1.5rem !important;
+    margin: 1rem !important;
+}
+
+.successMessage {
+    background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%) !important;
+    color: #2f855a !important;
+    border: 1px solid #68d391 !important;
+    border-radius: 12px !important;
+    padding: 1rem 1.5rem !important;
+    margin: 1rem !important;
+}
+
+/* ===== TABLE ENHANCEMENTS FOR BETTER DATA DISPLAY ===== */
+.resultsTable .sapMListTblRow {
+    border-left: 4px solid transparent !important;
+    transition: all 0.3s ease !important;
+}
+
+.resultsTable .sapMListTblRow:hover {
+    border-left-color: #667eea !important;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%) !important;
+}
+
+.resultsTable .sapMListTblHeader {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%) !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+}
+
+.resultsTable .sapMListTblHeaderCell {
+    padding: 1rem !important;
+}
+
+.resultsTable .sapMListTblCell {
+    padding: 1rem !important;
+    vertical-align: middle !important;
+}
+
+/* ===== ENHANCED OBJECT STATUS COLORS ===== */
+.sapMObjectStatus.sapMObjectStatusSuccess {
+    background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%) !important;
+    color: #2f855a !important;
+    border: 1px solid #68d391 !important;
+}
+
+.sapMObjectStatus.sapMObjectStatusError {
+    background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%) !important;
+    color: #c53030 !important;
+    border: 1px solid #fc8181 !important;
+}
+
+.sapMObjectStatus.sapMObjectStatusWarning {
+    background: linear-gradient(135deg, #fefcbf 0%, #faf089 100%) !important;
+    color: #d69e2e !important;
+    border: 1px solid #f6e05e !important;
+}
+
+.sapMObjectStatus.sapMObjectStatusInformation {
+    background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%) !important;
+    color: #2c5282 !important;
+    border: 1px solid #63b3ed !important;
+}
+
+/* ===== MOBILE RESPONSIVENESS IMPROVEMENTS ===== */
+@media (max-width: 480px) {
+    .loginCard {
+        width: 90% !important;
+        margin: 1rem !important;
+        padding: 2rem 1rem !important;
+    }
+    
+    .loginLogo {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .loginTitle {
+        font-size: 1.5rem !important;
+    }
+    
+    .actionButtons {
+        padding: 1rem !important;
+    }
+    
+    .cardContent {
+        padding: 1rem !important;
+    }
+    
+    .entryForm {
+        padding: 1rem !important;
+    }
+}
+/* ===== TEST BUTTON STYLES ===== */
+.testButton .sapMBtn {
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3) !important;
+}
+
+.testButton .sapMBtn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(237, 137, 54, 0.4) !important;
+}
+
+/* ===== ENHANCED ERROR HANDLING ===== */
+.errorPanel {
+    background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%) !important;
+    border: 2px solid #fc8181 !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    margin: 1rem !important;
+    color: #c53030 !important;
+}
+
+.errorIcon {
+    color: #e53e3e !important;
+    margin-right: 0.5rem !important;
+}
+
+.retryButton {
+    background: #e53e3e !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 1rem !important;
+    margin-top: 1rem !important;
+}
+
+/* ===== DATA LOADING STATES ===== */
+.loadingOverlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1000 !important;
+}
+
+.loadingSpinner {
+    width: 50px !important;
+    height: 50px !important;
+    border: 4px solid #e2e8f0 !important;
+    border-top: 4px solid #667eea !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== ENHANCED TABLE STATES ===== */
+.emptyTableMessage {
+    text-align: center !important;
+    padding: 3rem !important;
+    color: #718096 !important;
+}
+
+.emptyTableIcon {
+    font-size: 3rem !important;
+    color: #cbd5e0 !important;
+    margin-bottom: 1rem !important;
+}
+
+.emptyTableTitle {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: #4a5568 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.emptyTableDescription {
+    color: #718096 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* ===== ENHANCED FORM VALIDATION ===== */
+.inputError .sapMInputBase {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+}
+
+.inputSuccess .sapMInputBase {
+    border-color: #38a169 !important;
+    box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1) !important;
+}
+
+.validationMessage {
+    font-size: 0.875rem !important;
+    margin-top: 0.25rem !important;
+}
+
+.validationError {
+    color: #e53e3e !important;
+}
+
+.validationSuccess {
+    color: #38a169 !important;
+}

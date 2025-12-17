@@ -1,18 +1,29 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/UIComponent",
-    "sap/m/MessageToast"
-], function (Controller, UIComponent, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/ui/model/json/JSONModel"
+], function (Controller, UIComponent, MessageToast, MessageBox, Filter, FilterOperator, JSONModel) {
     "use strict";
 
     return Controller.extend("quality.controller.ResultRecording", {
         onInit: function () {
             var oRouter = UIComponent.getRouterFor(this);
-            // Attach to both routes: Detail (with ID) and List (generic)
             oRouter.getRoute("RouteResultRecording").attachPatternMatched(this._onRouteMatched, this);
             oRouter.getRoute("RouteResultRecordingList").attachPatternMatched(this._onRouteMatched, this);
             
-            // Initialize models and check their availability
+            // Initialize local view model for UI state
+            var oViewModel = new JSONModel({
+                busy: false,
+                hasData: false,
+                selectedLot: null,
+                resultCount: 0
+            });
+            this.getView().setModel(oViewModel, "viewModel");
+            
             this._initializeModels();
         },
 
@@ -33,103 +44,247 @@ sap.ui.define([
                 return;
             }
 
-            // Set up error handlers
+            // Set up success and error handlers
+            oResultModel.attachRequestCompleted(function (oEvent) {
+                console.log("Result model request completed successfully");
+                this._updateResultCount();
+            }.bind(this));
+
             oResultModel.attachRequestFailed(function (oEvent) {
                 console.error("Result model request failed:", oEvent.getParameters());
                 MessageToast.show("Failed to load result data");
-            });
-
-            oInspectionModel.attachRequestFailed(function (oEvent) {
-                console.error("Inspection model request failed:", oEvent.getParameters());
-                MessageToast.show("Failed to load inspection data");
-            });
+                this.getView().getModel("viewModel").setProperty("/busy", false);
+            }.bind(this));
 
             console.log("Models initialized successfully");
+        },
+
+        _updateResultCount: function () {
+            var oResultModel = this.getView().getModel("result");
+            if (oResultModel && oResultModel.getProperty("/ZQM_RESULT_PR")) {
+                var aResults = oResultModel.getProperty("/ZQM_RESULT_PR");
+                this.getView().getModel("viewModel").setProperty("/resultCount", aResults.length);
+                this.getView().getModel("viewModel").setProperty("/hasData", aResults.length > 0);
+            }
         },
 
         _onRouteMatched: function (oEvent) {
             var oArgs = oEvent.getParameter("arguments");
             var sKeyPredicate = oArgs ? oArgs.inspectionLot : null;
+            var oViewModel = this.getView().getModel("viewModel");
+
+            // Set busy state
+            oViewModel.setProperty("/busy", true);
 
             // Clear inputs when entering a new lot or reloading
-            if (this.byId("inputUnrestricted")) this.byId("inputUnrestricted").setValue("");
-            if (this.byId("inputBlocked")) this.byId("inputBlocked").setValue("");
-            if (this.byId("inputProduction")) this.byId("inputProduction").setValue("");
-
-            var aFilters = [];
+            this._clearInputs();
 
             if (sKeyPredicate) {
                 // Detail Mode: Specific Lot selected
                 var sRawID = sKeyPredicate.replace(/'/g, "");
+                oViewModel.setProperty("/selectedLot", sRawID);
+                
+                this._bindInspectionLot(sRawID);
+                this._loadResultData(sRawID);
+                this.byId("resultPage").setTitle("Result Recording - Lot " + sRawID);
+            } else {
+                // List Mode: No Specific Lot (Tile Click)
+                oViewModel.setProperty("/selectedLot", null);
+                this.getView().unbindElement("inspection");
+                this._loadResultData();
+                this.byId("resultPage").setTitle("Result Recording - All Lots");
+            }
+        },
 
-                // 1. Filter the History Table
-                aFilters.push(new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sRawID));
+        _clearInputs: function () {
+            if (this.byId("inputUnrestricted")) this.byId("inputUnrestricted").setValue("");
+            if (this.byId("inputBlocked")) this.byId("inputBlocked").setValue("");
+            if (this.byId("inputProduction")) this.byId("inputProduction").setValue("");
+        },
 
-                // 2. Determine Binding Path
-                // Check if the model supports Key Predicates (OData) or needs Array Access (JSON)
-                var oModel = this.getView().getModel("inspection");
-                var sPath = "";
+        _bindInspectionLot: function (sLotNumber) {
+            var oModel = this.getView().getModel("inspection");
+            var sPath = "";
 
-                if (oModel.createKey) {
-                    // OData Model
-                    sPath = "/ZQM_INSPECT_PR('" + sRawID + "')";
-                } else {
-                    // JSON Model (Client Side) - We must find the index
-                    var aData = oModel.getProperty("/ZQM_INSPECT_PR");
-                    if (aData) {
-                        for (var i = 0; i < aData.length; i++) {
-                            if (aData[i].InspectionLotNumber === sRawID) {
-                                sPath = "/ZQM_INSPECT_PR/" + i;
-                                break;
-                            }
+            if (oModel && oModel.createKey) {
+                // OData Model
+                sPath = "/ZQM_INSPECT_PR('" + sLotNumber + "')";
+            } else if (oModel) {
+                // JSON Model - find by lot number
+                var aData = oModel.getProperty("/ZQM_INSPECT_PR");
+                if (aData) {
+                    for (var i = 0; i < aData.length; i++) {
+                        if (aData[i].InspectionLotNumber === sLotNumber) {
+                            sPath = "/ZQM_INSPECT_PR/" + i;
+                            break;
                         }
                     }
                 }
-
-                if (sPath) {
-                    this.getView().bindElement({
-                        path: sPath,
-                        model: "inspection"
-                    });
-                    this.byId("resultPage").setTitle("Result Recording - Lot " + sRawID);
-                } else {
-                    MessageToast.show("Inspection Lot " + sRawID + " not found.");
-                }
-
-            } else {
-                // List Mode: No Specific Lot (Tile Click)
-                this.getView().unbindElement("inspection");
-                this.byId("resultPage").setTitle("Result Recording - All");
             }
 
-            // Ensure result model is loaded and refresh the table
-            this._refreshResultTable(aFilters);
+            if (sPath) {
+                this.getView().bindElement({
+                    path: sPath,
+                    model: "inspection"
+                });
+            } else {
+                MessageToast.show("Inspection Lot " + sLotNumber + " not found.");
+            }
         },
 
-        _refreshResultTable: function (aFilters) {
-            var oTable = this.byId("resultTable");
+        _loadResultData: function (sLotNumber) {
             var oResultModel = this.getView().getModel("result");
+            var oViewModel = this.getView().getModel("viewModel");
             
             if (!oResultModel) {
                 console.error("Result model not found");
                 MessageToast.show("Result service not available");
+                oViewModel.setProperty("/busy", false);
                 return;
             }
 
-            // Force refresh the result model
-            oResultModel.refresh();
+            // Create filters if specific lot is selected
+            var aFilters = [];
+            if (sLotNumber) {
+                aFilters.push(new Filter("InspectionLotNumber", FilterOperator.EQ, sLotNumber));
+            }
+
+            // Force data refresh from server
+            console.log("Loading result data for lot:", sLotNumber || "All");
+            oViewModel.setProperty("/busy", true);
             
+            // For OData models, we need to read the data explicitly
+            if (oResultModel.read) {
+                var sPath = "/ZQM_RESULT_PR";
+                var mParameters = {
+                    success: function (oData) {
+                        console.log("Result data loaded successfully:", oData);
+                        oViewModel.setProperty("/busy", false);
+                        
+                        // Filter data if needed
+                        var aResults = oData.results || [];
+                        if (sLotNumber) {
+                            aResults = aResults.filter(function(item) {
+                                return item.InspectionLotNumber === sLotNumber;
+                            });
+                        }
+                        
+                        oViewModel.setProperty("/hasData", aResults.length > 0);
+                        oViewModel.setProperty("/resultCount", aResults.length);
+                        
+                        // Force refresh the table binding
+                        this._forceTableRefresh(aFilters);
+                        
+                        if (aResults.length === 0 && sLotNumber) {
+                            MessageToast.show("No results found for lot " + sLotNumber);
+                        } else if (aResults.length === 0) {
+                            MessageToast.show("No result data available");
+                        } else {
+                            MessageToast.show("Loaded " + aResults.length + " result records");
+                        }
+                    }.bind(this),
+                    error: function (oError) {
+                        console.error("Failed to load result data:", oError);
+                        MessageToast.show("Failed to load result data. Please check your connection.");
+                        oViewModel.setProperty("/busy", false);
+                        oViewModel.setProperty("/hasData", false);
+                        oViewModel.setProperty("/resultCount", 0);
+                    }.bind(this)
+                };
+
+                // Add filters to parameters if any
+                if (aFilters.length > 0) {
+                    mParameters.filters = aFilters;
+                }
+
+                oResultModel.read(sPath, mParameters);
+            } else {
+                // For JSON models, just update the binding
+                this._forceTableRefresh(aFilters);
+                oViewModel.setProperty("/busy", false);
+                this._updateResultCount();
+            }
+        },
+
+        _forceTableRefresh: function (aFilters) {
+            var oTable = this.byId("resultTable");
             var oBinding = oTable.getBinding("items");
+            
+            if (oBinding) {
+                // Apply filters and refresh
+                oBinding.filter(aFilters || []);
+                oBinding.refresh(true); // Force refresh
+            } else {
+                // Rebind the table if no binding exists
+                oTable.bindItems({
+                    path: "result>/ZQM_RESULT_PR",
+                    template: this._getTableTemplate(),
+                    filters: aFilters || []
+                });
+            }
+        },
+
+        _getTableTemplate: function () {
+            // Create table row template if it doesn't exist
+            return new sap.m.ColumnListItem({
+                cells: [
+                    new sap.m.ObjectIdentifier({
+                        title: "{result>InspectionLotNumber}",
+                        class: "lotIdentifier"
+                    }),
+                    new sap.m.Text({
+                        text: "{result>PlantCode}",
+                        class: "cellText"
+                    }),
+                    new sap.m.Text({
+                        text: "{result>InspectorName}",
+                        class: "cellText"
+                    }),
+                    new sap.m.Text({
+                        text: {
+                            path: "result>RecordedDate",
+                            type: "sap.ui.model.type.Date",
+                            formatOptions: { style: "medium" }
+                        },
+                        class: "cellText"
+                    }),
+                    new sap.m.ObjectStatus({
+                        text: "{result>ResultCategory}",
+                        state: {
+                            path: "result>ResultCategory",
+                            formatter: this.formatCategoryState.bind(this)
+                        },
+                        class: "categoryStatus"
+                    }),
+                    new sap.m.ObjectNumber({
+                        number: "{result>StockCode}",
+                        class: "quantityNumber"
+                    }),
+                    new sap.m.ObjectStatus({
+                        text: {
+                            path: "result>UsageDecisionCode",
+                            formatter: this.formatUDText.bind(this)
+                        },
+                        state: {
+                            path: "result>UsageDecisionCode",
+                            formatter: this.formatUDState.bind(this)
+                        },
+                        icon: "{= ${result>UsageDecisionCode} ? 'sap-icon://accept' : 'sap-icon://pending' }",
+                        class: "statusIndicator"
+                    })
+                ],
+                press: this.onResultPress.bind(this),
+                class: "resultRow"
+            });
+        },
+
+        _updateTableBinding: function (aFilters) {
+            var oTable = this.byId("resultTable");
+            var oBinding = oTable.getBinding("items");
+            
             if (oBinding) {
                 oBinding.filter(aFilters || []);
                 oBinding.refresh();
-            } else {
-                // If binding doesn't exist, create it
-                oTable.bindItems({
-                    path: "result>/ZQM_RESULT_PR",
-                    template: oTable.getBindingInfo("items").template,
-                    filters: aFilters || []
-                });
             }
         },
 
@@ -369,6 +524,92 @@ sap.ui.define([
                 return "Decision Made (" + sCode + ")";
             }
             return "Pending";
+        },
+
+        onRefreshData: function () {
+            var oViewModel = this.getView().getModel("viewModel");
+            var sSelectedLot = oViewModel.getProperty("/selectedLot");
+            
+            MessageToast.show("Refreshing data...");
+            
+            // Force refresh all models
+            var oResultModel = this.getView().getModel("result");
+            var oInspectionModel = this.getView().getModel("inspection");
+            
+            if (oResultModel && oResultModel.refresh) {
+                oResultModel.refresh(true);
+            }
+            
+            if (oInspectionModel && oInspectionModel.refresh) {
+                oInspectionModel.refresh(true);
+            }
+            
+            // Reload data
+            this._loadResultData(sSelectedLot);
+            
+            // Refresh inspection data if specific lot is selected
+            if (sSelectedLot) {
+                this._bindInspectionLot(sSelectedLot);
+            }
+        },
+
+        onInputChange: function () {
+            // Optional: Add real-time validation or calculations
+            var nUnrestricted = parseFloat(this.byId("inputUnrestricted").getValue()) || 0;
+            var nBlocked = parseFloat(this.byId("inputBlocked").getValue()) || 0;
+            var nProduction = parseFloat(this.byId("inputProduction").getValue()) || 0;
+            var nTotal = nUnrestricted + nBlocked + nProduction;
+            
+            // You can add validation logic here
+            console.log("Total quantity entered:", nTotal);
+        },
+
+        onResultPress: function (oEvent) {
+            var oContext = oEvent.getSource().getBindingContext("result");
+            if (oContext) {
+                var sLotNumber = oContext.getProperty("InspectionLotNumber");
+                MessageToast.show("Selected result for lot: " + sLotNumber);
+                // Optional: Navigate to detailed view or show popup
+            }
+        },
+
+        // Debug method to test data fetching
+        onTestDataFetch: function () {
+            var oResultModel = this.getView().getModel("result");
+            
+            if (!oResultModel) {
+                MessageToast.show("Result model not available");
+                return;
+            }
+
+            console.log("Testing direct OData call...");
+            MessageToast.show("Testing data fetch...");
+
+            // Test direct URL call
+            jQuery.ajax({
+                url: "/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json",
+                type: "GET",
+                success: function (data) {
+                    console.log("Direct AJAX call successful:", data);
+                    MessageToast.show("Direct call successful: " + (data.d?.results?.length || 0) + " records");
+                },
+                error: function (xhr, status, error) {
+                    console.error("Direct AJAX call failed:", error);
+                    MessageToast.show("Direct call failed: " + error);
+                }
+            });
+
+            // Test OData model call
+            oResultModel.read("/ZQM_RESULT_PR", {
+                success: function (oData) {
+                    console.log("OData model call successful:", oData);
+                    MessageToast.show("OData call successful: " + (oData.results?.length || 0) + " records");
+                },
+                error: function (oError) {
+                    console.error("OData model call failed:", oError);
+                    MessageToast.show("OData call failed");
+                }
+            });
         }
     });
 });

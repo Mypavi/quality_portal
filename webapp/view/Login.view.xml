@@ -4,24 +4,60 @@
     xmlns:f="sap.f"
     xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core">
+    
     <Page id="page" title="{i18n>title}" showHeader="false" class="loginPage">
         <content>
-            <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column">
-                <VBox class="loginCard" width="400px" alignItems="Center">
-                    <!-- Placeholder using a generic business icon styled as logo, since download failed -->
-                    <!-- In a real scenario, use src="img/logo.png" -->
-                    <core:Icon src="sap-icon://quality-issue" size="4rem" class="sapUiMediumMarginBottom" color="#2c5364" />
-                    <Title text="Kaar Technologies" level="H1" class="sapUiTinyMarginBottom" />
-                    <Title text="Quality Control Portal" level="H3" class="sapUiLargeMarginBottom" titleStyle="H4"/>
+            <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column" class="loginContainer">
+                <VBox class="loginCard" alignItems="Center">
+                    <!-- Enhanced Logo with Gradient Background -->
+                    <VBox class="loginLogo" alignItems="Center" justifyContent="Center">
+                        <core:Icon src="sap-icon://quality-issue" size="2.5rem" color="white" />
+                    </VBox>
                     
-                    <VBox width="100%" class="sapUiSmallMargin">
-                        <Label text="User ID" labelFor="userInput" design="Bold" class="sapUiTinyMarginBottom"/>
-                        <Input id="userInput" placeholder="Enter User ID" value="{login>/userId}" icon="sap-icon://employee" class="sapUiMediumMarginBottom"/>
+                    <!-- Enhanced Titles -->
+                    <Title text="Kaar Technologies" level="H1" class="loginTitle" />
+                    <Text text="Quality Management System" class="loginSubtitle" />
+                    
+                    <!-- Enhanced Form -->
+                    <VBox width="100%" class="loginForm">
+                        <VBox class="loginInput">
+                            <Label text="User ID" labelFor="userInput" design="Bold" class="inputLabel"/>
+                            <Input id="userInput" 
+                                   placeholder="Enter your user ID" 
+                                   value="{login>/userId}" 
+                                   class="loginInputField"
+                                   liveChange="onInputChange" />
+                        </VBox>
                         
-                        <Label text="Password" labelFor="passwordInput" design="Bold" class="sapUiTinyMarginBottom"/>
-                        <Input id="passwordInput" type="Password" placeholder="Enter Password" value="{login>/password}" icon="sap-icon://locked" class="sapUiMediumMarginBottom"/>
+                        <VBox class="loginInput">
+                            <Label text="Password" labelFor="passwordInput" design="Bold" class="inputLabel"/>
+                            <Input id="passwordInput" 
+                                   type="Password" 
+                                   placeholder="Enter your password" 
+                                   value="{login>/password}" 
+                                   class="loginInputField"
+                                   liveChange="onInputChange" />
+                        </VBox>
                         
-                        <Button text="Login to Portal" type="Emphasized" press="onLoginPress" class="sapUiMediumMarginTop" width="100%"/>
+                        <!-- Enhanced Login Button -->
+                        <Button text="Sign In to Portal" 
+                                type="Emphasized" 
+                                press="onLoginPress" 
+                                class="loginButton"
+                                icon="sap-icon://log"
+                                enabled="{= ${login>/userId} && ${login>/password} }" />
+                        
+                        <!-- Additional Features -->
+                        <HBox justifyContent="SpaceBetween" alignItems="Center" class="loginExtras">
+                            <CheckBox text="Remember me" class="rememberMe" />
+                            <Link text="Forgot password?" class="forgotPassword" />
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Footer -->
+                    <VBox alignItems="Center" class="loginFooter">
+                        <Text text="Secure Quality Management Portal" class="footerText" />
+                        <Text text="© 2024 Kaar Technologies" class="copyrightText" />
                     </VBox>
                 </VBox>
             </FlexBox>
