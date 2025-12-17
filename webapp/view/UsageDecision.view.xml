@@ -1,0 +1,52 @@
+<mvc:View controllerName="quality.controller.UsageDecision"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.f">
+    <Page id="usagePage" title="Usage Decision" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <Table id="usageTable" items="{usage>/ZQM_US_PR}" growing="true" growingThreshold="10">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Usage Decisions" level="H2"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="Inspection Lot" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="Plant" />
+                    </Column>
+                    <Column hAlign="End">
+                        <Text text="Lot Qty" />
+                    </Column>
+                    <Column hAlign="End">
+                        <Text text="Inspected Qty" />
+                    </Column>
+                     <Column>
+                        <Text text="UD Code" />
+                    </Column>
+                    <Column>
+                        <Text text="Status" />
+                    </Column>
+                    <Column minScreenWidth="Desktop" demandPopin="true">
+                        <Text text="Message" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{usage>InspectionLotNumber}" />
+                            <Text text="{usage>Plant}" />
+                            <ObjectNumber number="{usage>LotQuantity}" />
+                            <ObjectNumber number="{usage>InspectedQuantity}" />
+                            <Text text="{usage>UsageDecisionCode}" />
+                            <ObjectStatus text="{usage>DecisionStatus}" state="{= ${usage>DecisionStatus} === 'Allowed' ? 'Success' : 'Error' }" />
+                            <Text text="{usage>DecisionMessage}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

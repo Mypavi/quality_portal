@@ -28,12 +28,14 @@ sap.ui.define([
 
         onResultRecordingPress: function () {
             // Navigate to Result Recording List or View
-            // UIComponent.getRouterFor(this).navTo("RouteResultRecording"); 
+            var oRouter = UIComponent.getRouterFor(this);
+            oRouter.navTo("RouteResultRecording");
         },
 
         onUsageDecisionPress: function () {
             // Navigate to Usage Decision View
-            // UIComponent.getRouterFor(this).navTo("RouteUsageDecision");
+            var oRouter = UIComponent.getRouterFor(this);
+            oRouter.navTo("RouteUsageDecision");
         },
 
         onInspectionLotPress: function (oEvent) {

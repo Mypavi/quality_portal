@@ -1,0 +1,52 @@
+<mvc:View controllerName="quality.controller.ResultRecording"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.f">
+    <Page id="resultPage" title="Result Recording" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <Table id="resultTable" items="{result>/ZQM_RESULT_PR}" growing="true" growingThreshold="10">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Inspection Results" level="H2"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="Inspection Lot" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="Plant" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="Inspector" />
+                    </Column>
+                    <Column>
+                        <Text text="Date" />
+                    </Column>
+                    <Column>
+                        <Text text="Category" />
+                    </Column>
+                    <Column hAlign="End">
+                        <Text text="Stock Code" />
+                    </Column>
+                     <Column>
+                        <Text text="Status" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier title="{result>InspectionLotNumber}" />
+                            <Text text="{result>PlantCode}" />
+                            <Text text="{result>InspectorName}" />
+                            <Text text="{path: 'result>RecordedDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium' }}" />
+                            <ObjectStatus text="{result>ResultCategory}" state="{= ${result>ResultCategory} === 'Block Stock' ? 'Error' : 'Success' }" />
+                            <ObjectNumber number="{result>StockCode}" />
+                            <Text text="{result>RecordingStatus}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

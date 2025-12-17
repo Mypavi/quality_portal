@@ -132,6 +132,20 @@
           "target": [
             "TargetDashboard"
           ]
+        },
+        {
+          "name": "RouteResultRecording",
+          "pattern": "result",
+          "target": [
+            "TargetResultRecording"
+          ]
+        },
+        {
+          "name": "RouteUsageDecision",
+          "pattern": "usage",
+          "target": [
+            "TargetUsageDecision"
+          ]
         }
       ],
       "targets": {
@@ -142,6 +156,14 @@
         "TargetDashboard": {
           "viewName": "Dashboard",
           "viewId": "dashboard"
+        },
+        "TargetResultRecording": {
+          "viewName": "ResultRecording",
+          "viewId": "resultRecording"
+        },
+        "TargetUsageDecision": {
+          "viewName": "UsageDecision",
+          "viewId": "usageDecision"
         }
       }
     },
