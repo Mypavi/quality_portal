@@ -23,44 +23,30 @@ sap.ui.define([
         _fetchCounts: function () {
             var oComponent = this.getOwnerComponent();
 
-            // Fetch Inspection Count
-            var oInspectionService = oComponent.getModel("inspection");
-            if (oInspectionService) {
-                oInspectionService.read("/ZQM_INSPECT_PR", {
-                    success: function (oData) {
-                        this.getView().getModel("inspectionCount").setProperty("/count", oData.results.length);
-                    }.bind(this),
-                    error: function () {
-                        console.error("Failed to fetch inspection count");
-                    }
-                });
-            }
+            // Helper to fetch count
+            var fnFetchCount = function (sModelName, sEntitySet, sTargetModel, sTargetProperty) {
+                var oModel = oComponent.getModel(sModelName);
+                if (oModel) {
+                    var sUrl = oModel.sServiceUrl + sEntitySet + "/$count";
+                    // Use jQuery/Ajax for lightweight count fetch to avoid loading all data
+                    jQuery.ajax({
+                        url: sUrl,
+                        type: "GET",
+                        success: function (data) {
+                            // Data is the count as plain text (or number)
+                            var iCount = parseInt(data, 10);
+                            this.getView().getModel(sTargetModel).setProperty(sTargetProperty, isNaN(iCount) ? 0 : iCount);
+                        }.bind(this),
+                        error: function (e) {
+                            console.error("Failed to fetch count for " + sEntitySet, e);
+                        }
+                    });
+                }
+            }.bind(this);
 
-            // Fetch Result Count
-            var oResultService = oComponent.getModel("result");
-            if (oResultService) {
-                oResultService.read("/ZQM_RESULT_PR", {
-                    success: function (oData) {
-                        this.getView().getModel("resultCount").setProperty("/count", oData.results.length);
-                    }.bind(this),
-                    error: function () {
-                        console.error("Failed to fetch result count");
-                    }
-                });
-            }
-
-            // Fetch Usage Count
-            var oUsageService = oComponent.getModel("usage");
-            if (oUsageService) {
-                oUsageService.read("/ZQM_US_PR", {
-                    success: function (oData) {
-                        this.getView().getModel("usageCount").setProperty("/count", oData.results.length);
-                    }.bind(this),
-                    error: function () {
-                        console.error("Failed to fetch usage count");
-                    }
-                });
-            }
+            fnFetchCount("inspection", "/ZQM_INSPECT_PR", "inspectionCount", "/count");
+            fnFetchCount("result", "/ZQM_RESULT_PR", "resultCount", "/count");
+            fnFetchCount("usage", "/ZQM_US_PR", "usageCount", "/count");
         },
 
         onNavBack: function () {

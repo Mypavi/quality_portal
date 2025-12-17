@@ -20,28 +20,32 @@
         "uri": "/sap/opu/odata/sap/ZQM_LOG_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0"
+          "odataVersion": "2.0",
+          "useBatch": true
         }
       },
       "inspectionService": {
         "uri": "/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0"
+          "odataVersion": "2.0",
+          "useBatch": true
         }
       },
       "resultService": {
         "uri": "/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0"
+          "odataVersion": "2.0",
+          "useBatch": true
         }
       },
       "usageService": {
         "uri": "/sap/opu/odata/sap/ZQM_US_PR_CDS/",
         "type": "OData",
         "settings": {
-          "odataVersion": "2.0"
+          "odataVersion": "2.0",
+          "useBatch": true
         }
       }
     }
