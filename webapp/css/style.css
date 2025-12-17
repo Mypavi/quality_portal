@@ -401,9 +401,49 @@ body,
     align-items: center !important;
     justify-content: flex-end !important;
     margin-left: auto !important;
-    margin-right: 10% !important;
+    margin-right: 8% !important;
     position: relative !important;
     z-index: 10 !important;
+}
+
+/* Force right alignment for desktop */
+@media (min-width: 769px) {
+    .loginContainer .sapMFlexBox {
+        align-items: flex-end !important;
+        justify-content: flex-end !important;
+    }
+    
+    .loginCard {
+        align-items: flex-end !important;
+    }
+    
+    .loginCard .sapMVBox {
+        align-items: flex-end !important;
+    }
+    
+    .logoSection .sapMVBox {
+        align-items: flex-end !important;
+    }
+    
+    .companyBranding .sapMVBox {
+        align-items: flex-end !important;
+    }
+    
+    .systemTitle .sapMVBox {
+        align-items: flex-end !important;
+    }
+    
+    .demoSection .sapMVBox {
+        align-items: flex-end !important;
+    }
+    
+    .securityBadge .sapMVBox {
+        align-items: flex-end !important;
+    }
+    
+    .loginFooter .sapMVBox {
+        align-items: flex-end !important;
+    }
 }
 
 /* Login Card */
@@ -1576,12 +1616,23 @@ body,
     .loginContainer {
         justify-content: center !important;
         margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+    
+    .loginContainer .sapMFlexBox {
+        align-items: center !important;
+        justify-content: center !important;
     }
     
     .loginCard {
         padding: var(--space-xl) var(--space-lg) !important;
         margin: var(--space-md) !important;
         text-align: center !important;
+        align-items: center !important;
+    }
+    
+    .loginCard .sapMVBox {
+        align-items: center !important;
     }
     
     .logoSection {

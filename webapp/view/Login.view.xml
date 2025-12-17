@@ -20,22 +20,22 @@
             </html:div>
             
             <!-- Main Login Container -->
-            <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column" class="loginContainer">
-                <VBox class="loginCard" alignItems="Center">
+            <FlexBox alignItems="Center" justifyContent="End" height="100%" direction="Column" class="loginContainer">
+                <VBox class="loginCard" alignItems="End">
                     
                     <!-- Company Logo Section -->
-                    <VBox class="logoSection" alignItems="Center">
+                    <VBox class="logoSection" alignItems="End">
                         <VBox class="loginLogo" alignItems="Center" justifyContent="Center">
                             <core:Icon src="sap-icon://quality-issue" size="3rem" color="white" class="logoIcon" />
                         </VBox>
-                        <VBox class="companyBranding" alignItems="Center">
+                        <VBox class="companyBranding" alignItems="End">
                             <Title text="KAAR" level="H1" class="companyName" />
                             <Title text="TECHNOLOGIES" level="H2" class="companySubName" />
                         </VBox>
                     </VBox>
                     
                     <!-- System Title -->
-                    <VBox class="systemTitle" alignItems="Center">
+                    <VBox class="systemTitle" alignItems="End">
                         <Text text="Quality Management System" class="systemSubtitle" />
                         <html:div class="titleUnderline"></html:div>
                     </VBox>
@@ -89,16 +89,21 @@
                     </VBox>
                     
                     <!-- Demo Credentials Helper -->
-                    <VBox alignItems="Center" class="demoSection">
+                    <VBox alignItems="End" class="demoSection">
                         <Button text="🔑 Demo Credentials" 
                                 type="Transparent" 
                                 press="onShowDemoCredentials" 
                                 class="demoButton"
                                 tooltip="Click to see demo login credentials" />
+                        <Button text="🚀 Quick Dashboard" 
+                                type="Transparent" 
+                                press="onQuickNavToDashboard" 
+                                class="demoButton"
+                                tooltip="Quick navigation to dashboard for testing" />
                     </VBox>
                     
                     <!-- Security Badge -->
-                    <VBox alignItems="Center" class="securityBadge">
+                    <VBox alignItems="End" class="securityBadge">
                         <HBox alignItems="Center" class="securityInfo">
                             <core:Icon src="sap-icon://shield" class="securityIcon" />
                             <Text text="Secure Enterprise Portal" class="securityText" />
@@ -106,7 +111,7 @@
                     </VBox>
                     
                     <!-- Footer -->
-                    <VBox alignItems="Center" class="loginFooter">
+                    <VBox alignItems="End" class="loginFooter">
                         <Text text="Powered by SAP UI5 Technology" class="footerText" />
                         <Text text="© 2024 Kaar Technologies Pvt Ltd. All Rights Reserved." class="copyrightText" />
                     </VBox>
