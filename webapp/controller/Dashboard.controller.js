@@ -90,14 +90,13 @@ sap.ui.define([
             var oItem = oEvent.getSource();
             var oContext = oItem.getBindingContext("inspection");
 
-            // Get the full path e.g. /ZQM_INSPECT_PR('50000000010')
-            var sPath = oContext.getPath();
-            // Extract the key predicate: '50000000010' or (InspectLot='...')
-            var sKeyPredicate = sPath.substring(sPath.indexOf("(") + 1, sPath.lastIndexOf(")"));
+            // Robustly get the ID regardless of model type (Client JSON vs OData)
+            var sInspectionLot = oContext.getProperty("InspectionLotNumber");
 
             var oRouter = UIComponent.getRouterFor(this);
+            // Pass the ID. The ResultRecording controller will handle adding quotes if needed for OData keys.
             oRouter.navTo("RouteResultRecording", {
-                inspectionLot: sKeyPredicate
+                inspectionLot: sInspectionLot
             });
         },
 

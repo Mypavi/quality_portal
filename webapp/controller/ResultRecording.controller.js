@@ -26,8 +26,8 @@ sap.ui.define([
 
             if (sKeyPredicate) {
                 // Detail Mode: Specific Lot selected
-                // sKeyPredicate might be '5000000010' (with quotes, from Dashboard)
-                // Extract raw ID for filtering the table (which relies on property value)
+                // sKeyPredicate comes from the router. It might be '5000000010' (raw) or quoted if passed that way.
+                // We want the raw numeric/string ID for filtering, and the Quoted ID for the Path.
                 var sRawID = sKeyPredicate.replace(/'/g, "");
 
                 // 1. Filter the History Table
@@ -36,12 +36,17 @@ sap.ui.define([
                 aFilters.push(new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sRawID));
 
                 // 2. Bind the Whole Page/Header to the Inspection Lot Context
-                // Use the predicate exactly as passed from Dashboard (matches cache key e.g. '123')
-                var sPath = "/ZQM_INSPECT_PR(" + sKeyPredicate + ")";
+                // Ensure we use quotes for OData String keys: /Entity('ID')
+                var sPath = "/ZQM_INSPECT_PR('" + sRawID + "')";
 
                 this.getView().bindElement({
                     path: sPath,
-                    model: "inspection"
+                    model: "inspection",
+                    events: {
+                        dataReceived: function () {
+                            // Verify if binding worked
+                        }
+                    }
                 });
 
                 this.byId("resultPage").setTitle("Result Recording - Lot " + sRawID);

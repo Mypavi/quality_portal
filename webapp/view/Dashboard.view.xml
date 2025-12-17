@@ -7,25 +7,26 @@
     <Page id="dashboardPage" title="Quality Engineer Dashboard" showNavButton="true" navButtonPress="onNavBack">
         <content>
             <VBox class="sapUiSmallMargin">
-                <HBox justifyContent="SpaceAround" class="sapUiMediumMarginBottom">
+            <VBox class="sapUiSmallMargin">
+                <HBox alignItems="Center" justifyContent="Center" class="dashboard-tile-container sapUiMediumMarginBottom">
                     <GenericTile header="Inspection Lots" frameType="OneByOne" press="onTilePress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
                         <tileContent>
                             <TileContent>
-                                <NumericContent value="{inspectionCount>/count}" icon="sap-icon://inspection" />
+                                <NumericContent value="{inspectionCount>/count}" icon="sap-icon://inspection" withMargin="false" />
                             </TileContent>
                         </tileContent>
                     </GenericTile>
                     <GenericTile header="Result Recording" frameType="OneByOne" press="onResultRecordingPress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
                         <tileContent>
                             <TileContent>
-                                <NumericContent value="{resultCount>/count}" icon="sap-icon://form" />
+                                <NumericContent value="{resultCount>/count}" icon="sap-icon://form" withMargin="false" />
                             </TileContent>
                         </tileContent>
                     </GenericTile>
                     <GenericTile header="Usage Decision" frameType="OneByOne" press="onUsageDecisionPress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
                         <tileContent>
                             <TileContent>
-                                <NumericContent value="{usageCount>/count}" icon="sap-icon://approvals" />
+                                <NumericContent value="{usageCount>/count}" icon="sap-icon://approvals" withMargin="false" />
                             </TileContent>
                         </tileContent>
                     </GenericTile>

@@ -62,11 +62,11 @@
                             <Text text="Progress: {inspection>InspectedQuantity} / {inspection>ActualQuantity} {inspection>UnitOfMeasure} Recorded" class="sapUiTinyMarginBegin" />
                         </HBox>
                         <HBox alignItems="Center" wrap="Wrap">
-                            <VBox class="sapUiSmallMarginEnd">
-                                <Label text="Unrestricted (Good)" />
-                                <Input id="inputUnrestricted" placeholder="0" type="Number" width="120px" />
+                            <VBox class="sapUiMediumMarginEnd">
+                                <Label text="Unrestricted (Good)" class="sapUiTinyMarginBottom" />
+                                <Input id="inputUnrestricted" placeholder="0" type="Number" width="140px" class="sapUiTinyMarginBottom"/>
                             </VBox>
-                            <VBox class="sapUiSmallMarginEnd">
+                            <VBox class="sapUiMediumMarginEnd">
                                 <Label text="Blocked (Defect)" />
                                 <Input id="inputBlocked" placeholder="0" type="Number" width="120px"/>
                             </VBox>

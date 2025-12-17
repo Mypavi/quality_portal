@@ -1,55 +1,191 @@
-/* Kaar Tech Branding */
-.loginPage {
-    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+/* Global Styles & Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body,
+.sapUiBody {
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+    background-color: #F8FAFC !important;
+    /* Slate 50 */
+    color: #1E293B !important;
+    /* Slate 800 */
 }
 
-.loginCard {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    padding: 2rem;
+/* Page Headers */
+.sapMPageSubHeader,
+.sapMPageHeader {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
 }
 
-.kaarLogo {
-    display: block;
-    margin: 0 auto 1rem auto;
-    max-width: 150px;
-    height: auto;
+.sapMTitle {
+    color: #0F172A !important;
+    /* Slate 900 */
+    font-weight: 700 !important;
+    letter-spacing: -0.025em !important;
 }
 
-/* Dashboard Tiles Gradient */
+/* Dashboard Tiles - Gradient & Glassmorphism */
+/* Modernizing the standard SAP Tile */
 .sapMGT {
-    border-radius: 12px !important;
-    color: #fff !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-.sapMGT:nth-child(1) .sapMGTContent {
-    background: linear-gradient(135deg, #FF9966, #FF5E62) !important;
+.sapMGT:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    cursor: pointer;
 }
 
-.sapMGT:nth-child(2) .sapMGTContent {
-    background: linear-gradient(135deg, #56CCF2, #2F80ED) !important;
+/* Tile 1: Inspection Lots - Sunrise Gradient */
+.sapMGT:nth-of-type(1) .sapMGTContent {
+    background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%) !important;
+    /* Amber to Orange */
 }
 
-.sapMGT:nth-child(3) .sapMGTContent {
-    background: linear-gradient(135deg, #11998e, #38ef7d) !important;
+/* Tile 2: Result Recording - Ocean Gradient */
+.sapMGT:nth-of-type(2) .sapMGTContent {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+    /* Blue */
 }
 
+/* Tile 3: Usage Decision - Emerald Gradient */
+.sapMGT:nth-of-type(3) .sapMGTContent {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    /* Emerald */
+}
+
+.sapMGT * {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Icons in Tiles */
 .sapMNCValue,
 .sapMNCIcon {
-    color: #fff !important;
+    font-weight: 600 !important;
 }
 
-.sapMGTHdrTxt {
-    color: #eee !important;
+/* Modern Cards & Panels */
+.sapMPanel,
+.sapFCard {
+    background: #FFFFFF !important;
+    border-radius: 12px !important;
+    border: 1px solid #E2E8F0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+    margin-bottom: 1rem !important;
 }
 
-.sapUiPositiveText,
-.sapUiPositiveText>span {
-    color: #2B7D2C !important;
+/* Tables */
+.sapMListTblHeader {
+    background-color: #F1F5F9 !important;
+    /* Slate 100 */
+    border-bottom: 2px solid #E2E8F0 !important;
 }
 
-.sapUiNegativeText,
-.sapUiNegativeText>span {
-    color: #BB0000 !important;
+.sapMListTblCell {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    vertical-align: middle !important;
+}
+
+.sapMListTblRow:hover {
+    background-color: #F8FAFC !important;
+}
+
+/* Object Headers */
+.sapMOH {
+    background: #FFFFFF !important;
+    margin-bottom: 1rem;
+    padding: 1rem !important;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+}
+
+.sapMOHBgTransparent {
+    background: transparent !important;
+}
+
+/* Status Indicators */
+.sapUiPositiveText {
+    color: #15803d !important;
+    font-weight: 600;
+}
+
+/* Green 700 */
+.sapUiNegativeText {
+    color: #b91c1c !important;
+    font-weight: 600;
+}
+
+/* Red 700 */
+.sapUiCriticalText {
+    color: #a16207 !important;
+    font-weight: 600;
+}
+
+/* Yellow 700 */
+
+/* Buttons */
+.sapMBtnTypeEmphasized {
+    background-color: #4F46E5 !important;
+    /* Indigo 600 */
+    border-color: #4338ca !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+}
+
+.sapMBtnTypeEmphasized:hover {
+    background-color: #4338ca !important;
+    /* Indigo 700 */
+}
+
+.sapMBtnTypeAccept {
+    background-color: #10B981 !important;
+    border-color: #059669 !important;
+    color: white !important;
+    border-radius: 8px !important;
+}
+
+.sapMBtnTypeReject {
+    background-color: #EF4444 !important;
+    border-color: #DC2626 !important;
+    color: white !important;
+    border-radius: 8px !important;
+}
+
+/* Inputs */
+.sapMInputBaseContentWrapper {
+    border-radius: 6px !important;
+    border-color: #CBD5E1 !important;
+}
+
+.sapMInputBaseContentWrapper:focus-within {
+    border-color: #4F46E5 !important;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2) !important;
+}
+
+/* Custom Text Utilities */
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    color: #64748B;
+}
+
+/* Dashboard Specific Layout */
+.dashboard-tile-container {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
