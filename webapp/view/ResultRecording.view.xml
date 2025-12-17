@@ -1,5 +1,6 @@
 <mvc:View controllerName="quality.controller.ResultRecording"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc" 
+    displayBlock="true"
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:core="sap.ui.core"
@@ -8,7 +9,7 @@
     <Page id="resultPage" title="Result Recording" showNavButton="true" navButtonPress="onNavBack" 
           class="resultRecordingPage" busy="{viewModel>/busy}">
         
-        <!-- Custom Header with Gradient Background -->
+        <!-- Custom Header -->
         <customHeader>
             <Bar class="customHeaderBar">
                 <contentLeft>
@@ -25,61 +26,55 @@
 
         <content>
             <!-- Hero Section with Lot Information -->
-            <Panel class="heroPanel" visible="{= !!${inspection>InspectionLotNumber} }">
+            <Panel class="heroPanel" visible="{inspection>InspectionLotNumber}">
                 <content>
-                    <layout:Grid defaultSpan="L12 M12 S12" class="heroGrid">
-                        <layout:content>
-                            <!-- Lot Information Card -->
-                            <f:Card class="lotInfoCard">
-                                <f:header>
-                                    <f:Header title="Inspection Lot {inspection>InspectionLotNumber}" 
-                                             subtitle="{inspection>PlantDescription} ({inspection>Plant})" />
-                                </f:header>
-                                <f:content>
-                                    <VBox class="cardContent">
-                                        <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
-                                            <VBox>
-                                                <Label text="Material" class="cardLabel" />
-                                                <Text text="{inspection>SelectedMaterial}" class="cardValue" />
-                                            </VBox>
-                                            <VBox>
-                                                <Label text="Lot Quantity" class="cardLabel" />
-                                                <Text text="{inspection>ActualQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
-                                            </VBox>
-                                            <VBox>
-                                                <Label text="Inspected" class="cardLabel" />
-                                                <Text text="{inspection>InspectedQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
-                                            </VBox>
-                                        </HBox>
-                                        
-                                        <!-- Progress Bar -->
-                                        <VBox class="sapUiSmallMarginTop">
-                                            <Label text="Inspection Progress" class="cardLabel" />
-                                            <ProgressIndicator 
-                                                percentValue="{= (${inspection>InspectedQuantity} / ${inspection>ActualQuantity}) * 100 }"
-                                                displayValue="{= Math.round((${inspection>InspectedQuantity} / ${inspection>ActualQuantity}) * 100) }%"
-                                                state="{= (${inspection>InspectedQuantity} / ${inspection>ActualQuantity}) >= 1 ? 'Success' : 'Information' }"
-                                                class="progressBar" />
-                                        </VBox>
-
-                                        <!-- Status Badge -->
-                                        <HBox justifyContent="End" class="sapUiSmallMarginTop">
-                                            <ObjectStatus 
-                                                text="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDText'}"
-                                                state="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDState'}"
-                                                icon="{= ${inspection>UsageDecisionCode} === 'A' ? 'sap-icon://accept' : ${inspection>UsageDecisionCode} === 'R' ? 'sap-icon://decline' : 'sap-icon://pending' }"
-                                                class="statusBadge" />
-                                        </HBox>
+                    <f:Card class="lotInfoCard">
+                        <f:header>
+                            <f:Header title="Inspection Lot {inspection>InspectionLotNumber}" 
+                                     subtitle="{inspection>PlantDescription} ({inspection>Plant})" />
+                        </f:header>
+                        <f:content>
+                            <VBox class="cardContent">
+                                <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                                    <VBox>
+                                        <Label text="Material" class="cardLabel" />
+                                        <Text text="{inspection>SelectedMaterial}" class="cardValue" />
                                     </VBox>
-                                </f:content>
-                            </f:Card>
-                        </layout:content>
-                    </layout:Grid>
+                                    <VBox>
+                                        <Label text="Lot Quantity" class="cardLabel" />
+                                        <Text text="{inspection>ActualQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="Inspected" class="cardLabel" />
+                                        <Text text="{inspection>InspectedQuantity} {inspection>UnitOfMeasure}" class="cardValue" />
+                                    </VBox>
+                                </HBox>
+                                
+                                <!-- Progress Bar -->
+                                <VBox class="sapUiSmallMarginTop">
+                                    <Label text="Inspection Progress" class="cardLabel" />
+                                    <ProgressIndicator 
+                                        percentValue="{parts: ['inspection>InspectedQuantity', 'inspection>ActualQuantity'], formatter: '.formatProgress'}"
+                                        displayValue="{parts: ['inspection>InspectedQuantity', 'inspection>ActualQuantity'], formatter: '.formatProgressText'}"
+                                        state="Information"
+                                        class="progressBar" />
+                                </VBox>
+
+                                <!-- Status Badge -->
+                                <HBox justifyContent="End" class="sapUiSmallMarginTop">
+                                    <ObjectStatus 
+                                        text="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDText'}"
+                                        state="{path: 'inspection>UsageDecisionCode', formatter: '.formatUDState'}"
+                                        class="statusBadge" />
+                                </HBox>
+                            </VBox>
+                        </f:content>
+                    </f:Card>
                 </content>
             </Panel>
 
             <!-- Quick Actions Panel -->
-            <Panel class="actionsPanel" visible="{= !!${inspection>InspectionLotNumber} }">
+            <Panel class="actionsPanel" visible="{inspection>InspectionLotNumber}">
                 <headerToolbar>
                     <Toolbar class="actionToolbar">
                         <Title text="Quick Actions" level="H3" class="actionTitle" />
@@ -93,7 +88,7 @@
                                 press="onAcceptPress" 
                                 icon="sap-icon://accept"
                                 class="actionButton acceptButton"
-                                visible="{= !${inspection>UsageDecisionCode} }" />
+                                visible="{path: 'inspection>UsageDecisionCode', formatter: '.formatNotDecided'}" />
                         
                         <!-- Reject Button -->
                         <Button text="Reject Lot" 
@@ -101,7 +96,7 @@
                                 press="onRejectPress" 
                                 icon="sap-icon://decline"
                                 class="actionButton rejectButton"
-                                visible="{= !${inspection>UsageDecisionCode} }" />
+                                visible="{path: 'inspection>UsageDecisionCode', formatter: '.formatNotDecided'}" />
                         
                         <!-- Usage Decision Button -->
                         <Button text="Usage Decision" 
@@ -117,20 +112,19 @@
                                 icon="sap-icon://refresh"
                                 class="actionButton refreshButton" />
                         
-                        <!-- Test Data Fetch Button (Debug) -->
+                        <!-- Test Data Fetch Button -->
                         <Button text="Test Fetch" 
                                 type="Ghost" 
                                 press="onTestDataFetch" 
                                 icon="sap-icon://test-automation"
-                                class="actionButton testButton"
-                                visible="true" />
+                                class="actionButton testButton" />
                     </HBox>
                 </content>
             </Panel>
 
             <!-- Result Entry Form -->
             <Panel class="entryPanel" 
-                   visible="{= !!${inspection>InspectionLotNumber} &amp;&amp; !${inspection>UsageDecisionCode} }"
+                   visible="{parts: ['inspection>InspectionLotNumber', 'inspection>UsageDecisionCode'], formatter: '.formatEntryVisible'}"
                    expandable="true" 
                    expanded="true">
                 <headerToolbar>
@@ -143,42 +137,40 @@
                 <content>
                     <VBox class="entryForm">
                         <!-- Input Fields -->
-                        <layout:Grid defaultSpan="L4 M6 S12" class="inputGrid">
-                            <layout:content>
-                                <!-- Unrestricted Stock -->
-                                <VBox class="inputGroup unrestrictedGroup">
-                                    <Label text="Unrestricted Stock" class="inputLabel" />
-                                    <Text text="(Good Quality)" class="inputDescription" />
-                                    <Input id="inputUnrestricted" 
-                                           placeholder="Enter quantity" 
-                                           type="Number" 
-                                           class="inputField unrestrictedInput"
-                                           liveChange="onInputChange" />
-                                </VBox>
-                                
-                                <!-- Blocked Stock -->
-                                <VBox class="inputGroup blockedGroup">
-                                    <Label text="Blocked Stock" class="inputLabel" />
-                                    <Text text="(Defective)" class="inputDescription" />
-                                    <Input id="inputBlocked" 
-                                           placeholder="Enter quantity" 
-                                           type="Number" 
-                                           class="inputField blockedInput"
-                                           liveChange="onInputChange" />
-                                </VBox>
-                                
-                                <!-- Production Stock -->
-                                <VBox class="inputGroup productionGroup">
-                                    <Label text="Production Stock" class="inputLabel" />
-                                    <Text text="(Rework Required)" class="inputDescription" />
-                                    <Input id="inputProduction" 
-                                           placeholder="Enter quantity" 
-                                           type="Number" 
-                                           class="inputField productionInput"
-                                           liveChange="onInputChange" />
-                                </VBox>
-                            </layout:content>
-                        </layout:Grid>
+                        <HBox wrap="Wrap" class="inputContainer">
+                            <!-- Unrestricted Stock -->
+                            <VBox class="inputGroup unrestrictedGroup">
+                                <Label text="Unrestricted Stock" class="inputLabel" />
+                                <Text text="(Good Quality)" class="inputDescription" />
+                                <Input id="inputUnrestricted" 
+                                       placeholder="Enter quantity" 
+                                       type="Number" 
+                                       class="inputField unrestrictedInput"
+                                       liveChange="onInputChange" />
+                            </VBox>
+                            
+                            <!-- Blocked Stock -->
+                            <VBox class="inputGroup blockedGroup">
+                                <Label text="Blocked Stock" class="inputLabel" />
+                                <Text text="(Defective)" class="inputDescription" />
+                                <Input id="inputBlocked" 
+                                       placeholder="Enter quantity" 
+                                       type="Number" 
+                                       class="inputField blockedInput"
+                                       liveChange="onInputChange" />
+                            </VBox>
+                            
+                            <!-- Production Stock -->
+                            <VBox class="inputGroup productionGroup">
+                                <Label text="Production Stock" class="inputLabel" />
+                                <Text text="(Rework Required)" class="inputDescription" />
+                                <Input id="inputProduction" 
+                                       placeholder="Enter quantity" 
+                                       type="Number" 
+                                       class="inputField productionInput"
+                                       liveChange="onInputChange" />
+                            </VBox>
+                        </HBox>
                         
                         <!-- Save Button -->
                         <HBox justifyContent="Center" class="sapUiMediumMarginTop">
@@ -215,7 +207,7 @@
                     <MessagePage title="No Results Found" 
                                 description="No quality results have been recorded yet. Start by recording results for an inspection lot."
                                 icon="sap-icon://document"
-                                visible="{= !${viewModel>/hasData} &amp;&amp; !${viewModel>/busy} }"
+                                visible="{parts: ['viewModel>/hasData', 'viewModel>/busy'], formatter: '.formatNoDataVisible'}"
                                 class="noDataMessage">
                         <customDescription>
                             <Button text="Refresh Data" 
@@ -271,7 +263,6 @@
                                                 class="quantityNumber" />
                                     <ObjectStatus text="{path: 'result>UsageDecisionCode', formatter: '.formatUDText'}"
                                                 state="{path: 'result>UsageDecisionCode', formatter: '.formatUDState'}"
-                                                icon="{= ${result>UsageDecisionCode} ? 'sap-icon://accept' : 'sap-icon://pending' }"
                                                 class="statusIndicator" />
                                 </cells>
                             </ColumnListItem>

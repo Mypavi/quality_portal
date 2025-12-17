@@ -45,7 +45,7 @@
                                 press="onLoginPress" 
                                 class="loginButton"
                                 icon="sap-icon://log"
-                                enabled="{= ${login>/userId} && ${login>/password} }" />
+                                enabled="{= ${login>/userId} &amp;&amp; ${login>/password} }" />
                         
                         <!-- Additional Features -->
                         <HBox justifyContent="SpaceBetween" alignItems="Center" class="loginExtras">

@@ -1125,3 +1125,52 @@ body,
 .validationSuccess {
     color: #38a169 !important;
 }
+/* ===== INPUT CONTAINER STYLES ===== */
+.inputContainer {
+    gap: 1rem !important;
+    justify-content: space-around !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.inputContainer .inputGroup {
+    flex: 1 !important;
+    min-width: 250px !important;
+    max-width: 300px !important;
+}
+
+/* ===== ENHANCED MOBILE STYLES ===== */
+@media (max-width: 768px) {
+    .inputContainer {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+    
+    .inputContainer .inputGroup {
+        width: 100% !important;
+        max-width: none !important;
+    }
+    
+    .cardContent .sapUiLayoutHBox {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        text-align: center !important;
+    }
+}
+
+/* ===== ENHANCED BUTTON STYLES ===== */
+.actionButtons .actionButton {
+    margin: 0.5rem !important;
+    min-height: 45px !important;
+}
+
+@media (max-width: 600px) {
+    .actionButtons {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    
+    .actionButtons .actionButton {
+        width: 100% !important;
+        margin: 0.25rem 0 !important;
+    }
+}

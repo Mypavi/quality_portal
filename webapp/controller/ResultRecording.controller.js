@@ -526,6 +526,33 @@ sap.ui.define([
             return "Pending";
         },
 
+        formatVisible: function (sValue) {
+            return !!sValue;
+        },
+
+        formatNotDecided: function (sCode) {
+            return !sCode;
+        },
+
+        formatEntryVisible: function (sLotNumber, sDecisionCode) {
+            return !!sLotNumber && !sDecisionCode;
+        },
+
+        formatNoDataVisible: function (bHasData, bBusy) {
+            return !bHasData && !bBusy;
+        },
+
+        formatProgress: function (nInspected, nActual) {
+            if (!nActual || nActual === 0) return 0;
+            return Math.min((parseFloat(nInspected) / parseFloat(nActual)) * 100, 100);
+        },
+
+        formatProgressText: function (nInspected, nActual) {
+            if (!nActual || nActual === 0) return "0%";
+            var nPercent = Math.min((parseFloat(nInspected) / parseFloat(nActual)) * 100, 100);
+            return Math.round(nPercent) + "%";
+        },
+
         onRefreshData: function () {
             var oViewModel = this.getView().getModel("viewModel");
             var sSelectedLot = oViewModel.getProperty("/selectedLot");
