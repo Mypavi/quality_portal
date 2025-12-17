@@ -26,30 +26,41 @@ sap.ui.define([
 
             if (sKeyPredicate) {
                 // Detail Mode: Specific Lot selected
-                // sKeyPredicate comes from the router. It might be '5000000010' (raw) or quoted if passed that way.
-                // We want the raw numeric/string ID for filtering, and the Quoted ID for the Path.
                 var sRawID = sKeyPredicate.replace(/'/g, "");
 
                 // 1. Filter the History Table
-                // Note: The main table shows results (ZQM_RESULT_PR).
-                // Ensure the InspectionLotNumber column matches this ID exactly.
                 aFilters.push(new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sRawID));
 
-                // 2. Bind the Whole Page/Header to the Inspection Lot Context
-                // Ensure we use quotes for OData String keys: /Entity('ID')
-                var sPath = "/ZQM_INSPECT_PR('" + sRawID + "')";
+                // 2. Determine Binding Path
+                // Check if the model supports Key Predicates (OData) or needs Array Access (JSON)
+                var oModel = this.getView().getModel("inspection");
+                var sPath = "";
 
-                this.getView().bindElement({
-                    path: sPath,
-                    model: "inspection",
-                    events: {
-                        dataReceived: function () {
-                            // Verify if binding worked
+                if (oModel.createKey) {
+                    // OData Model
+                    sPath = "/ZQM_INSPECT_PR('" + sRawID + "')";
+                } else {
+                    // JSON Model (Client Side) - We must find the index
+                    var aData = oModel.getProperty("/ZQM_INSPECT_PR");
+                    if (aData) {
+                        for (var i = 0; i < aData.length; i++) {
+                            if (aData[i].InspectionLotNumber === sRawID) {
+                                sPath = "/ZQM_INSPECT_PR/" + i;
+                                break;
+                            }
                         }
                     }
-                });
+                }
 
-                this.byId("resultPage").setTitle("Result Recording - Lot " + sRawID);
+                if (sPath) {
+                    this.getView().bindElement({
+                        path: sPath,
+                        model: "inspection"
+                    });
+                    this.byId("resultPage").setTitle("Result Recording - Lot " + sRawID);
+                } else {
+                    MessageToast.show("Inspection Lot " + sRawID + " not found.");
+                }
 
             } else {
                 // List Mode: No Specific Lot (Tile Click)

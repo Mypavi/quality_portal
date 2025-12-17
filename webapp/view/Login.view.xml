@@ -7,21 +7,21 @@
     <Page id="page" title="{i18n>title}" showHeader="false" class="loginPage">
         <content>
             <FlexBox alignItems="Center" justifyContent="Center" height="100%" direction="Column">
-                <VBox class="loginCard sapUiResponsiveMargin" width="400px" alignItems="Center">
+                <VBox class="loginCard" width="400px" alignItems="Center">
                     <!-- Placeholder using a generic business icon styled as logo, since download failed -->
                     <!-- In a real scenario, use src="img/logo.png" -->
-                    <core:Icon src="sap-icon://building" size="3rem" class="sapUiSmallMarginBottom" color="#2c5364" />
-                    <Title text="Kaar Technologies" level="H2" class="sapUiTinyMarginBottom" />
-                    <Title text="Quality Portal" level="H3" class="sapUiMediumMarginBottom"/>
+                    <core:Icon src="sap-icon://quality-issue" size="4rem" class="sapUiMediumMarginBottom" color="#2c5364" />
+                    <Title text="Kaar Technologies" level="H1" class="sapUiTinyMarginBottom" />
+                    <Title text="Quality Control Portal" level="H3" class="sapUiLargeMarginBottom" titleStyle="H4"/>
                     
-                    <VBox width="100%">
-                        <Label text="User ID" labelFor="userInput" design="Bold"/>
-                        <Input id="userInput" placeholder="Enter User ID" value="{login>/userId}" icon="sap-icon://employee"/>
+                    <VBox width="100%" class="sapUiSmallMargin">
+                        <Label text="User ID" labelFor="userInput" design="Bold" class="sapUiTinyMarginBottom"/>
+                        <Input id="userInput" placeholder="Enter User ID" value="{login>/userId}" icon="sap-icon://employee" class="sapUiMediumMarginBottom"/>
                         
-                        <Label text="Password" labelFor="passwordInput" class="sapUiSmallMarginTop" design="Bold"/>
-                        <Input id="passwordInput" type="Password" placeholder="Enter Password" value="{login>/password}" icon="sap-icon://locked"/>
+                        <Label text="Password" labelFor="passwordInput" design="Bold" class="sapUiTinyMarginBottom"/>
+                        <Input id="passwordInput" type="Password" placeholder="Enter Password" value="{login>/password}" icon="sap-icon://locked" class="sapUiMediumMarginBottom"/>
                         
-                        <Button text="Login" type="Emphasized" press="onLoginPress" class="sapUiMediumMarginTop" width="100%"/>
+                        <Button text="Login to Portal" type="Emphasized" press="onLoginPress" class="sapUiMediumMarginTop" width="100%"/>
                     </VBox>
                 </VBox>
             </FlexBox>

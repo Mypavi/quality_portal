@@ -188,4 +188,53 @@ body,
     margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loginCard {
+    animation: slideUp 0.6s ease-out;
+}
+
+/* Ensure Text & Placeholders are Visible */
+.sapMInputBaseInner {
+    color: #1E293B !important;
+    /* Dark Text */
+    font-weight: 500 !important;
+}
+
+.sapMInputBaseInner::placeholder {
+    color: #94A3B8 !important;
+    /* Slate 400 */
+    opacity: 1 !important;
+}
+
+.sapMLabel {
+    color: #475569 !important;
+    /* Slate 600 */
+    font-weight: 600 !important;
 }
