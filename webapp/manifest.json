@@ -16,12 +16,31 @@
       "toolsId": "0d7f2416-8e9e-4ae2-855e-59c4786d8017"
     },
     "dataSources": {
-      "mainService": {
-        "uri": "/sap/opu/odata/sap/ZESHM_PR_SRV/",
+      "loginService": {
+        "uri": "/sap/opu/odata/sap/ZQM_LOG_PR_CDS/",
         "type": "OData",
         "settings": {
-          "annotations": [],
-          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "inspectionService": {
+        "uri": "/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      },
+      "resultService": {
+        "uri": "/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      },
+      "usageService": {
+        "uri": "/sap/opu/odata/sap/ZQM_US_PR_CDS/",
+        "type": "OData",
+        "settings": {
           "odataVersion": "2.0"
         }
       }
@@ -49,7 +68,8 @@
       "minUI5Version": "1.143.2",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.f": {}
       }
     },
     "contentDensities": {
@@ -63,10 +83,21 @@
           "bundleName": "quality.i18n.i18n"
         }
       },
-      "": {
-        "dataSource": "mainService",
-        "preload": true,
-        "settings": {}
+      "auth": {
+        "dataSource": "loginService",
+        "preload": true
+      },
+      "inspection": {
+        "dataSource": "inspectionService",
+        "preload": true
+      },
+      "result": {
+        "dataSource": "resultService",
+        "preload": true
+      },
+      "usage": {
+        "dataSource": "usageService",
+        "preload": true
       }
     },
     "resources": {
@@ -85,22 +116,32 @@
         "type": "View",
         "viewType": "XML",
         "path": "quality.view",
-        "async": true,
-        "viewPath": "quality.view"
+        "async": true
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": ":?query:",
+          "name": "RouteLogin",
+          "pattern": "",
           "target": [
-            "TargetView1"
+            "TargetLogin"
+          ]
+        },
+        {
+          "name": "RouteDashboard",
+          "pattern": "dashboard",
+          "target": [
+            "TargetDashboard"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
+        "TargetLogin": {
+          "viewName": "Login",
+          "viewId": "login"
+        },
+        "TargetDashboard": {
+          "viewName": "Dashboard",
+          "viewId": "dashboard"
         }
       }
     },
