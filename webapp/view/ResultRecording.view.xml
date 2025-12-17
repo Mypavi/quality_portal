@@ -45,7 +45,8 @@
                         <!-- Action Buttons (Visible if Pending) -->
                         <HBox visible="{= !${inspection>UsageDecisionCode} }">
                             <Button text="Accept Lot" type="Accept" press="onAcceptPress" class="sapUiMediumMarginEnd" width="150px" icon="sap-icon://accept" />
-                            <Button text="Reject Lot" type="Reject" press="onRejectPress" width="150px" icon="sap-icon://decline" />
+                            <Button text="Reject Lot" type="Reject" press="onRejectPress" class="sapUiMediumMarginEnd" width="150px" icon="sap-icon://decline" />
+                            <Button text="Usage Decision" type="Emphasized" press="onProceedToUsageDecision" width="150px" icon="sap-icon://decision" />
                         </HBox>
                         
                         <Label text="* Decision cannot be reversed once made." visible="{= !${inspection>UsageDecisionCode} }" class="sapUiTinyMarginTop" />
@@ -77,6 +78,18 @@
                             <Button text="Save Record" type="Emphasized" icon="sap-icon://save" press="onSaveResult" class="sapUiSmallMarginTop" />
                         </HBox>
                         <Text text="* Records are cumulative. Enter only the quantity for the current session." class="sapUiTinyMarginTop" type="Secondary" />
+                    </VBox>
+                </content>
+            </Panel>
+
+            <!-- Debug Info Panel (Remove in production) -->
+            <Panel headerText="Debug Information" visible="true" expandable="true" expanded="false" class="sapUiResponsiveMargin">
+                <content>
+                    <VBox>
+                        <Text text="Result Model Available: {= !!${result>/} }" />
+                        <Text text="Result Data Count: {= ${result>/ZQM_RESULT_PR} ? ${result>/ZQM_RESULT_PR}.length : 'No data' }" />
+                        <Text text="Current Lot: {inspection>InspectionLotNumber}" />
+                        <Text text="Inspection Model Available: {= !!${inspection>/} }" />
                     </VBox>
                 </content>
             </Panel>

@@ -1,20 +1,52 @@
 [
     {
-        "InspectionLotNumber": "50000000010",
+        "InspectionLotNumber": "50000000002",
+        "PlantCode": "0001",
+        "InspectorName": "TRAINEE",
+        "RecordedDate": "/Date(1719187200000)/",
+        "UsageDecisionCode": "A",
+        "StockCode": "100",
         "ResultCategory": "Unrestricted Stock",
-        "StockCode": "UNRES",
-        "PlantCode": "1000",
-        "InspectorName": "John Doe",
-        "RecordedDate": "/Date(1702771200000)/",
-        "UsageDecisionCode": ""
+        "RecordingStatus": "View Only"
     },
     {
-        "InspectionLotNumber": "50000000011",
+        "InspectionLotNumber": "30000000017",
+        "PlantCode": "0001",
+        "InspectorName": "TRAINEE",
+        "RecordedDate": "/Date(1719187200000)/",
+        "UsageDecisionCode": "R",
+        "StockCode": "1",
+        "ResultCategory": "Block Stock",
+        "RecordingStatus": "View Only"
+    },
+    {
+        "InspectionLotNumber": "20000000002",
+        "PlantCode": "0001",
+        "InspectorName": "TRAINEE",
+        "RecordedDate": "/Date(1719187200000)/",
+        "UsageDecisionCode": "A",
+        "StockCode": "100",
         "ResultCategory": "Unrestricted Stock",
-        "StockCode": "UNRES",
-        "PlantCode": "1000",
-        "InspectorName": "Jane Smith",
-        "RecordedDate": "/Date(1702684800000)/",
-        "UsageDecisionCode": "A"
+        "RecordingStatus": "View Only"
+    },
+    {
+        "InspectionLotNumber": "40000000001",
+        "PlantCode": "0001",
+        "InspectorName": "TRAINEE",
+        "RecordedDate": "/Date(1719187200000)/",
+        "UsageDecisionCode": "A",
+        "StockCode": "100",
+        "ResultCategory": "Unrestricted Stock",
+        "RecordingStatus": "View Only"
+    },
+    {
+        "InspectionLotNumber": "50000000004",
+        "PlantCode": "0001",
+        "InspectorName": "TRAINEE",
+        "RecordedDate": "/Date(1719273600000)/",
+        "UsageDecisionCode": "R",
+        "StockCode": "1",
+        "ResultCategory": "Block Stock",
+        "RecordingStatus": "View Only"
     }
 ]

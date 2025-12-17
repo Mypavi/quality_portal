@@ -37,7 +37,8 @@
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
-          "useBatch": true
+          "useBatch": true,
+          "defaultBindingMode": "TwoWay"
         }
       },
       "usageService": {
@@ -97,7 +98,11 @@
       },
       "result": {
         "dataSource": "resultService",
-        "preload": true
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "Inline"
+        }
       },
       "usage": {
         "dataSource": "usageService",
@@ -152,8 +157,15 @@
           ]
         },
         {
-          "name": "RouteUsageDecision",
+          "name": "RouteUsageDecisionList",
           "pattern": "usage",
+          "target": [
+            "TargetUsageDecision"
+          ]
+        },
+        {
+          "name": "RouteUsageDecision",
+          "pattern": "usage/{inspectionLot}",
           "target": [
             "TargetUsageDecision"
           ]

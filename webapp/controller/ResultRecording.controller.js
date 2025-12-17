@@ -11,6 +11,40 @@ sap.ui.define([
             // Attach to both routes: Detail (with ID) and List (generic)
             oRouter.getRoute("RouteResultRecording").attachPatternMatched(this._onRouteMatched, this);
             oRouter.getRoute("RouteResultRecordingList").attachPatternMatched(this._onRouteMatched, this);
+            
+            // Initialize models and check their availability
+            this._initializeModels();
+        },
+
+        _initializeModels: function () {
+            var oComponent = this.getOwnerComponent();
+            var oResultModel = oComponent.getModel("result");
+            var oInspectionModel = oComponent.getModel("inspection");
+            
+            if (!oResultModel) {
+                console.error("Result model not available");
+                MessageToast.show("Result service not available. Please check your connection.");
+                return;
+            }
+            
+            if (!oInspectionModel) {
+                console.error("Inspection model not available");
+                MessageToast.show("Inspection service not available. Please check your connection.");
+                return;
+            }
+
+            // Set up error handlers
+            oResultModel.attachRequestFailed(function (oEvent) {
+                console.error("Result model request failed:", oEvent.getParameters());
+                MessageToast.show("Failed to load result data");
+            });
+
+            oInspectionModel.attachRequestFailed(function (oEvent) {
+                console.error("Inspection model request failed:", oEvent.getParameters());
+                MessageToast.show("Failed to load inspection data");
+            });
+
+            console.log("Models initialized successfully");
         },
 
         _onRouteMatched: function (oEvent) {
@@ -68,10 +102,34 @@ sap.ui.define([
                 this.byId("resultPage").setTitle("Result Recording - All");
             }
 
+            // Ensure result model is loaded and refresh the table
+            this._refreshResultTable(aFilters);
+        },
+
+        _refreshResultTable: function (aFilters) {
             var oTable = this.byId("resultTable");
+            var oResultModel = this.getView().getModel("result");
+            
+            if (!oResultModel) {
+                console.error("Result model not found");
+                MessageToast.show("Result service not available");
+                return;
+            }
+
+            // Force refresh the result model
+            oResultModel.refresh();
+            
             var oBinding = oTable.getBinding("items");
             if (oBinding) {
-                oBinding.filter(aFilters);
+                oBinding.filter(aFilters || []);
+                oBinding.refresh();
+            } else {
+                // If binding doesn't exist, create it
+                oTable.bindItems({
+                    path: "result>/ZQM_RESULT_PR",
+                    template: oTable.getBindingInfo("items").template,
+                    filters: aFilters || []
+                });
             }
         },
 
@@ -127,21 +185,36 @@ sap.ui.define([
             var sLot = oCtx.getProperty("InspectionLotNumber");
             var oResultModel = oView.getModel("result");
             var sPlant = oCtx.getProperty("Plant");
+            var that = this;
+
+            // Counter for tracking async operations
+            var iOperationsCount = 0;
+            var iCompletedOperations = 0;
 
             // Helper to create entry
             var createRecord = function (sCategory, nQty) {
+                iOperationsCount++;
                 var oData = {
                     InspectionLotNumber: sLot,
                     ResultCategory: sCategory,
-                    StockCode: nQty.toString(), // Using StockCode to store Quantity as String due to metadata assumption
+                    StockCode: nQty.toString(),
                     PlantCode: sPlant,
-                    InspectorName: "Engineer",
+                    InspectorName: "TRAINEE",
                     RecordedDate: new Date(),
-                    UsageDecisionCode: ""
+                    UsageDecisionCode: oCtx.getProperty("UsageDecisionCode") || "",
+                    RecordingStatus: "View Only"
                 };
+                
                 oResultModel.create("/ZQM_RESULT_PR", oData, {
-                    success: function () { },
-                    error: function () { }
+                    success: function () {
+                        iCompletedOperations++;
+                        that._checkOperationsComplete(iOperationsCount, iCompletedOperations, sLot);
+                    },
+                    error: function (oError) {
+                        console.error("Error creating result record:", oError);
+                        iCompletedOperations++;
+                        that._checkOperationsComplete(iOperationsCount, iCompletedOperations, sLot);
+                    }
                 });
             };
 
@@ -149,12 +222,55 @@ sap.ui.define([
             if (nBlocked > 0) createRecord("Block Stock", nBlocked);
             if (nProduction > 0) createRecord("Production Stock", nProduction);
 
-            MessageToast.show("Results Saved. Progress Updated.");
+            // If no records to create, show message immediately
+            if (iOperationsCount === 0) {
+                MessageToast.show("No quantities entered to save.");
+                return;
+            }
+
+            MessageToast.show("Saving results...");
 
             // Clear Inputs
             this.byId("inputUnrestricted").setValue("");
             this.byId("inputBlocked").setValue("");
             this.byId("inputProduction").setValue("");
+        },
+
+        _checkOperationsComplete: function (iTotal, iCompleted, sLot) {
+            if (iCompleted === iTotal) {
+                MessageToast.show("Results saved successfully!");
+                
+                // Refresh the result table to show new entries
+                this._refreshResultTable([new sap.ui.model.Filter("InspectionLotNumber", sap.ui.model.FilterOperator.EQ, sLot)]);
+                
+                // Check if all quantity is recorded and navigate to usage decision
+                var oCtx = this.getView().getBindingContext("inspection");
+                if (oCtx) {
+                    var nActual = parseFloat(oCtx.getProperty("ActualQuantity")) || 0;
+                    var nInspected = parseFloat(oCtx.getProperty("InspectedQuantity")) || 0;
+                    
+                    if (nInspected >= nActual) {
+                        this._navigateToUsageDecision(sLot);
+                    }
+                }
+            }
+        },
+
+        _navigateToUsageDecision: function (sLot) {
+            sap.m.MessageBox.confirm(
+                "All quantities have been recorded for this lot. Would you like to proceed to Usage Decision?",
+                {
+                    title: "Recording Complete",
+                    onClose: function (oAction) {
+                        if (oAction === sap.m.MessageBox.Action.OK) {
+                            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                            oRouter.navTo("RouteUsageDecision", {
+                                inspectionLot: sLot
+                            });
+                        }
+                    }.bind(this)
+                }
+            );
         },
 
         onAcceptPress: function () {
@@ -180,6 +296,39 @@ sap.ui.define([
                 var oModel = oCtx.getModel();
                 oModel.setProperty(oCtx.getPath() + "/UsageDecisionCode", "R");
                 oModel.setProperty(oCtx.getPath() + "/UsageDecisionStatus", "Decision Made");
+                
+                // Navigate to Usage Decision for further processing
+                var sLot = oCtx.getProperty("InspectionLotNumber");
+                this._navigateToUsageDecision(sLot);
+            }
+        },
+
+        onProceedToUsageDecision: function () {
+            var oCtx = this.getView().getBindingContext("inspection");
+            if (!oCtx) {
+                MessageToast.show("No Inspection Lot selected.");
+                return;
+            }
+
+            var sLot = oCtx.getProperty("InspectionLotNumber");
+            var nActual = parseFloat(oCtx.getProperty("ActualQuantity")) || 0;
+            var nInspected = parseFloat(oCtx.getProperty("InspectedQuantity")) || 0;
+
+            if (nInspected < nActual) {
+                sap.m.MessageBox.warning(
+                    "Not all quantities have been recorded yet. Recorded: " + nInspected + " / " + nActual + ". Do you still want to proceed to Usage Decision?",
+                    {
+                        title: "Incomplete Recording",
+                        actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+                        onClose: function (oAction) {
+                            if (oAction === sap.m.MessageBox.Action.YES) {
+                                this._navigateToUsageDecision(sLot);
+                            }
+                        }.bind(this)
+                    }
+                );
+            } else {
+                this._navigateToUsageDecision(sLot);
             }
         },
 

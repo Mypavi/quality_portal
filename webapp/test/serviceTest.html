@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OData Service Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>OData Service Connectivity Test</h1>
+    <div id="results"></div>
+
+    <script>
+        function testService(serviceName, url) {
+            console.log(`Testing ${serviceName}: ${url}`);
+            
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(`${serviceName} - Success:`, data);
+                    $('#results').append(`<p style="color: green;">${serviceName}: SUCCESS - ${data.d?.results?.length || 'Unknown'} records</p>`);
+                },
+                error: function(xhr, status, error) {
+                    console.error(`${serviceName} - Error:`, error);
+                    $('#results').append(`<p style="color: red;">${serviceName}: ERROR - ${error}</p>`);
+                }
+            });
+        }
+
+        // Test all services
+        $(document).ready(function() {
+            testService('Inspection', '/sap/opu/odata/sap/ZQM_INSPECT_PR_CDS/ZQM_INSPECT_PR?$format=json');
+            testService('Result', '/sap/opu/odata/sap/ZQM_RESULT_PR_CDS/ZQM_RESULT_PR?$format=json');
+            testService('Usage', '/sap/opu/odata/sap/ZQM_US_PR_CDS/ZQM_US_PR?$format=json');
+        });
+    </script>
+</body>
+</html>

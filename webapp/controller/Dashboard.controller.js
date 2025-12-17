@@ -74,6 +74,13 @@ sap.ui.define([
         },
 
         onResultRecordingPress: function () {
+            // Check if result model is available before navigation
+            var oResultModel = this.getOwnerComponent().getModel("result");
+            if (!oResultModel) {
+                sap.m.MessageBox.error("Result service is not available. Please check your connection and try again.");
+                return;
+            }
+
             // Navigate to Result Recording List (Generic)
             var oRouter = UIComponent.getRouterFor(this);
             // Use the List route which causes no parameter error

@@ -22,14 +22,17 @@
             <EntityType Name="ZQM_RESULT_PR" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="InspectionLotNumber"/>
+                    <PropertyRef Name="RecordedDate"/>
+                    <PropertyRef Name="ResultCategory"/>
                 </Key>
                 <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Inspection Lot"/>
-                <Property Name="ResultCategory" Type="Edm.String" MaxLength="20" sap:label="Category"/>
+                <Property Name="ResultCategory" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Category"/>
                 <Property Name="StockCode" Type="Edm.String" MaxLength="10" sap:label="Stock Code"/>
                 <Property Name="PlantCode" Type="Edm.String" MaxLength="4" sap:label="Plant"/>
                 <Property Name="InspectorName" Type="Edm.String" MaxLength="40" sap:label="Inspector"/>
-                <Property Name="RecordedDate" Type="Edm.DateTime" Precision="0" sap:label="Date"/>
+                <Property Name="RecordedDate" Type="Edm.DateTime" Nullable="false" Precision="0" sap:label="Date"/>
                 <Property Name="UsageDecisionCode" Type="Edm.String" MaxLength="2" sap:label="UD Code"/>
+                <Property Name="RecordingStatus" Type="Edm.String" MaxLength="20" sap:label="Recording Status"/>
             </EntityType>
 
             <EntityType Name="ZQM_US_PR" sap:content-version="1">
