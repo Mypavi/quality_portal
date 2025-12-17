@@ -7,7 +7,7 @@
     <Page id="dashboardPage" title="Quality Engineer Dashboard" showNavButton="true" navButtonPress="onNavBack">
         <content>
             <VBox class="sapUiSmallMargin">
-            <VBox class="sapUiSmallMargin">
+
                 <HBox alignItems="Center" justifyContent="Center" class="dashboard-tile-container sapUiMediumMarginBottom">
                     <GenericTile header="Inspection Lots" frameType="OneByOne" press="onTilePress" class="sapUiTinyMarginBegin sapUiTinyMarginEnd">
                         <tileContent>
