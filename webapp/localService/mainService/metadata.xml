@@ -1,53 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
     <edmx:DataServices m:DataServiceVersion="2.0">
-        <Schema Namespace="ZESHM_PR_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-            <EntityType Name="Login" sap:content-version="1">
+        <Schema Namespace="ZQUALITY_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            
+            <EntityType Name="ZQM_INSPECT_PR" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="EmpId"/>
-                    <PropertyRef Name="Password"/>
+                    <PropertyRef Name="InspectionLotNumber"/>
                 </Key>
-                <Property Name="EmpId" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Personnel No." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Password" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Inspection Lot"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:label="Plant"/>
+                <Property Name="PlantDescription" Type="Edm.String" MaxLength="40" sap:label="Plant Name"/>
+                <Property Name="LotOrigin" Type="Edm.String" MaxLength="20" sap:label="Origin"/>
+                <Property Name="ActualQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:label="Lot Qty"/>
+                <Property Name="InspectedQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:label="Inspected Qty"/>
+                <Property Name="UsageDecisionCode" Type="Edm.String" MaxLength="2" sap:label="UD Code"/>
+                <Property Name="UsageDecisionStatus" Type="Edm.String" MaxLength="20" sap:label="Status"/>
+                <Property Name="SelectedMaterial" Type="Edm.String" MaxLength="40" sap:label="Material"/>
+                <Property Name="UnitOfMeasure" Type="Edm.String" MaxLength="3" sap:label="UoM"/>
             </EntityType>
-            <EntityType Name="Incident" sap:content-version="1">
+
+            <EntityType Name="ZQM_RESULT_PR" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="Plant"/>
+                    <PropertyRef Name="InspectionLotNumber"/>
                 </Key>
-                <Property Name="IncidentId" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Plant" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="IncidentDescription" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Char40" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="IncidentCategory" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="IncidentPriority" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Char10" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="IncidentStatus" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="IncidentDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="IncidentTime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Field of type TIMS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="CompletionDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="CompletionTime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Field of type TIMS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Inspection Lot"/>
+                <Property Name="ResultCategory" Type="Edm.String" MaxLength="20" sap:label="Category"/>
+                <Property Name="StockCode" Type="Edm.String" MaxLength="10" sap:label="Stock Code"/>
+                <Property Name="PlantCode" Type="Edm.String" MaxLength="4" sap:label="Plant"/>
+                <Property Name="InspectorName" Type="Edm.String" MaxLength="40" sap:label="Inspector"/>
+                <Property Name="RecordedDate" Type="Edm.DateTime" Precision="0" sap:label="Date"/>
+                <Property Name="UsageDecisionCode" Type="Edm.String" MaxLength="2" sap:label="UD Code"/>
             </EntityType>
-            <EntityType Name="Risk" sap:content-version="1">
+
+            <EntityType Name="ZQM_US_PR" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="Plant"/>
+                    <PropertyRef Name="InspectionLotNumber"/>
                 </Key>
-                <Property Name="RiskId" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="RiskDescription" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="RiskIdentificationDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="RiskCategory" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="RiskSeverity" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Plant" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="MitigationMeasures" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Likelihood" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InspectionLotNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Inspection Lot"/>
+                <Property Name="UsageDecisionCode" Type="Edm.String" MaxLength="2" sap:label="UD Code"/>
+                <Property Name="UsageDecisionStatus" Type="Edm.String" MaxLength="20" sap:label="Status"/>
+                <Property Name="Comments" Type="Edm.String" MaxLength="255" sap:label="Comments"/>
+                <Property Name="LotQuantity" Type="Edm.Decimal" Precision="13" Scale="3"/>
+                <Property Name="InspectedQuantity" Type="Edm.Decimal" Precision="13" Scale="3"/>
             </EntityType>
-            <EntityContainer Name="ZESHM_PR_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
-                <EntitySet Name="LoginSet" EntityType="ZESHM_PR_SRV.Login" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="IncidentSet" EntityType="ZESHM_PR_SRV.Incident" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="RiskSet" EntityType="ZESHM_PR_SRV.Risk" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+
+            <EntityType Name="ZQM_LOG_PR" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="UserID"/>
+                </Key>
+                <Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User ID"/>
+                <Property Name="Password" Type="Edm.String" MaxLength="20" sap:label="Password"/>
+                <Property Name="UserName" Type="Edm.String" MaxLength="40" sap:label="Name"/>
+            </EntityType>
+
+            <EntityContainer Name="ZQUALITY_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZQM_INSPECT_PR" EntityType="ZQUALITY_SRV.ZQM_INSPECT_PR" sap:creatable="false" sap:updatable="true" sap:deletable="false" sap:pageable="true" sap:content-version="1"/>
+                <EntitySet Name="ZQM_RESULT_PR" EntityType="ZQUALITY_SRV.ZQM_RESULT_PR" sap:creatable="true" sap:updatable="true" sap:deletable="false" sap:pageable="true" sap:content-version="1"/>
+                <EntitySet Name="ZQM_US_PR" EntityType="ZQUALITY_SRV.ZQM_US_PR" sap:creatable="true" sap:updatable="true" sap:deletable="false" sap:pageable="true" sap:content-version="1"/>
+                <EntitySet Name="ZQM_LOG_PR" EntityType="ZQUALITY_SRV.ZQM_LOG_PR" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="true" sap:content-version="1"/>
             </EntityContainer>
-            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
-            <atom:link rel="self" href="http://ecc.virtual:8000/sap/opu/odata/sap/ZESHM_PR_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
-            <atom:link rel="latest-version" href="http://ecc.virtual:8000/sap/opu/odata/sap/ZESHM_PR_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
         </Schema>
     </edmx:DataServices>
 </edmx:Edmx>

@@ -1,0 +1,26 @@
+[
+    {
+        "InspectionLotNumber": "50000000010",
+        "UsageDecisionCode": "",
+        "UsageDecisionStatus": "Pending",
+        "Comments": "",
+        "LotQuantity": 100.000,
+        "InspectedQuantity": 0.000
+    },
+    {
+        "InspectionLotNumber": "50000000011",
+        "UsageDecisionCode": "A",
+        "UsageDecisionStatus": "Decision Made",
+        "Comments": "All good",
+        "LotQuantity": 50.000,
+        "InspectedQuantity": 50.000
+    },
+    {
+        "InspectionLotNumber": "50000000012",
+        "UsageDecisionCode": "R",
+        "UsageDecisionStatus": "Decision Made",
+        "Comments": "Rust issues",
+        "LotQuantity": 200.000,
+        "InspectedQuantity": 200.000
+    }
+]

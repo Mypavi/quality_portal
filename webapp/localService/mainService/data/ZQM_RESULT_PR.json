@@ -1,0 +1,20 @@
+[
+    {
+        "InspectionLotNumber": "50000000010",
+        "ResultCategory": "Unrestricted Stock",
+        "StockCode": "UNRES",
+        "PlantCode": "1000",
+        "InspectorName": "John Doe",
+        "RecordedDate": "/Date(1702771200000)/",
+        "UsageDecisionCode": ""
+    },
+    {
+        "InspectionLotNumber": "50000000011",
+        "ResultCategory": "Unrestricted Stock",
+        "StockCode": "UNRES",
+        "PlantCode": "1000",
+        "InspectorName": "Jane Smith",
+        "RecordedDate": "/Date(1702684800000)/",
+        "UsageDecisionCode": "A"
+    }
+]

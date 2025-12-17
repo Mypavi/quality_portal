@@ -35,8 +35,16 @@ server:
       configuration:
         mountPath: /
         services:
-          - urlPath: /sap/opu/odata/sap/ZESHM_PR_SRV
+          - urlPath: /sap/opu/odata/sap/ZQM_LOG_PR_CDS
             metadataPath: ./webapp/localService/mainService/metadata.xml
-            mockdataPath: ./webapp/localService/mainService/data
+            generateMockData: true
+          - urlPath: /sap/opu/odata/sap/ZQM_INSPECT_PR_CDS
+            metadataPath: ./webapp/localService/mainService/metadata.xml
+            generateMockData: true
+          - urlPath: /sap/opu/odata/sap/ZQM_RESULT_PR_CDS
+            metadataPath: ./webapp/localService/mainService/metadata.xml
+            generateMockData: true
+          - urlPath: /sap/opu/odata/sap/ZQM_US_PR_CDS
+            metadataPath: ./webapp/localService/mainService/metadata.xml
             generateMockData: true
         annotations: []
